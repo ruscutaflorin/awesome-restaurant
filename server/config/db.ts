@@ -16,6 +16,7 @@ if (!globalThis.__db) {
             return result;
           } catch (error) {
             console.error(error);
+            throw error;
           }
         },
       },

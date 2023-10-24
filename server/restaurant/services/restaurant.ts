@@ -1,5 +1,5 @@
 import { db } from "../../config/db";
-import { Reservation, Restaurant } from "../types/restaurant.types";
+import { Reservation, Restaurant } from "../types/restaurant";
 
 export const listRestaurants = async (): Promise<Restaurant[]> => {
   return db.restaurant.findMany({
@@ -45,5 +45,3 @@ export const getNextReservationForTable = async (
 
   return table.reservations[0];
 };
-
-// Si daca am relation querries dc mai am nevoie de chestia din db.server, am nevoie ca sa nu o scriu de 100 de ori
