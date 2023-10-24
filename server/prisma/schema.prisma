@@ -1,0 +1,178 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Restaurant {
+  id            Int           @id @default(autoincrement())
+  name          String
+  address       String
+  location      String
+  businessHours String[]
+  contact       String?
+  owner         User          @relation(fields: [ownerId], references: [id])
+  ownerId       Int
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  diningTables  DiningTable[]
+  categories    Category[]
+  staffUsers    StaffUser[]
+  reservations  Reservation[]
+  reviews       Review[]
+}
+
+model DiningTable {
+  id            Int           @id @default(autoincrement())
+  name          String
+  status        String
+  capacity      Int
+  positionX     Int
+  positionY     Int
+  restaurant    Restaurant    @relation(fields: [restaurantId], references: [id])
+  reservations  Reservation[]
+  productOrders OrderItem[]
+  restaurantId  Int
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  Order         Order[]
+}
+
+model Reservation {
+  id                Int         @id @default(autoincrement())
+  restaurant        Restaurant  @relation(fields: [restaurantId], references: [id])
+  diningTable       DiningTable @relation(fields: [tableId], references: [id])
+  restaurantId      Int
+  tableId           Int
+  reservationDate   DateTime
+  numberOfGuests    Int
+  customerName      String
+  customerPhone     String
+  customerEmail     String?
+  reservationStatus String
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+}
+
+model Order {
+  id          Int         @id @default(autoincrement())
+  status      String
+  orderDate   DateTime
+  totalAmount Decimal
+  diningTable DiningTable @relation(fields: [tableId], references: [id])
+  tableId     Int
+  orderItems  OrderItem[]
+  payments    Payment[]
+  user        User?       @relation(fields: [userId], references: [id])
+  userId      Int?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model Payment {
+  id            Int      @id @default(autoincrement())
+  status        String
+  method        String
+  transactionID String?
+  order         Order    @relation(fields: [orderId], references: [id])
+  orderId       Int
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Category {
+  id           Int        @id @default(autoincrement())
+  name         String
+  products     Product[]
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
+  restaurantId Int
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+}
+
+model Product {
+  id           Int         @id @default(autoincrement())
+  name         String
+  description  String
+  price        Decimal
+  basePrice    Decimal
+  ingredients  String[]
+  availability Boolean
+  category     Category    @relation(fields: [categoryId], references: [id])
+  categoryId   Int
+  orderItems   OrderItem[]
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  reviews      Review[]
+}
+
+model StaffUser {
+  id           Int        @id @default(autoincrement())
+  name         String
+  role         String
+  user         User       @relation(fields: [userId], references: [id])
+  userId       Int        @unique
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
+  restaurantId Int
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+}
+
+// name = poate vedea comenzi, human-readable label
+// code = can_access_commands, pt programatori
+model Permission {
+  id        Int      @id @default(autoincrement())
+  name      String
+  code      String
+  users     User[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model User {
+  id          Int          @id @default(autoincrement())
+  name        String
+  email       String       @unique
+  password    String
+  permissions Permission[]
+  profilePic  String?
+  orders      Order[]
+  reviews     Review[]
+  restaurants Restaurant[]
+  staffUser   StaffUser?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model Review {
+  id           Int        @id @default(autoincrement())
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
+  user         User       @relation(fields: [userId], references: [id])
+  product      Product?   @relation(fields: [productId], references: [id])
+  userId       Int
+  restaurantId Int
+  rating       Int
+  reviewText   String?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  productId    Int
+}
+
+model OrderItem {
+  id            Int          @id @default(autoincrement())
+  order         Order        @relation(fields: [orderId], references: [id])
+  orderId       Int
+  product       Product      @relation(fields: [productId], references: [id])
+  productId     Int
+  quantity      Int
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  DiningTable   DiningTable? @relation(fields: [diningTableId], references: [id])
+  diningTableId Int?
+}
