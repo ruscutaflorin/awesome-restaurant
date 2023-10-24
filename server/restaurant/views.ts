@@ -38,3 +38,4 @@ export async function getClosestReservation(req: Request, res: Response) {
 // }
 // viewul contine partea de resp si service-ul care da date.
 // service = functie de bussiness logic
+// express-validator

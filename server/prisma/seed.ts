@@ -36,7 +36,7 @@ async function seedDatabase() {
       // Create a new DiningTable with random data
       const diningTable = await prisma.diningTable.create({
         data: {
-          name: `Table ${i}`,
+          name: `Dining Table ${i}`,
           status: "Available",
           capacity: Math.floor(Math.random() * 10) + 2,
           positionX: Math.floor(Math.random() * 100),
@@ -50,7 +50,7 @@ async function seedDatabase() {
         data: {
           status: "Pending",
           orderDate: new Date(),
-          totalAmount: parseFloat((Math.random() * 100 + 10).toFixed(2)),
+          totalAmount: Math.floor(Math.random() * 100) + 10,
           tableId: diningTable.id,
           userId: user.id,
         },
@@ -69,8 +69,8 @@ async function seedDatabase() {
         data: {
           name: `Product ${i}`,
           description: `Description ${i}`,
-          price: parseFloat((Math.random() * 50 + 5).toFixed(2)),
-          basePrice: parseFloat((Math.random() * 40 + 5).toFixed(2)),
+          price: Math.floor(Math.random() * 50) + 5,
+          basePrice: Math.floor(Math.random() * 40) + 5,
           ingredients: ["Ingredient1", "Ingredient2"],
           availability: true,
           categoryId: category.id,
@@ -86,7 +86,6 @@ async function seedDatabase() {
           numberOfGuests: Math.floor(Math.random() * 10) + 2,
           customerName: `Customer ${i}`,
           customerPhone: `Phone ${i}`,
-          customerEmail: `customer${i}@example.com`,
           reservationStatus: "Pending",
         },
       });
@@ -128,6 +127,7 @@ async function seedDatabase() {
           orderId: order.id,
           productId: product.id,
           quantity: Math.floor(Math.random() * 5) + 1,
+          diningTableId: diningTable.id,
         },
       });
     }

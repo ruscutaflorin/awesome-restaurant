@@ -84,10 +84,9 @@ export type StaffUser = {
   role: string;
   userId: number;
   restaurantId: number;
+  permissionId: number;
   createdAt: Date;
   updatedAt: Date;
-  user: User;
-  restaurant: Restaurant;
 };
 
 export type Permission = {
@@ -106,7 +105,6 @@ export type User = {
   profilePic: string | null;
   createdAt: Date;
   updatedAt: Date;
-  staffUser: StaffUser | null;
 };
 
 export type Review = {
@@ -127,4 +125,5 @@ export type OrderItem = {
   quantity: number;
   createdAt: Date;
   updatedAt: Date;
+  diningTableId: number;
 };
