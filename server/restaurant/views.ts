@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import { listRestaurants } from "./services/restaurant";
+import { check, validationResult } from "express-validator";
 import { db } from "../config/db";
+import { table } from "console";
 
 export async function getRestaurants(req: Request, res: Response) {
   try {
@@ -12,9 +14,16 @@ export async function getRestaurants(req: Request, res: Response) {
 }
 export async function getClosestReservation(req: Request, res: Response) {
   try {
+    check("tableId").isNumeric();
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    const tableId: number = parseInt(req.query.tableId as string);
+
     const reservation = await (
       db.diningTable as unknown as any
-    ).getNextReservation(5);
+    ).getNextReservation(tableId);
     if (!reservation) {
       return res.status(404).json({ message: "No reservations found" });
     }
