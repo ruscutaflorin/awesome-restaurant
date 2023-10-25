@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
 import { listRestaurants } from "./services/restaurant";
-import { check, validationResult } from "express-validator";
+import { validationResult } from "express-validator";
 import { db } from "../config/db";
+import { Restaurant } from "./types/restaurant";
 
 export async function getRestaurants(req: Request, res: Response) {
   try {
@@ -19,11 +20,11 @@ export async function getClosestReservation(req: Request, res: Response) {
     }
     const tableId: number = parseInt(req.query.tableId as string);
 
-    const reservation = await (
+    const reservation: Restaurant | string = await (
       db.diningTable as unknown as any
     ).getNextReservation(tableId);
-    if (!reservation) {
-      return res.status(404).json({ message: "No reservations found" });
+    if (typeof reservation == "string") {
+      return res.status(404).json({ message: `${reservation}` });
     }
     return res.status(200).json(reservation);
   } catch (error: any) {

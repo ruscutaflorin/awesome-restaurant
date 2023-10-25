@@ -19,7 +19,7 @@ export const listRestaurants = async (): Promise<Restaurant[]> => {
 
 export const getNextReservationForTable = async (
   tableId: number
-): Promise<Reservation | null> => {
+): Promise<Reservation | string> => {
   const table = await db.diningTable.findUnique({
     where: {
       id: tableId,
@@ -39,8 +39,11 @@ export const getNextReservationForTable = async (
     },
   });
 
-  if (!table || !table.reservations || table.reservations.length === 0) {
-    return null;
+  if (!table) {
+    return "The table is not found!";
+  }
+  if (!table.reservations || table.reservations.length === 0) {
+    return "There are no reservations planned for this table!";
   }
 
   return table.reservations[0];
