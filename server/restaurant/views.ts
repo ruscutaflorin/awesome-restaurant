@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import { listRestaurants } from "./services/restaurant";
 import { check, validationResult } from "express-validator";
 import { db } from "../config/db";
-import { table } from "console";
 
 export async function getRestaurants(req: Request, res: Response) {
   try {
@@ -14,7 +13,6 @@ export async function getRestaurants(req: Request, res: Response) {
 }
 export async function getClosestReservation(req: Request, res: Response) {
   try {
-    check("tableId").isNumeric();
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
@@ -33,18 +31,3 @@ export async function getClosestReservation(req: Request, res: Response) {
     return res.status(500).json({ message: "Internal server error" });
   }
 }
-
-// export async function x(req: Request, res: Response) {
-//   try {
-//
-//     // 1. Create User
-//     // a. validari pt creare userului
-//     // 2. Preferinte User
-//   } catch (err) {
-//     console.log(err);
-//     res.status(500);
-//   }
-// }
-// viewul contine partea de resp si service-ul care da date.
-// service = functie de bussiness logic
-// express-validator
