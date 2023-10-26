@@ -1,3 +1,9 @@
+import { Prisma } from "@prisma/client";
+
+export type CustomDiningTable = Prisma.DiningTableFieldRefs & {
+  getNextReservation(tableId: number): Promise<Restaurant | string>;
+};
+
 export type Restaurant = {
   id: number;
   name: string;
