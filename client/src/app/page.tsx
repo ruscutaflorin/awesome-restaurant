@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 
 export default function Home() {
-  const [message, setMessage] = useState([]);
+  const [message, setMessage] = useState<{ name: string }[]>([]);
 
   useEffect(() => {
     fetch("http://localhost:8000/api/restaurant")
