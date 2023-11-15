@@ -1,24 +1,26 @@
-"use client";
-import React, { useState, useEffect } from "react";
+import React from "react";
+import Hero from "./ui/landingPage/hero";
+import Footer from "./ui/landingPage/footer";
+import About from "./ui/landingPage/about";
+import HeroSecond from "./ui/landingPage/heroSecond";
 
-export default function Home() {
-  const [message, setMessage] = useState<{ name: string }[]>([]);
-
-  useEffect(() => {
-    fetch("http://localhost:8000/api/restaurant")
-      .then((res) => res.json())
-      .then((message) => {
-        console.log(message);
-        setMessage(message);
-      });
-  }, []);
+function LandingPage() {
   return (
     <main>
-      <h1>
-        {message.map((element) => (
-          <h1>{element.name}</h1>
-        ))}
-      </h1>
+      <div className="h-2/6">
+        <Hero />
+      </div>
+      <div>
+        <About />
+      </div>
+      <div className="h-2/6">
+        <HeroSecond />
+      </div>
+      <div className="4/6">
+        <Footer />
+      </div>
     </main>
   );
 }
+
+export default LandingPage;
