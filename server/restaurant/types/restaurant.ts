@@ -3,6 +3,9 @@ import { Prisma } from "@prisma/client";
 export type CustomDiningTable = Prisma.DiningTableFieldRefs & {
   getNextReservation(tableId: number): Promise<Restaurant | string>;
 };
+export type CustomRestaurantDetails = Prisma.RestaurantFieldRefs & {
+  getRestaurantById(id: number): Promise<RestaurantDetails | string>;
+};
 
 export type Restaurant = {
   id: number;
@@ -133,3 +136,10 @@ export type OrderItem = {
   updatedAt: Date;
   diningTableId: number;
 };
+
+export type RestaurantDetails = {
+  diningTables: DiningTable[];
+  categories: Category[];
+  reservations: Reservation[];
+  reviews: Review[];
+} & Restaurant;

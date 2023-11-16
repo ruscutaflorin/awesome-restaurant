@@ -1,5 +1,8 @@
 import { PrismaClient } from "@prisma/client";
-import { getNextReservationForTable } from "../restaurant/services/restaurant";
+import {
+  getNextReservationForTable,
+  getRestaurantById,
+} from "../restaurant/services/restaurant";
 let db: PrismaClient;
 
 declare global {
@@ -21,8 +24,14 @@ if (!globalThis.__db) {
         },
       },
       restaurant: {
-        async getBestRestaurant(name: string) {
-          console.log("inside getBestRestaurant");
+        async getRestaurantById(id: number) {
+          try {
+            const result = await getRestaurantById(id);
+            return result;
+          } catch (error) {
+            console.error(error);
+            throw error;
+          }
         },
       },
     },

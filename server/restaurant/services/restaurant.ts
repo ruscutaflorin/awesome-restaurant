@@ -1,5 +1,9 @@
 import { db } from "../../config/db";
-import { Reservation, Restaurant } from "../types/restaurant";
+import {
+  Reservation,
+  Restaurant,
+  RestaurantDetails,
+} from "../types/restaurant";
 
 export const listRestaurants = async (): Promise<Restaurant[]> => {
   return db.restaurant.findMany({
@@ -15,6 +19,26 @@ export const listRestaurants = async (): Promise<Restaurant[]> => {
       updatedAt: true,
     },
   });
+};
+
+export const getRestaurantById = async (
+  id: number
+): Promise<RestaurantDetails | string> => {
+  const restaurant = await db.restaurant.findUnique({
+    where: {
+      id: id,
+    },
+    include: {
+      reservations: true,
+      categories: true,
+      reviews: true,
+      diningTables: true,
+    },
+  });
+  if (!restaurant) {
+    return "The restaurant is not found!";
+  }
+  return restaurant;
 };
 
 export const getNextReservationForTable = async (

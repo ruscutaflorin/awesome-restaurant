@@ -1,5 +1,9 @@
 import express from "express";
-import { getClosestReservation, getRestaurants } from "./views";
+import {
+  getClosestReservation,
+  getRestaurantById,
+  getRestaurants,
+} from "./views";
 import { validateGetClosestReservation } from "./services/validation";
 
 export const router = express.Router();
@@ -10,3 +14,4 @@ router.get(
   validateGetClosestReservation,
   getClosestReservation
 );
+router.get("/restaurants", getRestaurantById);

@@ -92,3 +92,4 @@ export const validateOrderItem = [
 ];
 
 export const validateGetClosestReservation = [check("tableId").isNumeric()];
+export const validateGetRestaurantById = [check("id").isNumeric()];
