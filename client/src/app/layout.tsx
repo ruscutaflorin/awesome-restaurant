@@ -1,14 +1,14 @@
 import "../app/styles/global.css";
-import { inter } from "@/app/ui/fonts";
+import { inter } from "@/app/ui/typography/fonts";
 import { Metadata } from "next";
-import Navbar from "./ui/navbar/navbar";
+import Navbar from "./ui/components/navbar/navbar";
 
 export const metadata: Metadata = {
   title: {
-    template: "%s | Acme Dashboard",
-    default: "Acme Dashboard",
+    template: "%s | Deliver Ready",
+    default: "Deliver Ready",
   },
-  description: "The official Next.js Learn Dashboard built with App Router.",
+  description: "The official App Created By RFL si A TA NA SEEEE.",
   metadataBase: new URL("https://next-learn-dashboard.vercel.sh"),
 };
 export default function RootLayout({

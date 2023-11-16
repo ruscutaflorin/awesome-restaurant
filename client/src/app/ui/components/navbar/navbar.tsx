@@ -1,8 +1,11 @@
 import React from "react";
+import NavLinks from "./nav-links";
+import DarkButton from "../dark-button";
 
 function Navbar() {
   return (
-    <div className="navbar bg-red-300 bg-opacity-10 sticky top-0">
+    // <div className="navbar bg-red-300 bg-opacity-10 sticky top-0">
+    <div className="navbar bg-red-300 bg-opacity-10">
       <div className="navbar-start">
         <div className="dropdown">
           <label tabIndex={0} className="btn btn-ghost lg:hidden">
@@ -25,52 +28,18 @@ function Navbar() {
             tabIndex={0}
             className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
           >
-            <li>
-              <a>Home</a>
-            </li>
-            <li>
-              <a>About Us</a>
-              <ul className="p-2">
-                <li>
-                  <a>Details</a>
-                </li>
-                <li>
-                  <a>Contact</a>
-                </li>
-              </ul>
-            </li>
-            <li>
-              <a>Restaurants</a>
-            </li>
+            <NavLinks />
           </ul>
         </div>
         <a className="btn btn-ghost text-xl">restaurantReady</a>
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
-          <li>
-            <a>Home</a>
-          </li>
-          <li tabIndex={0}>
-            <details>
-              <summary>About Us</summary>
-              <ul className="p-2">
-                <li>
-                  <a>Details</a>
-                </li>
-                <li>
-                  <a>Contact</a>
-                </li>
-              </ul>
-            </details>
-          </li>
-          <li>
-            <a>Restaurants</a>
-          </li>
+          <NavLinks />
         </ul>
       </div>
       <div className="navbar-end ">
-        <button className="btn btn-default bg-zinc-800">Log Out</button>
+        <DarkButton text="Log Out" />
       </div>
     </div>
   );
