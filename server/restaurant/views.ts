@@ -45,16 +45,13 @@ export const getRestaurantById = async (req: Request, res: Response) => {
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const id: number = parseInt(req.query.id as string);
+    const id: number = parseInt(req.params.id as string);
 
     console.log(id);
     const restaurant: RestaurantDetails | string = await (
       db.restaurant as unknown as CustomRestaurantDetails
     ).getRestaurantById(id);
     console.log(restaurant);
-    if (typeof restaurant === "string") {
-      return res.status(404).json({ message: `${restaurant}` });
-    }
 
     return res.status(200).json(restaurant);
   } catch (err: any) {
