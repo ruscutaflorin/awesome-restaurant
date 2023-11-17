@@ -17,17 +17,20 @@ export async function getRestaurants(req: Request, res: Response) {
     return res.status(500).json(error.message);
   }
 }
-export async function getClosestReservation(req: Request, res: Response) {
+export async function getClosestReservationForTableId(
+  req: Request,
+  res: Response
+) {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const tableId: number = parseInt(req.query.tableId as string);
+    const id: number = parseInt(req.params.id as string);
 
     const reservation: Restaurant | string = await (
       db.diningTable as unknown as CustomDiningTable
-    ).getNextReservation(tableId);
+    ).getNextReservationForTable(id);
 
     if (typeof reservation === "string") {
       return res.status(404).json({ message: `${reservation}` });
@@ -45,13 +48,11 @@ export const getRestaurantById = async (req: Request, res: Response) => {
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const id: number = parseInt(req.params.id as string);
+    const uuid: string = req.params.uuid as string;
 
-    console.log(id);
     const restaurant: RestaurantDetails | string = await (
       db.restaurant as unknown as CustomRestaurantDetails
-    ).getRestaurantById(id);
-    console.log(restaurant);
+    ).getRestaurantById(uuid);
 
     return res.status(200).json(restaurant);
   } catch (err: any) {

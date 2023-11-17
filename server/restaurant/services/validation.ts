@@ -91,5 +91,5 @@ export const validateOrderItem = [
   check("diningTableId").optional().isInt(),
 ];
 
-export const validateGetClosestReservation = [check("tableId").isNumeric()];
-export const validateGetRestaurantById = [check("id").isNumeric()];
+export const validateGetClosestReservation = [check("id").isNumeric()];
+export const validateGetRestaurantById = [check("uuid").isString()];

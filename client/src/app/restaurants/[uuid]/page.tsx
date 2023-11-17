@@ -1,4 +1,3 @@
-// pages/restaurants/[id].tsx
 "use client";
 
 import { useParams } from "next/navigation";
@@ -6,6 +5,7 @@ import React, { useEffect, useState } from "react";
 
 type Restaurant = {
   id: number;
+  uuid: string;
   name: string;
   address: string;
   location: string;
@@ -27,7 +27,7 @@ const RestaurantDetails: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   useEffect(() => {
-    fetch(`http://localhost:8000/api/restaurants/${params.id}`)
+    fetch(`http://localhost:8000/api/restaurants/${params.uuid}`)
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
@@ -39,7 +39,7 @@ const RestaurantDetails: React.FC = () => {
         setError(true);
         setLoading(false);
       });
-  }, [params.id]);
+  }, [params.uuid]);
   if (loading) {
     return "loading...";
   }

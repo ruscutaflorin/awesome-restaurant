@@ -1,6 +1,6 @@
 import express from "express";
 import {
-  getClosestReservation,
+  getClosestReservationForTableId,
   getRestaurantById,
   getRestaurants,
 } from "./views";
@@ -12,5 +12,9 @@ import {
 export const router = express.Router();
 
 router.get("", getRestaurants);
-router.get("/tables/:id", validateGetClosestReservation, getClosestReservation);
-router.get("/:id", validateGetRestaurantById, getRestaurantById);
+router.get(
+  "/tables/:id",
+  validateGetClosestReservation,
+  getClosestReservationForTableId
+);
+router.get("/:uuid", validateGetRestaurantById, getRestaurantById);

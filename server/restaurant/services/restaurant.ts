@@ -9,6 +9,7 @@ export const listRestaurants = async (): Promise<Restaurant[]> => {
   return db.restaurant.findMany({
     select: {
       id: true,
+      uuid: true,
       name: true,
       address: true,
       location: true,
@@ -22,11 +23,11 @@ export const listRestaurants = async (): Promise<Restaurant[]> => {
 };
 
 export const getRestaurantById = async (
-  id: number
+  uuid: string
 ): Promise<RestaurantDetails | string> => {
-  const restaurant = await db.restaurant.findUnique({
+  const restaurant = await db.restaurant.findFirst({
     where: {
-      id: id,
+      uuid: uuid,
     },
     include: {
       reservations: true,
@@ -41,7 +42,7 @@ export const getRestaurantById = async (
   return restaurant;
 };
 
-export const getNextReservationForTable = async (
+export const nextReservationForTable = async (
   tableId: number
 ): Promise<Reservation | string> => {
   const table = await db.diningTable.findUnique({

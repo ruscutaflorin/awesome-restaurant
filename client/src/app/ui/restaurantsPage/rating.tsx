@@ -10,7 +10,7 @@ const Rating = () => {
           name={`rating-${name}`}
           className="mask mask-star-2 bg-orange-400 mb-1"
           checked={index === 2} // Assuming 2 is the default checked rating
-          onChange={() => console.log(`Rating ${index} selected`)} // Add your onChange logic here
+          // onChange={() => console.log(`Rating ${index} selected`)} // Add your onChange logic here
         />
       ))}
     </div>

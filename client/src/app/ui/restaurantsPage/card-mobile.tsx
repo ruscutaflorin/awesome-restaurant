@@ -10,6 +10,7 @@ type Props = {
   description: string;
   restaurant: {
     id: number;
+    uuid: string;
     name: string;
     address: string;
     location: string;
@@ -50,7 +51,7 @@ const CardMobile: React.FC<Props> = ({
       <div className="card-body">
         <h2 className="card-title">{name}</h2>
         <p>{description}</p>
-        <Link href={`/restaurants/${restaurant.id}`} passHref>
+        <Link href={`/restaurants/${restaurant.uuid}`} passHref>
           <DarkButton text={"Eat"} />
         </Link>
       </div>

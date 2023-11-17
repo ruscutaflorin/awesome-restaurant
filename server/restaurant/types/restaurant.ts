@@ -1,14 +1,15 @@
 import { Prisma } from "@prisma/client";
 
 export type CustomDiningTable = Prisma.DiningTableFieldRefs & {
-  getNextReservation(tableId: number): Promise<Restaurant | string>;
+  getNextReservationForTable(tableId: number): Promise<Restaurant | string>;
 };
 export type CustomRestaurantDetails = Prisma.RestaurantFieldRefs & {
-  getRestaurantById(id: number): Promise<RestaurantDetails | string>;
+  getRestaurantById(id: string): Promise<RestaurantDetails | string>;
 };
 
 export type Restaurant = {
   id: number;
+  uuid: string;
   name: string;
   address: string;
   location: string;

@@ -5,6 +5,7 @@ import CardMobile from "../ui/restaurantsPage/card-mobile";
 import Pagination from "../ui/restaurantsPage/pagination";
 type Restaurant = {
   id: number;
+  uuid: string;
   name: string;
   address: string;
   location: string;
@@ -29,7 +30,6 @@ const Restaurants: React.FC = () => {
         setRestaurants(message);
       });
   }, []);
-
   const indexOfLastRestaurant = currentPage * restaurantsPerPage;
   const indexOfFirstRestaurant = indexOfLastRestaurant - restaurantsPerPage;
   const currentRestaurants = restaurants.slice(
