@@ -23,7 +23,7 @@ const Restaurants: React.FC = () => {
   //TODO: offset cu params
 
   useEffect(() => {
-    fetch("http://localhost:8000/api/restaurant")
+    fetch("http://localhost:8000/api/restaurants")
       .then((res) => res.json())
       .then((message: Restaurant[]) => {
         setRestaurants(message);

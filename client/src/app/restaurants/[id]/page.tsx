@@ -23,19 +23,32 @@ type Restaurant = {
 
 const RestaurantDetails: React.FC = () => {
   const params = useParams();
-  const [restaurant, setRestaurant] = useState<Restaurant | string>("");
-
+  const [restaurant, setRestaurant] = useState<Restaurant | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   useEffect(() => {
-    fetch(`http://localhost:8000/api/restaurant/restaurants?id=${params.id}`)
+    fetch(`http://localhost:8000/api/restaurants/${params.id}`)
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
         setRestaurant(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setError(true);
+        setLoading(false);
       });
   }, [params.id]);
+  if (loading) {
+    return "loading...";
+  }
+  if (error) {
+    return "error";
+  }
   return (
     <div>
-      {typeof restaurant !== "string" && restaurant !== null ? (
+      {restaurant && (
         <>
           <h1>{restaurant.name}</h1>
           <p>Address: {restaurant.address}</p>
@@ -53,10 +66,6 @@ const RestaurantDetails: React.FC = () => {
               </div>
             ))}
         </>
-      ) : (
-        <div>
-          <p>hello</p>
-        </div>
       )}
     </div>
   );
