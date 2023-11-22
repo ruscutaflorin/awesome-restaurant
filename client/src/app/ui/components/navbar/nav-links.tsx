@@ -7,8 +7,8 @@ import clsx from "clsx";
 const links = [
   { name: "Home", href: "/" },
   {
-    name: "About Us",
-    href: "/details",
+    name: "Log In",
+    href: "/login",
   },
   { name: "Restaurants", href: "/restaurants" },
 ];
@@ -20,7 +20,7 @@ const NavLinks = () => {
       <Link key={link.name} href={link.href}>
         <div
           className={clsx(
-            "flex h-[48px] grow items-center justify-center px-3 mx-auto",
+            "flex h-[48px] grow items-center justify-center px-2 mx-auto",
             {
               "bg-sky-100 text-blue-600": pathname == link.href,
             }

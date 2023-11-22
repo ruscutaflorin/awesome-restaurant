@@ -1,53 +1,34 @@
 "use client";
 
+import { getRestaurant } from "@/app/api/restaurants";
+import { RestaurantDetailed } from "@/app/types/types";
+import Menu from "@/app/ui/restaurant/menu";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
-
-type Restaurant = {
-  id: number;
-  uuid: string;
-  name: string;
-  address: string;
-  location: string;
-  businessHours: string[];
-  contact: null | any;
-  ownerId: number;
-  createdAt: string;
-  updatedAt: string;
-  reservations: any[];
-  categories: any[];
-  reviews: any[];
-  diningTables: any[];
-};
-//TODO: sa mi aduc toate tipurile din back
-
-const RestaurantDetails: React.FC = () => {
+const RestaurantDetails: React.FC<RestaurantDetailed> = () => {
   const params = useParams();
-  const [restaurant, setRestaurant] = useState<Restaurant | null>(null);
+  const [restaurant, setRestaurant] = useState<RestaurantDetailed | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+
   useEffect(() => {
-    fetch(`http://localhost:8000/api/restaurants/${params.uuid}`)
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        setRestaurant(data);
+    const effect = async () => {
+      try {
+        const response = await getRestaurant(params.uuid);
+        setRestaurant(response.data);
         setLoading(false);
-      })
-      .catch((err) => {
+      } catch (err) {
         console.log(err);
-        setError(true);
-        setLoading(false);
-      });
+      }
+    };
+    effect();
   }, [params.uuid]);
+
   if (loading) {
     return "loading...";
   }
-  if (error) {
-    return "error";
-  }
+
   return (
-    <div>
+    <div className="m-0 p-0">
       {restaurant && (
         <>
           <h1>{restaurant.name}</h1>
@@ -61,11 +42,16 @@ const RestaurantDetails: React.FC = () => {
           {restaurant.reservations &&
             restaurant.reservations.map((reservation) => (
               <div key={reservation.id}>
-                <p>Reservation Date: {reservation.reservationDate}</p>
+                {/* <p>Reservation Date: {reservation.reservationDate}</p> */}
                 <p>Number of Guests: {reservation.numberOfGuests}</p>
               </div>
             ))}
         </>
+      )}
+      {loading && !restaurant ? (
+        <div>Loading...</div>
+      ) : (
+        <Menu restaurant={restaurant} />
       )}
     </div>
   );

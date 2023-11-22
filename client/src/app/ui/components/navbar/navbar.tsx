@@ -5,7 +5,7 @@ import DarkButton from "../dark-button";
 function Navbar() {
   return (
     // <div className="navbar bg-red-300 bg-opacity-10 sticky top-0">
-    <div className="navbar bg-red-300 bg-opacity-10">
+    <div className="navbar bg-red-300 bg-opacity-10 flex justify-evenly">
       <div className="navbar-start">
         <div className="dropdown">
           <label tabIndex={0} className="btn btn-ghost lg:hidden">
@@ -38,9 +38,9 @@ function Navbar() {
           <NavLinks />
         </ul>
       </div>
-      <div className="navbar-end ">
+      {/* <div className="navbar-end ">
         <DarkButton text="Log Out" />
-      </div>
+      </div> */}
     </div>
   );
 }

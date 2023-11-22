@@ -11,23 +11,23 @@ const config: Config = {
     themes: [
       {
         mytheme: {
-          primary: "#a500ff",
+          primary: "#00bdd9",
 
-          secondary: "#e58400",
+          secondary: "#00b3ff",
 
-          accent: "#ff8700",
+          accent: "#0093ff",
 
-          neutral: "#1e2110",
+          neutral: "#100000",
 
-          "base-100": "#f8ffff",
+          "base-100": "#f5fefd",
 
-          info: "#00a6ff",
+          info: "#0066ff",
 
-          success: "#00b221",
+          success: "#31a800",
 
-          warning: "#ffc600",
+          warning: "#e85400",
 
-          error: "#ff7374",
+          error: "#f50023",
         },
       },
     ],
