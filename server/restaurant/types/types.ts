@@ -1,11 +1,23 @@
 import { Prisma } from "@prisma/client";
-
 export type CustomDiningTable = Prisma.DiningTableFieldRefs & {
   getNextReservationForTable(tableId: number): Promise<Restaurant | string>;
 };
-export type CustomRestaurantDetails = Prisma.RestaurantFieldRefs & {
-  getRestaurantById(id: string): Promise<RestaurantDetails | string>;
+export type CustomRestaurantDetailed = Prisma.RestaurantFieldRefs & {
+  getRestaurantById(id: string): Promise<RestaurantDetailed | string>;
 };
+export type CustomPaginatedRestaurant = Restaurant & {
+  getPaginatedRestaurants(
+    offset: number,
+    limit: number
+  ): Promise<{ restaurants: Restaurant[] | null; numberOfPages: number }>;
+};
+
+export type RestaurantDetailed = {
+  diningTables: DiningTable[];
+  categories: Category[];
+  reservations: Reservation[];
+  reviews: Review[];
+} & Restaurant;
 
 export type Restaurant = {
   id: number;
@@ -20,6 +32,12 @@ export type Restaurant = {
   updatedAt: Date;
 };
 
+export type DiningTableDetailed = {
+  reservations: Reservation[];
+  productOrders: OrderItem[];
+  Order: Order[];
+} & DiningTable;
+
 export type DiningTable = {
   id: number;
   name: string;
@@ -31,6 +49,11 @@ export type DiningTable = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+export type ReservationDetailed = {
+  restaurant: Restaurant;
+  diningTable: DiningTable;
+} & Reservation;
 
 export type Reservation = {
   id: number;
@@ -46,6 +69,13 @@ export type Reservation = {
   updatedAt: Date;
 };
 
+export type OrderDetailed = {
+  diningTable: DiningTable;
+  orderItems: OrderItem[];
+  payments: Payment[];
+  user: User | null;
+} & Order;
+
 export type Order = {
   id: number;
   status: string;
@@ -57,15 +87,25 @@ export type Order = {
   updatedAt: Date;
 };
 
+export type PaymentDetailed = {
+  order: Order;
+} & Payment;
+
 export type Payment = {
   id: number;
+  uuid: string;
   status: string;
   method: string;
-  transactionId: string | null;
+  transactionID: string | null;
   orderId: number;
   createdAt: Date;
   updatedAt: Date;
 };
+
+export type CategoryDetailed = {
+  products: Product[];
+  restaurant: Restaurant;
+} & Category;
 
 export type Category = {
   id: number;
@@ -74,6 +114,11 @@ export type Category = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+export type ProductDetailed = {
+  orderItems: OrderItem[];
+  reviews: Review[];
+} & Product;
 
 export type Product = {
   id: number;
@@ -86,7 +131,14 @@ export type Product = {
   categoryId: number;
   createdAt: Date;
   updatedAt: Date;
+  category: Category;
 };
+
+export type StaffUserDetailed = {
+  permissions: Permission[];
+  user: User;
+  restaurant: Restaurant;
+} & StaffUser;
 
 export type StaffUser = {
   id: number;
@@ -94,10 +146,13 @@ export type StaffUser = {
   role: string;
   userId: number;
   restaurantId: number;
-  permissionId: number;
   createdAt: Date;
   updatedAt: Date;
 };
+
+export type PermissionDetailed = {
+  staffUsers: StaffUser[];
+} & Permission;
 
 export type Permission = {
   id: number;
@@ -106,6 +161,13 @@ export type Permission = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+export type UserDetailed = {
+  orders: Order[];
+  reviews: Review[];
+  restaurants: Restaurant[];
+  staffUser: StaffUser | null;
+} & User;
 
 export type User = {
   id: number;
@@ -117,10 +179,16 @@ export type User = {
   updatedAt: Date;
 };
 
+export type ReviewDetailed = {
+  restaurant: Restaurant;
+  user: User;
+  product: Product | null;
+} & Review;
+
 export type Review = {
   id: number;
-  userId: number;
   restaurantId: number;
+  userId: number;
   productId: number;
   rating: number;
   reviewText: string | null;
@@ -128,19 +196,18 @@ export type Review = {
   updatedAt: Date;
 };
 
+export type OrderItemDetailed = {
+  order: Order;
+  product: Product;
+  diningTable: DiningTable | null;
+} & OrderItem;
+
 export type OrderItem = {
   id: number;
   orderId: number;
   productId: number;
   quantity: number;
+  diningTableId: number | null;
   createdAt: Date;
   updatedAt: Date;
-  diningTableId: number;
 };
-
-export type RestaurantDetails = {
-  diningTables: DiningTable[];
-  categories: Category[];
-  reservations: Reservation[];
-  reviews: Review[];
-} & Restaurant;

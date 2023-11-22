@@ -4,10 +4,11 @@ import { validationResult } from "express-validator";
 import { db } from "../config/db";
 import {
   CustomDiningTable,
-  CustomRestaurantDetails,
+  CustomPaginatedRestaurant,
+  CustomRestaurantDetailed,
   Restaurant,
-  RestaurantDetails,
-} from "./types/restaurant";
+  RestaurantDetailed,
+} from "./types/types";
 
 export async function getRestaurants(req: Request, res: Response) {
   try {
@@ -50,8 +51,8 @@ export const getRestaurantById = async (req: Request, res: Response) => {
 
     const uuid: string = req.params.uuid as string;
 
-    const restaurant: RestaurantDetails | string = await (
-      db.restaurant as unknown as CustomRestaurantDetails
+    const restaurant: RestaurantDetailed | string = await (
+      db.restaurant as unknown as CustomRestaurantDetailed
     ).getRestaurantById(uuid);
 
     return res.status(200).json(restaurant);
@@ -60,3 +61,21 @@ export const getRestaurantById = async (req: Request, res: Response) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 };
+
+export async function getRestaurantsPaginated(req: Request, res: Response) {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const offset: number = parseInt(req.query.offset as string);
+    const limit: number = parseInt(req.query.limit as string);
+    const data = await (
+      db.restaurant as unknown as CustomPaginatedRestaurant
+    ).getPaginatedRestaurants(offset, limit);
+    return res.status(200).json(data);
+  } catch (error: any) {
+    return res.status(500).json(error.message);
+  }
+}

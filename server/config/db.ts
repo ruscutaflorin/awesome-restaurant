@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import {
   nextReservationForTable,
   getRestaurantById,
+  paginatedRestaurants,
 } from "../restaurant/services/restaurant";
 let db: PrismaClient;
 
@@ -30,6 +31,15 @@ if (!globalThis.__db) {
             return result;
           } catch (error) {
             console.error(error);
+            throw error;
+          }
+        },
+        async getPaginatedRestaurants(offset: number, limit: number) {
+          try {
+            const result = await paginatedRestaurants(offset, limit);
+            return result;
+          } catch (error) {
+            console.log(error);
             throw error;
           }
         },

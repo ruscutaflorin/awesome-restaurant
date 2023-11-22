@@ -93,3 +93,7 @@ export const validateOrderItem = [
 
 export const validateGetClosestReservation = [check("id").isNumeric()];
 export const validateGetRestaurantById = [check("uuid").isString()];
+export const validateGetPaginatedRestaurants = [
+  check("offset").isNumeric(),
+  check("limit").isNumeric(),
+];
