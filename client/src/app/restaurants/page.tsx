@@ -7,6 +7,7 @@ import Pagination from "../ui/restaurantsPage/pagination";
 import Search from "../ui/restaurantsPage/search";
 import { useSearchParams } from "next/navigation";
 import { RESTAURANTS_PER_PAGE } from "../utils/constants";
+
 const Restaurants: React.FC = () => {
   const [restaurants, setRestaurants] = useState<Restaurant[] | null>(null);
   const [currentPage, setCurrentPage] = useState<number | null>(0);
@@ -14,19 +15,18 @@ const Restaurants: React.FC = () => {
   const [limit, setLimit] = useState<number>(RESTAURANTS_PER_PAGE);
 
   const searchParams = useSearchParams();
-  const offset = searchParams.get(`offset`);
+  const offsetQueryParam = searchParams.get(`offset`);
   const limitQueryParam = searchParams.get(`limit`);
 
   useEffect(() => {
-    if (offset) {
-      setCurrentPage(parseInt(offset));
+    if (offsetQueryParam) {
+      setCurrentPage(parseInt(offsetQueryParam));
     }
     if (limitQueryParam) {
       setLimit(parseInt(limitQueryParam));
     }
   }, []);
-  /* implementez limit lfl ca offset si pe linia 30 ii dau si limita,
-daca limita nu exista, limita by default e 4 */
+
   useEffect(() => {
     const effect = async () => {
       try {

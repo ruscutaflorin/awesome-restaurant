@@ -27,7 +27,9 @@ export const getRestaurantById = async (
     },
     include: {
       reservations: true,
-      categories: true,
+      categories: {
+        include: { products: true },
+      },
       reviews: true,
       diningTables: true,
     },

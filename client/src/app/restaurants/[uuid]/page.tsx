@@ -15,6 +15,7 @@ const RestaurantDetails: React.FC<RestaurantDetailed> = () => {
       try {
         const response = await getRestaurant(params.uuid);
         setRestaurant(response.data);
+        console.log(response.data);
         setLoading(false);
       } catch (err) {
         console.log(err);
@@ -29,25 +30,6 @@ const RestaurantDetails: React.FC<RestaurantDetailed> = () => {
 
   return (
     <div className="m-0 p-0">
-      {restaurant && (
-        <>
-          <h1>{restaurant.name}</h1>
-          <p>Address: {restaurant.address}</p>
-          <p>Location: {restaurant.location}</p>
-          {restaurant.businessHours && (
-            <p>Business Hours: {restaurant.businessHours.join(", ")}</p>
-          )}
-
-          <h2>Reservations:</h2>
-          {restaurant.reservations &&
-            restaurant.reservations.map((reservation) => (
-              <div key={reservation.id}>
-                {/* <p>Reservation Date: {reservation.reservationDate}</p> */}
-                <p>Number of Guests: {reservation.numberOfGuests}</p>
-              </div>
-            ))}
-        </>
-      )}
       {loading && !restaurant ? (
         <div>Loading...</div>
       ) : (

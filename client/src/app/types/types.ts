@@ -1,6 +1,6 @@
 export type RestaurantDetailed = {
   diningTables: DiningTable[];
-  categories: Category[];
+  categories: CategoryDetailed[];
   reservations: Reservation[];
   reviews: Review[];
 } & Restaurant;
