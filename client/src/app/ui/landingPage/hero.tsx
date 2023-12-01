@@ -11,7 +11,7 @@ const Hero = () => {
       <div className="hero-overlay bg-opacity-60"></div>
       <div className="hero-content text-center text-neutral-content">
         <div className="max-w-md">
-          <h1 className="mb-5 text-5xl font-bold">manca-mi-ai pula</h1>
+          <h1 className="mb-5 text-5xl font-bold">header text</h1>
           <p className="mb-5">
             Explore diverse cuisines, exclusive deals, and hidden gems. Your
             ultimate dining companion connects food enthusiasts with local
