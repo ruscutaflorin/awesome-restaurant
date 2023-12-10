@@ -35,7 +35,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-Object.defineProperty(exports, "__esModule", { value: true });
+exports.__esModule = true;
 var client_1 = require("@prisma/client");
 var prisma = new client_1.PrismaClient();
 function seedDatabase() {
@@ -53,16 +53,16 @@ function seedDatabase() {
                             data: {
                                 name: "User ".concat(i),
                                 email: "user".concat(i, "_").concat(Date.now(), "@example.com"),
-                                password: "password123", // Change this to a secure password hashing method
-                            },
+                                password: "password123"
+                            }
                         })];
                 case 2:
                     user = _a.sent();
                     return [4 /*yield*/, prisma.permission.create({
                             data: {
                                 name: "Permission ".concat(i),
-                                code: "permission_".concat(i),
-                            },
+                                code: "permission_".concat(i)
+                            }
                         })];
                 case 3:
                     permission = _a.sent();
@@ -72,8 +72,8 @@ function seedDatabase() {
                                 address: "Address ".concat(i),
                                 location: "Location ".concat(i),
                                 businessHours: ["9 AM - 5 PM"],
-                                ownerId: user.id,
-                            },
+                                ownerId: user.id
+                            }
                         })];
                 case 4:
                     restaurant = _a.sent();
@@ -84,8 +84,8 @@ function seedDatabase() {
                                 capacity: Math.floor(Math.random() * 10) + 2,
                                 positionX: Math.floor(Math.random() * 100),
                                 positionY: Math.floor(Math.random() * 100),
-                                restaurantId: restaurant.id,
-                            },
+                                restaurantId: restaurant.id
+                            }
                         })];
                 case 5:
                     diningTable = _a.sent();
@@ -95,16 +95,16 @@ function seedDatabase() {
                                 orderDate: new Date(),
                                 totalAmount: Math.floor(Math.random() * 100) + 10,
                                 tableId: diningTable.id,
-                                userId: user.id,
-                            },
+                                userId: user.id
+                            }
                         })];
                 case 6:
                     order = _a.sent();
                     return [4 /*yield*/, prisma.category.create({
                             data: {
                                 name: "Category ".concat(i),
-                                restaurantId: restaurant.id,
-                            },
+                                restaurantId: restaurant.id
+                            }
                         })];
                 case 7:
                     category = _a.sent();
@@ -116,8 +116,8 @@ function seedDatabase() {
                                 basePrice: Math.floor(Math.random() * 40) + 5,
                                 ingredients: ["Ingredient1", "Ingredient2"],
                                 availability: true,
-                                categoryId: category.id,
-                            },
+                                categoryId: category.id
+                            }
                         })];
                 case 8:
                     product = _a.sent();
@@ -129,8 +129,8 @@ function seedDatabase() {
                                 numberOfGuests: Math.floor(Math.random() * 10) + 2,
                                 customerName: "Customer ".concat(i),
                                 customerPhone: "Phone ".concat(i),
-                                reservationStatus: "Pending",
-                            },
+                                reservationStatus: "Pending"
+                            }
                         })];
                 case 9:
                     reservation = _a.sent();
@@ -140,8 +140,8 @@ function seedDatabase() {
                                 userId: user.id,
                                 rating: Math.floor(Math.random() * 5) + 1,
                                 reviewText: "Review Text ".concat(i),
-                                productId: product.id,
-                            },
+                                productId: product.id
+                            }
                         })];
                 case 10:
                     review = _a.sent();
@@ -150,8 +150,8 @@ function seedDatabase() {
                                 name: "Staff User ".concat(i),
                                 role: "Waiter",
                                 userId: user.id,
-                                restaurantId: restaurant.id,
-                            },
+                                restaurantId: restaurant.id
+                            }
                         })];
                 case 11:
                     staffUser = _a.sent();
@@ -160,8 +160,8 @@ function seedDatabase() {
                                 status: "Completed",
                                 method: "Credit Card",
                                 transactionID: "TransactionID ".concat(i),
-                                orderId: order.id,
-                            },
+                                orderId: order.id
+                            }
                         })];
                 case 12:
                     payment = _a.sent();
@@ -170,8 +170,8 @@ function seedDatabase() {
                                 orderId: order.id,
                                 productId: product.id,
                                 quantity: Math.floor(Math.random() * 5) + 1,
-                                diningTableId: diningTable.id,
-                            },
+                                diningTableId: diningTable.id
+                            }
                         })];
                 case 13:
                     orderItem = _a.sent();
