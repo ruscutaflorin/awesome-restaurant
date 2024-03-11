@@ -55,6 +55,6 @@ export const loginService = async (userEmail: string, userPassword: string) => {
 
 const createToken = (id: number) => {
   return jwt.sign({ id }, JWT_SECRET, {
-    expiresIn: "1h",
+    expiresIn: "2h",
   });
 };
