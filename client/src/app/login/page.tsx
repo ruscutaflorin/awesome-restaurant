@@ -1,3 +1,4 @@
+"use client";
 import LoginForm from "../ui/loginPage/login-form";
 
 export default function Page() {

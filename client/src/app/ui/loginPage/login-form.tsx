@@ -1,77 +1,66 @@
-"use client";
+import React, { useState } from "react";
+import { Container, TextField, Button, Typography } from "@mui/material";
+import { useAuthStore } from "@/app/store/user";
+import axios from "axios";
+const LoginPage = () => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const setUser = useAuthStore((state) => state);
 
-import { lusitana } from "../typography/fonts";
-import {
-  AtSymbolIcon,
-  KeyIcon,
-  ExclamationCircleIcon,
-} from "@heroicons/react/24/outline";
-import { ArrowRightIcon } from "@heroicons/react/20/solid";
-import { useFormState, useFormStatus } from "react-dom";
+  const logIn = async () => {
+    try {
+      const response = await axios
+        .post("http://localhost:8000/api/auth/login", {
+          email: username,
+          password: password,
+        })
+        .then((response) => {
+          setUser.logIn(response.data);
+          console.log("Logged in successfully!");
+        });
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-export default function LoginForm() {
   return (
-    <form className="space-y-3">
-      <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
-        <h1
-          className={`${lusitana.className} text-neutral mb-3 text-2xl mx-auto flex items-center justify-center `}
+    <Container className="mx-auto mt-16 p-8 bg-gray-100 max-w-md rounded-lg">
+      <Typography variant="h4" align="center" gutterBottom>
+        Login
+      </Typography>
+      <form onSubmit={(e) => e.preventDefault()} className="space-y-4">
+        <TextField
+          id="outlined-start-adornment"
+          label="Username"
+          variant="outlined"
+          fullWidth
+          margin="normal"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        <TextField
+          id="outlined-start-adornment"
+          label="Password"
+          variant="outlined"
+          type="password"
+          fullWidth
+          margin="normal"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <Button
+          variant="contained"
+          color="primary"
+          fullWidth
+          onClick={logIn}
+          className="bg-blue-500 text-white hover:bg-blue-700 focus:outline-none focus:ring focus:border-blue-300"
         >
-          Log In
-        </h1>
-        <div className="w-full">
-          <div>
-            <label
-              className="mb-3 mt-5 block text-xs font-medium text-gray-900"
-              htmlFor="email"
-            >
-              Email
-            </label>
-            <div className="relative">
-              <input
-                className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
-                id="email"
-                type="email"
-                name="email"
-                placeholder="Enter your email address"
-                required
-              />
-              <AtSymbolIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
-            </div>
-          </div>
-          <div className="mt-4">
-            <label
-              className="mb-3 mt-5 block text-xs font-medium text-gray-900"
-              htmlFor="password"
-            >
-              Password
-            </label>
-            <div className="relative">
-              <input
-                className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
-                id="password"
-                type="password"
-                name="password"
-                placeholder="Enter password"
-                required
-                minLength={6}
-              />
-              <KeyIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
-            </div>
-          </div>
-        </div>
-        <LoginButton />
-        <div className="flex h-8 items-end space-x-1"></div>
-      </div>
-    </form>
+          Login
+        </Button>
+        <p>{setUser.user.id}</p>
+      </form>
+    </Container>
   );
-}
+};
 
-function LoginButton() {
-  const { pending } = useFormStatus();
-
-  return (
-    <button className="btn btn-md btn-neutral mt-6 w-2/6 mx-auto flex items-center justify-center">
-      Log In <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
-    </button>
-  );
-}
+export default LoginPage;

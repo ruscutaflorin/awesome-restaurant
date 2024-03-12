@@ -3,7 +3,9 @@ import "../app/styles/global.css";
 import { inter } from "@/app/ui/typography/fonts";
 import { usePathname } from "next/navigation";
 import Header from "./ui/components/navbar/header";
-
+import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
+import { ThemeProvider } from "@mui/material/styles";
+import theme from "./theme";
 // export const metadata: Metadata = {
 //   title: {
 //     template: "%s | Deliver Ready",
@@ -29,8 +31,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        {!shouldExcludeHeader && <Header />}
-        {children}
+        <AppRouterCacheProvider>
+          <ThemeProvider theme={theme}>
+            {!shouldExcludeHeader && <Header />}
+            {children}
+          </ThemeProvider>
+        </AppRouterCacheProvider>
       </body>
     </html>
   );
