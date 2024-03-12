@@ -31,23 +31,21 @@ export const registerService = async (user: Prisma.UserCreateInput) => {
 
 export const loginService = async (userEmail: string, userPassword: string) => {
   try {
-    const foundUser = await db.user.findUnique({
+    const user = await db.user.findUnique({
       where: {
         email: userEmail,
       },
     });
-    if (!foundUser) {
+    if (!user) {
       throw new AuthenticationError();
     }
-    const comparePassword = await bcrypt.compare(
-      userPassword,
-      foundUser.password
-    );
+    const comparePassword = await bcrypt.compare(userPassword, user.password);
     if (!comparePassword) {
       throw new AuthenticationError();
     }
-    const token = createToken(foundUser.id);
-    return { foundUser, token };
+    // todo: change this user si find user, daca las user tre sa fac o schema
+    const token = createToken(user.id);
+    return { user, token };
   } catch (err) {
     throw err;
   }
