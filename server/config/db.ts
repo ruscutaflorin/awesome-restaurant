@@ -1,5 +1,9 @@
 import { PrismaClient } from "@prisma/client";
-import { getNextReservationForTable } from "../restaurant/services/restaurant";
+import {
+  nextReservationForTable,
+  getRestaurantById,
+  paginatedRestaurants,
+} from "../restaurant/services/restaurant";
 let db: PrismaClient;
 
 declare global {
@@ -10,9 +14,9 @@ if (!globalThis.__db) {
   globalThis.__db = new PrismaClient().$extends({
     model: {
       diningTable: {
-        async getNextReservation(tableId: number) {
+        async getNextReservationForTable(tableId: number) {
           try {
-            const result = await getNextReservationForTable(tableId);
+            const result = await nextReservationForTable(tableId);
             return result;
           } catch (error) {
             console.error(error);
@@ -21,8 +25,23 @@ if (!globalThis.__db) {
         },
       },
       restaurant: {
-        async getBestRestaurant(name: string) {
-          console.log("inside getBestRestaurant");
+        async getRestaurantById(uuid: string) {
+          try {
+            const result = await getRestaurantById(uuid);
+            return result;
+          } catch (error) {
+            console.error(error);
+            throw error;
+          }
+        },
+        async getPaginatedRestaurants(offset: number, limit: number) {
+          try {
+            const result = await paginatedRestaurants(offset, limit);
+            return result;
+          } catch (error) {
+            console.log(error);
+            throw error;
+          }
         },
       },
     },

@@ -1,12 +1,29 @@
 import express from "express";
-import { getClosestReservation, getRestaurants } from "./views";
-import { validateGetClosestReservation } from "./services/validation";
+import { auth } from "../auth/middleware/auth";
+import {
+  getClosestReservationForTableId,
+  getRestaurantById,
+  getRestaurants,
+  getRestaurantsPaginated,
+} from "./views";
+import {
+  validateGetClosestReservation,
+  validateGetPaginatedRestaurants,
+  validateGetRestaurantById,
+} from "./services/validation";
 
 export const router = express.Router();
 
+router.use(auth);
+router.get(
+  "/paginate",
+  validateGetPaginatedRestaurants,
+  getRestaurantsPaginated
+);
 router.get("", getRestaurants);
 router.get(
-  "/getClosestReservationForTable",
+  "/tables/:id",
   validateGetClosestReservation,
-  getClosestReservation
+  getClosestReservationForTableId
 );
+router.get("/:uuid", validateGetRestaurantById, getRestaurantById);

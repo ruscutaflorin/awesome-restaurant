@@ -12,6 +12,7 @@ datasource db {
 
 model Restaurant {
   id            Int           @id @default(autoincrement())
+  uuid          String        @default(uuid()) @db.Uuid
   name          String
   address       String
   location      String
@@ -77,6 +78,7 @@ model Order {
 
 model Payment {
   id            Int      @id @default(autoincrement())
+  uuid          String   @default(uuid()) @db.Uuid
   status        String
   method        String
   transactionID String?
