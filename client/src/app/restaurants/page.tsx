@@ -14,7 +14,7 @@ const Restaurants: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number | null>(0);
   const [totalPages, setTotalPages] = useState<number>(0);
   const [limit, setLimit] = useState<number>(RESTAURANTS_PER_PAGE);
-
+  const token = useAuthStore((state) => state.token);
   const searchParams = useSearchParams();
   const offsetQueryParam = searchParams.get(`offset`);
   const limitQueryParam = searchParams.get(`limit`);
@@ -30,34 +30,10 @@ const Restaurants: React.FC = () => {
   useEffect(() => {
     const effect = async () => {
       try {
-        //TODO: IMPORTANT - check if user is authenticated, dc varianta comentata nu merge
-        /* 
-        if (localStorageUser && localStorageToken) {
-          const { id, name, email, profilePic } = JSON.parse(localStorageUser);
-          authenticateUser({
-            user: { id, name, email, profilePic },
-            token: localStorageToken,
-          });
-          console.log(user, token);
-        }
-        */
-        const localStorageUser = localStorage.getItem("user");
-        const localStorageToken = localStorage.getItem("token");
-        if (localStorageUser && localStorageToken) {
-          const { id, name, email, profilePic } = JSON.parse(localStorageUser);
-          useAuthStore.setState({
-            user: { id, name, email, profilePic },
-            token: localStorageToken,
-          });
-        }
         if (currentPage === null) {
           return;
         }
-        const res = await fetchRestaurants(
-          currentPage,
-          limit,
-          useAuthStore.getState().token
-        );
+        const res = await fetchRestaurants(currentPage, limit, token);
         console.log(res.data);
         setRestaurants(res.data.restaurants);
         setTotalPages(res.data.numberOfPages);
@@ -66,7 +42,7 @@ const Restaurants: React.FC = () => {
       }
     };
     effect();
-  }, [currentPage]);
+  }, [currentPage, token]);
 
   const paginate = (pageNumber: number) => {
     setCurrentPage(pageNumber);

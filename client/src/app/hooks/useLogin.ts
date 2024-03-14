@@ -13,8 +13,6 @@ export const useLogin = () => {
       const response = await fetchUsers(email, password);
       if (response) {
         setLoggedUser(response);
-        localStorage.setItem("token", response.token);
-        localStorage.setItem("user", JSON.stringify(response.user));
         showToast("success", `Logged in successfully!`);
       }
     } catch (error: any) {
