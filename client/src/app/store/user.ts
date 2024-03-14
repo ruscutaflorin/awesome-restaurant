@@ -9,11 +9,14 @@ type User = {
 type AuthStore = {
   user: User;
   token: string;
+};
+
+type AuthActions = {
   logIn: (data: AuthStore) => Promise<void>;
   logOut: () => Promise<void>;
 };
 
-export const useAuthStore = create<AuthStore>((set) => ({
+export const useAuthStore = create<AuthStore & AuthActions>((set) => ({
   user: {
     id: null,
     name: "",
