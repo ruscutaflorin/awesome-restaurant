@@ -9,15 +9,16 @@ import RestaurantFeaturedItems from "@/app/ui/restaurant/featured";
 import RestaurantSearch from "@/app/ui/restaurant/search";
 import RestaurantProductCard from "@/app/ui/components/product-card";
 import image from "@/../../public/restaurant-icon.svg";
+import { useAuthStore } from "@/app/store/user";
 export const RestaurantHomePage = () => {
   const [restaurant, setRestaurant] = useState<RestaurantDetailed | null>(null);
   const [loading, setLoading] = useState(true);
   const params = useParams();
-
+  const token = useAuthStore((state) => state.token);
   useEffect(() => {
     const effect = async () => {
       try {
-        const response = await getRestaurant(params.uuid);
+        const response = await getRestaurant(params.uuid, token);
         setRestaurant(response.data);
         setLoading(false);
       } catch (err) {

@@ -1,5 +1,6 @@
 "use client";
 import { getRestaurant } from "@/app/api/restaurants";
+import { useAuthStore } from "@/app/store/user";
 import { RestaurantDetailed } from "@/app/types/types";
 import Menu from "@/app/ui/restaurant/menu";
 import RestaurantWelcomePage from "@/app/ui/restaurant/welcome";
@@ -14,11 +15,12 @@ const RestaurantDetails: React.FC<RestaurantDetailed> = () => {
   const params = useParams();
   const [restaurant, setRestaurant] = useState<RestaurantDetailed | null>(null);
   const [loading, setLoading] = useState(true);
+  const token = useAuthStore((state) => state.token);
 
   useEffect(() => {
     const effect = async () => {
       try {
-        const response = await getRestaurant(params.uuid);
+        const response = await getRestaurant(params.uuid, token);
         setRestaurant(response.data);
         console.log(response.data);
         setLoading(false);

@@ -26,10 +26,15 @@ export const fetchRestaurants = async (
   }
 };
 
-export const getRestaurant = async (uuid: string | string[]) => {
+export const getRestaurant = async (uuid: string | string[], token: string) => {
   try {
     const response = await axios.get(
-      `http://localhost:8000/api/restaurants/${uuid}`
+      `http://localhost:8000/api/restaurants/${uuid}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
     );
     return response;
   } catch (err) {
