@@ -6,6 +6,7 @@ import Header from "./ui/components/navbar/header";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "./theme";
+import ToastProvider from "./utils/ToastProvider";
 // export const metadata: Metadata = {
 //   title: {
 //     template: "%s | Deliver Ready",
@@ -32,10 +33,12 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <AppRouterCacheProvider>
-          <ThemeProvider theme={theme}>
-            {!shouldExcludeHeader && <Header />}
-            {children}
-          </ThemeProvider>
+          <ToastProvider>
+            <ThemeProvider theme={theme}>
+              {!shouldExcludeHeader && <Header />}
+              {children}
+            </ThemeProvider>
+          </ToastProvider>
         </AppRouterCacheProvider>
       </body>
     </html>
