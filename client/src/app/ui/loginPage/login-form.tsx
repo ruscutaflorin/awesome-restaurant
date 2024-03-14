@@ -1,28 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Container, TextField, Button, Typography } from "@mui/material";
-import { useAuthStore } from "@/app/store/user";
-import axios from "axios";
+import { useLogin } from "@/app/hooks/useLogin";
+import { useLogout } from "@/app/hooks/useLogout";
 const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const setUser = useAuthStore((state) => state);
+  const { logIn, isLoading } = useLogin();
+  const { logOut } = useLogout();
 
-  const logIn = async () => {
-    try {
-      const response = await axios
-        .post("http://localhost:8000/api/auth/login", {
-          email: username,
-          password: password,
-        })
-        .then((response) => {
-          setUser.logIn(response.data);
-          console.log("Logged in successfully!");
-        });
-    } catch (error) {
-      console.error(error);
-    }
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    await logIn(username, password);
   };
-
+  const handleLogout = async (e: any) => {
+    e.preventDefault();
+    await logOut();
+  };
   return (
     <Container className="mx-auto mt-16 p-8 bg-gray-100 max-w-md rounded-lg">
       <Typography variant="h4" align="center" gutterBottom>
@@ -49,15 +42,23 @@ const LoginPage = () => {
           onChange={(e) => setPassword(e.target.value)}
         />
         <Button
+          disabled={isLoading}
           variant="contained"
           color="primary"
           fullWidth
-          onClick={logIn}
+          onClick={handleSubmit}
           className="bg-blue-500 text-white hover:bg-blue-700 focus:outline-none focus:ring focus:border-blue-300"
         >
           Login
         </Button>
-        <p>{setUser.user.id}</p>
+        <Button
+          variant="contained"
+          color="secondary"
+          fullWidth
+          onClick={handleLogout}
+        >
+          LogOut
+        </Button>
       </form>
     </Container>
   );
