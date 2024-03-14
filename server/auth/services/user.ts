@@ -43,7 +43,6 @@ export const loginService = async (userEmail: string, userPassword: string) => {
     if (!comparePassword) {
       throw new AuthenticationError();
     }
-    // todo: change this user si find user, daca las user tre sa fac o schema
     const token = createToken(user.id);
     return { user, token };
   } catch (err) {
