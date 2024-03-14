@@ -15,7 +15,7 @@ export const fetchRestaurants = async (
       `http://localhost:8000/api/restaurants/paginate?offset=${page}&limit=${restaurantsPerPage}`,
       {
         headers: {
-          Authorization: `Bearer ${token}`, // Attach token in the Authorization header
+          Authorization: `Bearer ${token}`,
         },
       }
     );
