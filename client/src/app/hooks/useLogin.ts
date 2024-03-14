@@ -1,6 +1,5 @@
-import axios from "axios";
 import { useAuthStore } from "../store/user";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { showToast } from "../utils/ToastHelper";
 import { fetchUsers } from "../api/auth";
 
