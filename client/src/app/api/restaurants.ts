@@ -4,14 +4,20 @@ import { RESTAURANTS_PER_PAGE } from "../utils/constants";
 
 export const fetchRestaurants = async (
   page: number,
-  restaurantsPerPage: number = RESTAURANTS_PER_PAGE
+  restaurantsPerPage: number = RESTAURANTS_PER_PAGE,
+  token: string
 ) => {
   try {
     const response = await axios.get<{
       restaurants: Restaurant[] | null;
       numberOfPages: number;
     }>(
-      `http://localhost:8000/api/restaurants/paginate?offset=${page}&limit=${restaurantsPerPage}`
+      `http://localhost:8000/api/restaurants/paginate?offset=${page}&limit=${restaurantsPerPage}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`, // Attach token in the Authorization header
+        },
+      }
     );
     return response;
   } catch (err) {
