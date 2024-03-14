@@ -1,4 +1,5 @@
 import express from "express";
+import { auth } from "../auth/middleware/auth";
 import {
   getClosestReservationForTableId,
   getRestaurantById,
@@ -13,6 +14,7 @@ import {
 
 export const router = express.Router();
 
+router.use(auth);
 router.get(
   "/paginate",
   validateGetPaginatedRestaurants,
