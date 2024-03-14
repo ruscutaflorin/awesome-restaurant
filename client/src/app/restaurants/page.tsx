@@ -7,6 +7,7 @@ import Pagination from "../ui/restaurantsPage/pagination";
 import Search from "../ui/restaurantsPage/search";
 import { useSearchParams } from "next/navigation";
 import { RESTAURANTS_PER_PAGE } from "../utils/constants";
+import { useAuthStore } from "../store/user";
 
 const Restaurants: React.FC = () => {
   const [restaurants, setRestaurants] = useState<Restaurant[] | null>(null);
@@ -26,14 +27,37 @@ const Restaurants: React.FC = () => {
       setLimit(parseInt(limitQueryParam));
     }
   }, []);
-
   useEffect(() => {
     const effect = async () => {
       try {
+        //TODO: IMPORTANT - check if user is authenticated, dc varianta comentata nu merge
+        /* 
+        if (localStorageUser && localStorageToken) {
+          const { id, name, email, profilePic } = JSON.parse(localStorageUser);
+          authenticateUser({
+            user: { id, name, email, profilePic },
+            token: localStorageToken,
+          });
+          console.log(user, token);
+        }
+        */
+        const localStorageUser = localStorage.getItem("user");
+        const localStorageToken = localStorage.getItem("token");
+        if (localStorageUser && localStorageToken) {
+          const { id, name, email, profilePic } = JSON.parse(localStorageUser);
+          useAuthStore.setState({
+            user: { id, name, email, profilePic },
+            token: localStorageToken,
+          });
+        }
         if (currentPage === null) {
           return;
         }
-        const res = await fetchRestaurants(currentPage, limit);
+        const res = await fetchRestaurants(
+          currentPage,
+          limit,
+          useAuthStore.getState().token
+        );
         console.log(res.data);
         setRestaurants(res.data.restaurants);
         setTotalPages(res.data.numberOfPages);
