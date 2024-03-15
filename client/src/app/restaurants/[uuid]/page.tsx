@@ -2,7 +2,6 @@
 import { getRestaurant } from "@/app/api/restaurants";
 import { useAuthStore } from "@/app/store/user";
 import { RestaurantDetailed } from "@/app/types/types";
-import Menu from "@/app/ui/restaurant/menu";
 import RestaurantWelcomePage from "@/app/ui/restaurant/welcome";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";

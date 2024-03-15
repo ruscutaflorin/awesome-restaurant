@@ -15,7 +15,7 @@ function HeroSecond() {
           </p>
           <a
             href="#"
-            className="inline-flex items-center justify-center px-5 py-3 mr-3 text-base font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-white hover:text-black focus:ring-4 focus:bg-300 dark:focus:bg-neutral-900"
+            className="inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center dark:bg-accent bg-opacity-75 text-gray-900 border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 dark:text-white dark:border-gray-700 hover:bg-amber-500 dark:focus:ring-gray-800  hover:text-black"
           >
             Speak to Sales
           </a>

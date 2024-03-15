@@ -1,6 +1,6 @@
 import axios from "axios";
 import { Restaurant } from "../types/types";
-import { RESTAURANTS_PER_PAGE } from "../utils/constants";
+import { RESTAURANTS_PER_PAGE } from "../../lib/utils/constants";
 
 export const fetchRestaurants = async (
   page: number,

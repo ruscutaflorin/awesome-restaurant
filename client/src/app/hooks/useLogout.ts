@@ -1,5 +1,5 @@
 import { useAuthStore } from "../store/user";
-import { showToast } from "../utils/ToastHelper";
+import { showToast } from "../../lib/utils/ToastHelper";
 
 export const useLogout = () => {
   const logout = useAuthStore((state) => state.logOut);
@@ -10,7 +10,7 @@ export const useLogout = () => {
       await logout();
       showToast("success", `Logged out successfully!`);
     } else {
-      showToast("info", `You are not logged in!`);
+      showToast("warning", `You are not logged in!`);
     }
   };
   return {

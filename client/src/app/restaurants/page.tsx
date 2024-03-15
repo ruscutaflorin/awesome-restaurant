@@ -6,7 +6,7 @@ import CardRestaurant from "../ui/restaurantsPage/card-restaurant";
 import Pagination from "../ui/restaurantsPage/pagination";
 import Search from "../ui/restaurantsPage/search";
 import { useSearchParams } from "next/navigation";
-import { RESTAURANTS_PER_PAGE } from "../utils/constants";
+import { RESTAURANTS_PER_PAGE } from "../../lib/utils/constants";
 import { useAuthStore } from "../store/user";
 
 const Restaurants: React.FC = () => {

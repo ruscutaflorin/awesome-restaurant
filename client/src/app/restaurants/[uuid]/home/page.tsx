@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import { getRestaurant } from "@/app/api/restaurants";
 import { useParams } from "next/navigation";
 import RestaurantHeader from "@/app/ui/restaurant/header";
-import CategoriesCarousel from "@/app/ui/restaurant/carousel";
 import RestaurantFeaturedItems from "@/app/ui/restaurant/featured";
 import RestaurantSearch from "@/app/ui/restaurant/search";
 import RestaurantProductCard from "@/app/ui/components/product-card";
@@ -37,7 +36,7 @@ export const RestaurantHomePage = () => {
     <div>
       <RestaurantHeader image={null} />
       <RestaurantSearch />
-      <CategoriesCarousel />
+      {/* <CategoriesCarousel /> */}
       <p className="ml-20">Featured Items</p>
       <RestaurantFeaturedItems />
       <p className="ml-20">People are looking for 🔥</p>

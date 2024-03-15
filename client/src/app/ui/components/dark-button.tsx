@@ -14,13 +14,12 @@ const DarkButton = ({
   ...props
 }: ButtonProps): JSX.Element => {
   const buttonClasses = clsx(
-    "btn",
-    "btn-default",
-    "bg-zinc-800",
-    "hover:bg-zinc-500",
     "text-white",
-    { "w-full": width },
-    { hover: hover }
+    "bg-zinc-800",
+    hover ? "hover:bg-zinc-500" : "",
+    "rounded-lg",
+    "px-4 py-2",
+    { "w-full": width }
   );
 
   return (

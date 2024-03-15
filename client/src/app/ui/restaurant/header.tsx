@@ -1,11 +1,13 @@
 import React from "react";
 import defaultImage from "@/../../public/default-user.png";
+
 type Props = {
   image: HTMLImageElement | null;
 };
+
 const RestaurantHeader: React.FC<Props> = ({ image }: Props): JSX.Element => {
   return (
-    <div className="flex flex-row h-1/5 align-center justify-between my-5 mx-5">
+    <div className="flex flex-row h-1/5 items-center justify-between my-5 mx-5">
       <div>
         <h1>Menu</h1>
       </div>

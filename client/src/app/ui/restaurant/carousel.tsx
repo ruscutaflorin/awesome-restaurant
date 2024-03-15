@@ -1,4 +1,4 @@
-import React from "react";
+/* import React from "react";
 // TODO: de spart componenta, fiecare carousel-item ar trebui sa aiba ori nume categorie
 // TODO: si o imagine ori o imagine predefinita care sa includa si nume categorie
 const CategoriesCarousel = () => {
@@ -51,3 +51,4 @@ const CategoriesCarousel = () => {
 };
 
 export default CategoriesCarousel;
+ */
