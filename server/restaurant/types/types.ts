@@ -11,6 +11,13 @@ export type CustomPaginatedRestaurant = Restaurant & {
     limit: number
   ): Promise<{ restaurants: Restaurant[] | null; numberOfPages: number }>;
 };
+export type CustomSearchPaginatedRestaurant = Restaurant & {
+  getSearchPaginatedRestaurants(
+    offset: number,
+    limit: number,
+    query: string
+  ): Promise<{ restaurants: Restaurant[] | null; numberOfPages: number }>;
+};
 
 export type RestaurantDetailed = {
   diningTables: DiningTable[];
