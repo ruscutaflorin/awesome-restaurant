@@ -42,3 +42,28 @@ export const getRestaurant = async (uuid: string | string[], token: string) => {
     throw err;
   }
 };
+
+export const searchRestaurants = async (
+  page: number,
+  restaurantsPerPage: number = RESTAURANTS_PER_PAGE,
+  token: string,
+  querySearch: string
+) => {
+  try {
+    const response = await axios.get<{
+      restaurants: Restaurant[] | null;
+      numberOfPages: number;
+    }>(
+      `http://localhost:8000/api/restaurants/paginate?offset=${page}&limit=${restaurantsPerPage}&query=${querySearch}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+};
