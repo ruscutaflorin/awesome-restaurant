@@ -1,2 +1,4 @@
 de spart frontul pe servicii si logica, cum ar fi useEffectu
-de integrat axios in loc de fetch si pusa logica de axios intr-o functie si apelata functia in useEffectu
+TODO: sa imbunatatesc searchul
+TODO:pe pagina de restaurante sa intorc un arr de restaurante cu mai putine detalii
+TODO:cand merg pe restaurant cu GO il trimit pe url restaurant/id si acolo fac requestul mare.
