@@ -105,8 +105,3 @@ const Restaurants: React.FC = () => {
 };
 
 export default Restaurants;
-/*
-TODO:pe pagina de restaurante sa intorc un arr de restaurante cu mai putine detalii
-TODO:cand merg pe restaurant cu GO il trimit pe url restaurant/id si acolo fac requestul mare.
-TODO: sa imbunatatesc searchul
-*/
