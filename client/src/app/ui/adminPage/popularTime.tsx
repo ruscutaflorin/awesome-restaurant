@@ -15,7 +15,7 @@ const PopularTime = () => {
   ];
 
   return (
-    <div className=" bg-slate-800">
+    <div className="bg-slate-800">
       <h2 className="text-white">Popular Time</h2>
       <BarChart
         width={500}

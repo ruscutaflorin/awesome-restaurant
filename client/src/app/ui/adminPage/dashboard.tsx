@@ -28,7 +28,7 @@ const AdminDashboard = () => {
       </div>
 
       {/* Second Row */}
-      <div className="col-span-3 grid gap-10 grid-cols-3">
+      <div className="col-span-3 grid gap-10 grid-cols-3 m-5">
         <div className="col-span-1 grid-item">
           <PopularTime />
         </div>
