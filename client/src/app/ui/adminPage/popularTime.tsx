@@ -15,8 +15,8 @@ const PopularTime = () => {
   ];
 
   return (
-    <div className="bg-slate-800">
-      <h2 className="text-white">Popular Time</h2>
+    <div className="bg-slate-800 h-full w-full flex justify-center items-center rounded-xl">
+      <h2 className="text-white ml-3">Popular Time</h2>
       <BarChart
         width={500}
         height={300}

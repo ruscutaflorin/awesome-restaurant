@@ -12,7 +12,7 @@ const data2 = [
 
 const PaymentPieChart = () => {
   return (
-    <div className=" bg-slate-800 m-0 p-0">
+    <div className=" bg-slate-800 h-full w-full flex justify-center items-center rounded-xl">
       <PieChart
         series={[
           {

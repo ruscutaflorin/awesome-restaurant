@@ -3,7 +3,7 @@ import { LineChart } from "@mui/x-charts/LineChart";
 
 const RevenueLines = () => {
   return (
-    <div className="bg-slate-800 h-full">
+    <div className="bg-slate-800 h-full w-full flex justify-center items-center rounded-xl">
       <LineChart
         xAxis={[{ data: [1, 2, 3, 5, 8, 10] }]}
         series={[
