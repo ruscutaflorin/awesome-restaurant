@@ -45,8 +45,13 @@ const AdminDashboard = () => {
         <div className="col-span-1 grid-item">
           <RevenueLines />
         </div>
-        <div className="col-span-1 grid-item">
-          <Earning actualValue={1000} oldValue={200} />
+        <div className=" grid-col-span-2 grid grid-cols-1 my-auto gap-5">
+          <div className="col-span-1 grid-item">
+            <Earning actualValue={1000} oldValue={200} />
+          </div>
+          <div className="col-span-1 grid-item">
+            <Earning actualValue={1000} oldValue={200} />
+          </div>
         </div>
       </div>
     </div>

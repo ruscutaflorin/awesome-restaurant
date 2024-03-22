@@ -12,7 +12,7 @@ const Earning = ({
   const color = upFromLastMonth > 0 ? "text-green-500" : "text-red-500";
 
   return (
-    <main className="flex flex-col items-center mx-5 bg-slate-800 rounded-xl p-4">
+    <main className="flex flex-col items-center mx-5 bg-slate-800 rounded-xl p-4 ">
       <h5 className="text-white text-lg mb-2">Earning</h5>
       <h2 className="text-white text-2xl mb-2">{`$${actualValue}`}</h2>
       <h6 className="text-sm flex items-center">
