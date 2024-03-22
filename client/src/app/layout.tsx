@@ -1,12 +1,10 @@
 "use client";
 import "../app/styles/global.css";
-import { inter } from "@/app/ui/typography/fonts";
+import { Inter as FontSans } from "next/font/google";
 import { usePathname } from "next/navigation";
 import Header from "./ui/components/navbar/header";
-import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
-import { ThemeProvider } from "@mui/material/styles";
-import theme from "./theme";
-import ToastProvider from "./utils/ToastProvider";
+import ToastProvider from "../lib/utils/ToastProvider";
+import { cn } from "@/lib/utils";
 // export const metadata: Metadata = {
 //   title: {
 //     template: "%s | Deliver Ready",
@@ -16,6 +14,11 @@ import ToastProvider from "./utils/ToastProvider";
 //   metadataBase: new URL("https://next-learn-dashboard.vercel.sh"),
 // };
 
+const fontSans = FontSans({
+  subsets: ["latin"],
+  variable: "--font-sans",
+});
+
 export default function RootLayout({
   children,
 }: {
@@ -24,22 +27,23 @@ export default function RootLayout({
   const pathname = usePathname();
 
   // Check if the route is "/login" or starts with "/restaurants"
-  const excludeHeaderRoutes = ["/login", "/restaurants/"];
+  const excludeHeaderRoutes = ["/login", "/restaurants/", "/admin"];
   const shouldExcludeHeader = excludeHeaderRoutes.some((route) =>
     pathname.startsWith(route)
   );
 
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <AppRouterCacheProvider>
-          <ToastProvider>
-            <ThemeProvider theme={theme}>
-              {!shouldExcludeHeader && <Header />}
-              {children}
-            </ThemeProvider>
-          </ToastProvider>
-        </AppRouterCacheProvider>
+      <body
+        className={cn(
+          "min-h-screen bg-background font-sans antialiased",
+          fontSans.variable
+        )}
+      >
+        <ToastProvider>
+          {!shouldExcludeHeader && <Header />}
+          {children}
+        </ToastProvider>
       </body>
     </html>
   );

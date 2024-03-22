@@ -3,6 +3,7 @@ import {
   nextReservationForTable,
   getRestaurantById,
   paginatedRestaurants,
+  paginatedSearchedRestaurants,
 } from "../restaurant/services/restaurant";
 let db: PrismaClient;
 
@@ -37,6 +38,23 @@ if (!globalThis.__db) {
         async getPaginatedRestaurants(offset: number, limit: number) {
           try {
             const result = await paginatedRestaurants(offset, limit);
+            return result;
+          } catch (error) {
+            console.log(error);
+            throw error;
+          }
+        },
+        async getSearchPaginatedRestaurants(
+          offset: number,
+          limit: number,
+          query: string
+        ) {
+          try {
+            const result = await paginatedSearchedRestaurants(
+              offset,
+              limit,
+              query
+            );
             return result;
           } catch (error) {
             console.log(error);

@@ -6,6 +6,7 @@ import {
   CustomDiningTable,
   CustomPaginatedRestaurant,
   CustomRestaurantDetailed,
+  CustomSearchPaginatedRestaurant,
   Restaurant,
   RestaurantDetailed,
 } from "./types/types";
@@ -71,10 +72,18 @@ export async function getRestaurantsPaginated(req: Request, res: Response) {
 
     const offset: number = parseInt(req.query.offset as string);
     const limit: number = parseInt(req.query.limit as string);
-    const data = await (
-      db.restaurant as unknown as CustomPaginatedRestaurant
-    ).getPaginatedRestaurants(offset, limit);
-    return res.status(200).json(data);
+    const query: string = req.query.query as string;
+    if (query) {
+      const data = await (
+        db.restaurant as unknown as CustomSearchPaginatedRestaurant
+      ).getSearchPaginatedRestaurants(offset, limit, query);
+      return res.status(200).json(data);
+    } else {
+      const data = await (
+        db.restaurant as unknown as CustomPaginatedRestaurant
+      ).getPaginatedRestaurants(offset, limit);
+      return res.status(200).json(data);
+    }
   } catch (error: any) {
     return res.status(500).json(error.message);
   }

@@ -1,8 +1,9 @@
 import React from "react";
 import Card from "./card";
+
 function About() {
   return (
-    <div className="carousel carousel-end rounded-box w-full justify-evenly">
+    <div className="flex justify-evenly">
       <div className="carousel-item">
         <Card
           title="Effortless Dining Experience"

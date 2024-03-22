@@ -96,3 +96,40 @@ export const paginatedRestaurants = async (
   const numberOfPages = Math.ceil(countRestaurants / limit);
   return { restaurants, numberOfPages };
 };
+
+export const paginatedSearchedRestaurants = async (
+  offset: number,
+  limit: number,
+  query: string
+): Promise<{ restaurants: Restaurant[] | null; numberOfPages: number }> => {
+  const restaurants = await db.restaurant.findMany({
+    where: {
+      name: {
+        contains: query,
+      },
+    },
+    select: {
+      id: true,
+      uuid: true,
+      name: true,
+      address: true,
+      location: true,
+      businessHours: true,
+      contact: true,
+      ownerId: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+    skip: offset * limit,
+    take: limit,
+  });
+  const countRestaurants = await db.restaurant.count({
+    where: {
+      name: {
+        contains: query,
+      },
+    },
+  });
+  const numberOfPages = Math.ceil(countRestaurants / limit);
+  return { restaurants, numberOfPages };
+};

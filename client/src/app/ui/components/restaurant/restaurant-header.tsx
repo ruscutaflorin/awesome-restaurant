@@ -1,7 +1,7 @@
 import {
   RESTAURANT_DEFAULT_DESCRIPTION,
   RESTAURANT_DEFAULT_SLOGAN,
-} from "@/app/utils/constants";
+} from "@/lib/utils/constants";
 import React from "react";
 
 type Props = {
