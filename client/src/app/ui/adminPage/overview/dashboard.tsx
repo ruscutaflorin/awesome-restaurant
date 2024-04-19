@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import Earning from "./earning";
 import TotalOrders from "./totalOrders";

@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from "react";
 import defaultImage from "@/../../public/default-user.png";
 import {
