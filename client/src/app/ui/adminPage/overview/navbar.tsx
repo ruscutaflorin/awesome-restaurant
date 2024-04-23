@@ -2,100 +2,155 @@
 import React, { useState } from "react";
 import defaultImage from "@/../../public/default-user.png";
 import {
-  DashboardIcon,
   PersonIcon,
-  GearIcon,
-  PieChartIcon,
-  ActivityLogIcon,
   ExitIcon,
+  HomeIcon,
+  ArchiveIcon,
+  TableIcon,
+  ReaderIcon,
+  IconJarLogoIcon,
+  CalendarIcon,
 } from "@radix-ui/react-icons";
+import { useRouter } from "next/navigation";
 
 const AdminNavbar = () => {
   const [selectedIcon, setSelectedIcon] = useState(null);
-
+  const { push } = useRouter();
   const handleIconClick = (iconName: any) => {
+    let redirectURL = "";
+    switch (iconName) {
+      case "home":
+        redirectURL = "/admin";
+        break;
+      case "archive":
+        redirectURL = "/admin/management/categories";
+        break;
+      case "table":
+        redirectURL = "/admin/management/dining";
+        break;
+      case "reader":
+        redirectURL = "/admin/management/orders";
+        break;
+      case "iconjar":
+        redirectURL = "/admin/management/products";
+        break;
+      case "calendar":
+        redirectURL = "/admin/management/reservations";
+        break;
+      case "person":
+        redirectURL = "/admin/management/staff";
+        break;
+      default:
+        break;
+    }
+    push(redirectURL);
     setSelectedIcon(iconName);
   };
-
   return (
-    <main className="flex flex-col justify-between items-center h-screen bg-slate-900 w-full">
+    <main className="flex flex-col justify-between items-center h-screen bg-slate-900 w-1/12">
       <div className="user-info mt-10 mx-2">
         <img
           src={defaultImage.src}
           alt="user"
           className="w-10 h-10 rounded-full"
         />
-        <h1 className="text-gray-500 text-sm mt-1 text-white">Admin</h1>
+        <h1 className="text-gray-500 text-sm mt-1">Admin</h1>
       </div>
       <div className="navbar flex flex-col justify-center items-center gap-4 mt-4">
         <div className="flex items-center">
           <div
             className={`w-1 h-16 mr-2 ${
-              selectedIcon === "dashboard" ? "bg-red-500" : "bg-transparent"
+              selectedIcon === "home" ? "bg-red-500" : "bg-transparent"
             }`}
           ></div>
-          <DashboardIcon
+          <HomeIcon
             className={`w-8 h-16 ${
-              selectedIcon === "dashboard" ? "text-red-500" : "text-gray-500"
+              selectedIcon === "home" ? "text-red-500" : "text-gray-500"
             }`}
-            onClick={() => handleIconClick("dashboard")}
+            onClick={() => handleIconClick("home")}
           />
         </div>
         <div className="flex items-center">
           <div
             className={`w-1 h-16 mr-2 ${
-              selectedIcon === "activityLog" ? "bg-red-500" : "bg-transparent"
+              selectedIcon === "archive" ? "bg-red-500" : "bg-transparent"
             }`}
           ></div>
-          <ActivityLogIcon
+          <ArchiveIcon
             className={`w-8 h-16 ${
-              selectedIcon === "activityLog" ? "text-red-500" : "text-gray-500"
+              selectedIcon === "archive" ? "text-red-500" : "text-gray-500"
             }`}
-            onClick={() => handleIconClick("activityLog")}
+            onClick={() => handleIconClick("archive")}
           />
         </div>
         <div className="flex items-center">
           <div
             className={`w-1 h-16 mr-2 ${
-              selectedIcon === "pieChart" ? "bg-red-500" : "bg-transparent"
+              selectedIcon === "table" ? "bg-red-500" : "bg-transparent"
             }`}
           ></div>
-          <PieChartIcon
+          <TableIcon
             className={`w-8 h-16 ${
-              selectedIcon === "pieChart" ? "text-red-500" : "text-gray-500"
+              selectedIcon === "table" ? "text-red-500" : "text-gray-500"
             }`}
-            onClick={() => handleIconClick("pieChart")}
+            onClick={() => handleIconClick("table")}
           />
         </div>
         <div className="flex items-center">
           <div
             className={`w-1 h-16 mr-2 ${
-              selectedIcon === "person" ? "bg-red-500" : "bg-transparent"
+              selectedIcon === "reader" ? "bg-red-500" : "bg-transparent"
             }`}
           ></div>
-          <PersonIcon
-            className={`w-8 h-8 ${
-              selectedIcon === "person" ? "text-red-500" : "text-gray-500"
+          <ReaderIcon
+            className={`w-8 h-16 ${
+              selectedIcon === "reader" ? "text-red-500" : "text-gray-500"
             }`}
-            onClick={() => handleIconClick("person")}
+            onClick={() => handleIconClick("reader")}
           />
         </div>
         <div className="flex items-center">
           <div
             className={`w-1 h-8 mr-2 ${
-              selectedIcon === "gear" ? "bg-red-500" : "bg-transparent"
+              selectedIcon === "iconjar" ? "bg-red-500" : "bg-transparent"
             }`}
           ></div>
-          <GearIcon
-            className={`w-8 h-8 ${
-              selectedIcon === "gear" ? "text-red-500" : "text-gray-500"
+          <IconJarLogoIcon
+            className={`w-8 h-16 ${
+              selectedIcon === "iconjar" ? "text-red-500" : "text-gray-500"
             }`}
-            onClick={() => handleIconClick("gear")}
+            onClick={() => handleIconClick("iconjar")}
+          />
+        </div>
+        <div className="flex items-center">
+          <div
+            className={`w-1 h-8 mr-2 ${
+              selectedIcon === "calendar" ? "bg-red-500" : "bg-transparent"
+            }`}
+          ></div>
+          <CalendarIcon
+            className={`w-8 h-16 ${
+              selectedIcon === "calendar" ? "text-red-500" : "text-gray-500"
+            }`}
+            onClick={() => handleIconClick("calendar")}
+          />
+        </div>
+        <div className="flex items-center">
+          <div
+            className={`w-1 h-8 mr-2 ${
+              selectedIcon === "person" ? "bg-red-500" : "bg-transparent"
+            }`}
+          ></div>
+          <PersonIcon
+            className={`w-8 h-16 ${
+              selectedIcon === "person" ? "text-red-500" : "text-gray-500"
+            }`}
+            onClick={() => handleIconClick("person")}
           />
         </div>
       </div>
       <div className="logout mb-16">
-        <ExitIcon className="w-8 h-8 text-gray-500" />
+        <ExitIcon className="w-8 h-16 text-gray-500" />
       </div>
     </main>
   );

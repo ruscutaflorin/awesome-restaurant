@@ -48,59 +48,91 @@ const columns: ColumnDef<Order>[] = [
   {
     id: "id",
     header: "ID",
-    cell: ({ row }) => row.getValue("id"),
+    cell: ({ row }) => row.original.id.toString(),
+    enableSorting: true,
   },
   {
     id: "status",
+    accessorKey: "status",
     header: "Status",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("status")}</div>
-    ),
+    cell: ({ row }) => <div className="capitalize">{row.original.status}</div>,
   },
   {
     id: "orderDate",
-    header: "Order Date",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Order Date
+          <CaretSortIcon className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
     cell: ({ row }) =>
-      row.getValue("orderDate")
-        ? new Date(row.getValue("orderDate")).toLocaleString()
+      row.original.orderDate
+        ? new Date(row.original.orderDate).toLocaleString("en-GB", {
+            timeZone: "UTC",
+          })
         : "",
   },
   {
     id: "totalAmount",
-    header: "Total Amount",
+    accessorKey: "totalAmount",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Total Amount
+          <CaretSortIcon className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
     cell: ({ row }) => {
-      const totalAmount = parseFloat(row.getValue("totalAmount"));
-      const formatted = new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-      }).format(totalAmount);
-      return <div className="text-right font-medium">{formatted}</div>;
+      const totalAmount = parseFloat(row.original.totalAmount.toString());
+      if (!isNaN(totalAmount)) {
+        const formatted = new Intl.NumberFormat("en-US", {
+          style: "currency",
+          currency: "USD",
+        }).format(totalAmount);
+        return <div className="text-right font-medium">{formatted}</div>;
+      } else {
+        return <div className="text-right font-medium">Invalid amount</div>;
+      }
     },
   },
   {
     id: "tableId",
     header: "Table ID",
-    cell: ({ row }) => row.getValue("tableId") as string,
+    cell: ({ row }) => row.original.tableId.toString(),
   },
   {
     id: "userId",
     header: "User ID",
-    cell: ({ row }) => row.getValue("userId"),
+    cell: ({ row }) =>
+      row.original.userId ? row.original.userId.toString() : "",
   },
   {
     id: "createdAt",
     header: "Created At",
     cell: ({ row }) =>
-      row.getValue("createdAt")
-        ? new Date(row.getValue("createdAt")).toLocaleString()
+      row.original.createdAt
+        ? new Date(row.original.createdAt).toLocaleString("en-GB", {
+            timeZone: "UTC",
+          })
         : "",
   },
   {
     id: "updatedAt",
     header: "Updated At",
     cell: ({ row }) =>
-      row.getValue("updatedAt")
-        ? new Date(row.getValue("updatedAt")).toLocaleString()
+      row.original.updatedAt
+        ? new Date(row.original.updatedAt).toLocaleString("en-GB", {
+            timeZone: "UTC",
+          })
         : "",
   },
   {
@@ -164,7 +196,7 @@ const OrderTable: React.FC<OrderTableProps> = ({ orders }) => {
     <div className="w-full">
       <div className="flex items-center py-4">
         <Input
-          placeholder="Filter ..."
+          placeholder="Filter Status ..."
           value={(table.getColumn("status")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
             table.getColumn("status")?.setFilterValue(event.target.value)
@@ -275,4 +307,3 @@ const OrderTable: React.FC<OrderTableProps> = ({ orders }) => {
 };
 
 export default OrderTable;
-// todo: fix this bcs doesnt work
