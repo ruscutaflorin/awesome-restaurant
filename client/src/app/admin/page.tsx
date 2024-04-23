@@ -1,4 +1,3 @@
-import React from "react";
 import AdminDashboard from "../ui/adminPage/overview/dashboard";
 
 const AdminPage = () => {

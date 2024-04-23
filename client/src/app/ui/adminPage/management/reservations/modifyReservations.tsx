@@ -28,6 +28,7 @@ const ReservationManagement: React.FC<ReservationManagementProps> = ({
           >
             <p className="font-bold">Reservation ID: {reservation.id}</p>
             <p>
+
               Reservation Date:{" "}
               {reservation.reservationDate.toLocaleString("en-GB", {
                 timeZone: "UTC",

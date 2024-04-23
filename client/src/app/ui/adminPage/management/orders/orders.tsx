@@ -172,6 +172,7 @@ const OrderTable: React.FC<OrderTableProps> = ({ orders }) => {
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
+
   const table = useReactTable({
     data: orders,
     columns,
@@ -190,6 +191,7 @@ const OrderTable: React.FC<OrderTableProps> = ({ orders }) => {
       rowSelection,
     },
   });
+
   return (
     <div className="w-full">
       <div className="flex items-center py-4">
