@@ -5,6 +5,8 @@ import {
   paginatedRestaurants,
   paginatedSearchedRestaurants,
 } from "../restaurant/services/restaurant";
+import { restaurantIncomeFromOrdersService } from "../admin/services/admin";
+
 let db: PrismaClient;
 
 declare global {
@@ -18,6 +20,19 @@ if (!globalThis.__db) {
         async getNextReservationForTable(tableId: number) {
           try {
             const result = await nextReservationForTable(tableId);
+            return result;
+          } catch (error) {
+            console.error(error);
+            throw error;
+          }
+        },
+      },
+      order: {
+        async getRestaurantIncomeFromOrders(restaurantId: number) {
+          try {
+            const result = await restaurantIncomeFromOrdersService(
+              restaurantId
+            );
             return result;
           } catch (error) {
             console.error(error);
