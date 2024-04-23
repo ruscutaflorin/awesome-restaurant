@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Earning from "./earning";
 import TotalOrders from "./totalOrders";
 import Customers from "./customers";
@@ -9,15 +9,25 @@ import PopularTime from "./popularTime";
 import PieChartComponent from "./pieChart";
 import PaymentPieChart from "./paymentPie";
 import RevenueLines from "./revenueLines";
-
+import { restaurantIncome } from "../../../api/admin";
 const AdminDashboard = () => {
+  const [earning, setEarning] = useState(0);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await restaurantIncome(1);
+      console.log(result);
+      setEarning(result);
+    };
+    fetchData();
+  }, []);
   return (
     <main className="h-full flex justify-center items-center mx-auto">
       <div className="grid-container grid-cols-4 gap-4 ">
         {/* First Row */}
         <div className="col-span-4 grid grid-cols-4">
           <div className="col-span-1 grid-item">
-            <Earning actualValue={64320} oldValue={40000} />
+            <Earning actualValue={earning} oldValue={40000} />
           </div>
           <div className="col-span-1 grid-item">
             <Customers actualValue={3209} oldValue={4100} />
