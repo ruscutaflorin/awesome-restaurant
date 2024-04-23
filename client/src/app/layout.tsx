@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import Header from "./ui/components/navbar/header";
 import ToastProvider from "../lib/utils/ToastProvider";
 import { cn } from "@/lib/utils";
+import AdminNavbar from "./ui/adminPage/overview/navbar";
 // export const metadata: Metadata = {
 //   title: {
 //     template: "%s | Deliver Ready",
@@ -31,7 +32,7 @@ export default function RootLayout({
   const shouldExcludeHeader = excludeHeaderRoutes.some((route) =>
     pathname.startsWith(route)
   );
-
+  // const shouldIncludeAdminNavbar = pathname.startsWith("/admin");
   return (
     <html lang="en">
       <body
@@ -42,6 +43,7 @@ export default function RootLayout({
       >
         <ToastProvider>
           {!shouldExcludeHeader && <Header />}
+          {/* {shouldIncludeAdminNavbar && <AdminNavbar />} */}
           {children}
         </ToastProvider>
       </body>

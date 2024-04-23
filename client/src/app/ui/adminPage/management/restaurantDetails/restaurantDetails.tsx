@@ -6,7 +6,7 @@ type restaurantDetailsProps = {
   restaurant: Restaurant;
 };
 
-const RestaurantDetails: React.FC<restaurantDetailsProps> = ({
+const RestaurantDetailsUI: React.FC<restaurantDetailsProps> = ({
   restaurant,
 }) => {
   const [name, setName] = useState(restaurant.name);
@@ -96,4 +96,4 @@ const RestaurantDetails: React.FC<restaurantDetailsProps> = ({
   );
 };
 
-export default RestaurantDetails;
+export default RestaurantDetailsUI;

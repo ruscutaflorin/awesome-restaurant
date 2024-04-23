@@ -28,7 +28,10 @@ const ReservationManagement: React.FC<ReservationManagementProps> = ({
           >
             <p className="font-bold">Reservation ID: {reservation.id}</p>
             <p>
-              Reservation Date: {reservation.reservationDate.toLocaleString()}
+              Reservation Date:{" "}
+              {reservation.reservationDate.toLocaleString("en-GB", {
+                timeZone: "UTC",
+              })}
             </p>
             <p>Number of Guests: {reservation.numberOfGuests}</p>
             <p>Status: {reservation.reservationStatus}</p>
@@ -41,7 +44,9 @@ const ReservationManagement: React.FC<ReservationManagementProps> = ({
           <p>Reservation ID: {selectedReservation.id}</p>
           <p>
             Reservation Date:{" "}
-            {selectedReservation.reservationDate.toLocaleString()}
+            {selectedReservation.reservationDate.toLocaleString("en-GB", {
+              timeZone: "UTC",
+            })}
           </p>
           <p>Number of Guests: {selectedReservation.numberOfGuests}</p>
           <p>Status: {selectedReservation.reservationStatus}</p>
