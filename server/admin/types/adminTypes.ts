@@ -15,3 +15,10 @@ export type CustomRestaurantHourlyCustomersCount = Prisma.OrderFieldRefs & {
 export type CustomRestaurantDailyCustomersCount = Prisma.OrderFieldRefs & {
   getRestaurantDailyCustomersCount(restaurantId: number): Promise<any>;
 };
+
+export type CustomRestaurantMostPopularItems = Prisma.OrderItemFieldRefs & {
+  getRestaurantMostPopularItems(
+    restaurantId: number,
+    limit: number
+  ): Promise<any>;
+};

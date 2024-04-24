@@ -10,6 +10,7 @@ import {
   restaurantDailyCustomersCount,
   restaurantHourlyCustomersCount,
   restaurantIncomeFromOrdersService,
+  restaurantMostOrderedItems,
 } from "../admin/services/admin";
 
 let db: PrismaClient;
@@ -65,6 +66,23 @@ if (!globalThis.__db) {
         async getRestaurantDailyCustomersCount(restaurantId: number) {
           try {
             const result = await restaurantDailyCustomersCount(restaurantId);
+            return result;
+          } catch (error) {
+            console.error(error);
+            throw error;
+          }
+        },
+      },
+      orderItem: {
+        async getRestaurantMostPopularItems(
+          restaurantId: number,
+          limit: number
+        ) {
+          try {
+            const result = await restaurantMostOrderedItems(
+              restaurantId,
+              limit
+            );
             return result;
           } catch (error) {
             console.error(error);

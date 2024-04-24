@@ -91,3 +91,58 @@ export const restaurantDailyCustomersCount = async (restaurantID: number) => {
     throw new Error(error);
   }
 };
+
+export const restaurantMostOrderedItems = async (
+  restaurantID: number,
+  numberOfItems: number
+) => {
+  try {
+    const items = await db.orderItem.groupBy({
+      by: ["productId"],
+      _sum: {
+        quantity: true,
+      },
+      where: {
+        order: {
+          diningTable: {
+            restaurantId: restaurantID,
+          },
+        },
+      },
+      orderBy: {
+        _sum: {
+          quantity: "desc",
+        },
+      },
+      take: numberOfItems,
+    });
+
+    const productNamesForRestaurant = await db.product.findMany({
+      where: {
+        category: {
+          restaurantId: restaurantID,
+        },
+      },
+      select: {
+        id: true,
+        name: true,
+      },
+    });
+
+    const productNamesMap: { [key: number]: string } = {};
+
+    productNamesForRestaurant.forEach((product) => {
+      productNamesMap[product.id] = product.name;
+    });
+
+    const itemsWithNames = items.map((item) => ({
+      productId: item.productId,
+      name: productNamesMap[item.productId],
+      quantity: item._sum.quantity,
+    }));
+
+    return itemsWithNames;
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};

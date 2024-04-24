@@ -1,11 +1,15 @@
 import express from "express";
 import { auth } from "../auth/middleware/auth";
-import { validateRestaurantId } from "./services/validation";
+import {
+  validateRestaurantAndLimit,
+  validateRestaurantId,
+} from "./services/validation";
 import {
   restaurantCustomerCount,
   restaurantDailyCustomersCount,
   restaurantHourlyCustomersCount,
   restaurantIncomeFromOrders,
+  restaurantMostOrderedItems,
 } from "./views";
 
 export const router = express.Router();
@@ -20,7 +24,9 @@ router.get(
   restaurantHourlyCustomersCount
 );
 router.get(
-  "/daily-activity/:id",
+  "/daily-activity/:id/:limit",
   validateRestaurantId,
   restaurantDailyCustomersCount
 );
+
+router.get("/popular", validateRestaurantAndLimit, restaurantMostOrderedItems);

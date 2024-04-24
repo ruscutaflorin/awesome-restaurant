@@ -6,6 +6,7 @@ import {
   CustomRestaurantDailyCustomersCount,
   CustomRestaurantHourlyCustomersCount,
   CustomRestaurantIncome,
+  CustomRestaurantMostPopularItems,
 } from "./types/adminTypes";
 
 export async function restaurantIncomeFromOrders(req: Request, res: Response) {
@@ -89,3 +90,26 @@ export async function restaurantDailyCustomersCount(
     return res.status(500).json({ message: "Internal server error" });
   }
 }
+
+export const restaurantMostOrderedItems = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const restaurantID: number = parseInt(req.query.id as string);
+    const limit: number = parseInt(req.query.limit as string);
+    const result = await (
+      db.orderItem as unknown as CustomRestaurantMostPopularItems
+    ).getRestaurantMostPopularItems(restaurantID, limit);
+
+    return res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
