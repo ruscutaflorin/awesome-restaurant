@@ -1,7 +1,7 @@
 import { Prisma } from "@prisma/client";
 import { db } from "../../config/db";
 import bcrypt from "bcrypt";
-import { AuthenticationError } from "../errors";
+import { AuthenticationError, AuthorizationError } from "../errors";
 import jwt from "jsonwebtoken";
 import * as dotenv from "dotenv";
 dotenv.config();
@@ -43,7 +43,15 @@ export const loginService = async (userEmail: string, userPassword: string) => {
     if (!comparePassword) {
       throw new AuthenticationError();
     }
-    const token = createToken(user.id);
+    let token = createToken(user.id);
+    let decodedToken = jwt.verify(token, JWT_SECRET);
+    // if (!decodedToken) {
+    //   throw new AuthorizationError();
+    // }
+    if (!decodedToken || (decodedToken as any).exp * 1000 < Date.now()) {
+      token = createToken(user.id);
+      decodedToken = jwt.verify(token, JWT_SECRET);
+    }
     return { user, token };
   } catch (err) {
     throw err;
@@ -52,6 +60,6 @@ export const loginService = async (userEmail: string, userPassword: string) => {
 
 const createToken = (id: number) => {
   return jwt.sign({ id }, JWT_SECRET, {
-    expiresIn: "2h",
+    expiresIn: "120s",
   });
 };

@@ -1,3 +1,3 @@
 import { check } from "express-validator";
 
-export const validateIncomeOfRestaurant = [check("id").isInt()];
+export const validateRestaurantId = [check("id").isInt()];

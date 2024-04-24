@@ -5,7 +5,12 @@ import {
   paginatedRestaurants,
   paginatedSearchedRestaurants,
 } from "../restaurant/services/restaurant";
-import { restaurantIncomeFromOrdersService } from "../admin/services/admin";
+import {
+  restaurantCustomerCount,
+  restaurantDailyCustomersCount,
+  restaurantHourlyCustomersCount,
+  restaurantIncomeFromOrdersService,
+} from "../admin/services/admin";
 
 let db: PrismaClient;
 
@@ -33,6 +38,33 @@ if (!globalThis.__db) {
             const result = await restaurantIncomeFromOrdersService(
               restaurantId
             );
+            return result;
+          } catch (error) {
+            console.error(error);
+            throw error;
+          }
+        },
+        async getRestaurantCustomerCount(restaurantId: number) {
+          try {
+            const result = await restaurantCustomerCount(restaurantId);
+            return result;
+          } catch (error) {
+            console.error(error);
+            throw error;
+          }
+        },
+        async getRestaurantHourlyCustomersCount(restaurantId: number) {
+          try {
+            const result = await restaurantHourlyCustomersCount(restaurantId);
+            return result;
+          } catch (error) {
+            console.error(error);
+            throw error;
+          }
+        },
+        async getRestaurantDailyCustomersCount(restaurantId: number) {
+          try {
+            const result = await restaurantDailyCustomersCount(restaurantId);
             return result;
           } catch (error) {
             console.error(error);

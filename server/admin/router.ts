@@ -1,13 +1,26 @@
 import express from "express";
 import { auth } from "../auth/middleware/auth";
-import { validateIncomeOfRestaurant } from "./services/validation";
-import { restaurantIncomeFromOrders } from "./views";
+import { validateRestaurantId } from "./services/validation";
+import {
+  restaurantCustomerCount,
+  restaurantDailyCustomersCount,
+  restaurantHourlyCustomersCount,
+  restaurantIncomeFromOrders,
+} from "./views";
 
 export const router = express.Router();
 // router.use(auth);
 
+router.get("/income/:id", validateRestaurantId, restaurantIncomeFromOrders);
+
+router.get("/customers/:id", validateRestaurantId, restaurantCustomerCount);
 router.get(
-  "/income/:id",
-  validateIncomeOfRestaurant,
-  restaurantIncomeFromOrders
+  "/hourly-activity/:id",
+  validateRestaurantId,
+  restaurantHourlyCustomersCount
+);
+router.get(
+  "/daily-activity/:id",
+  validateRestaurantId,
+  restaurantDailyCustomersCount
 );
