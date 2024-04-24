@@ -9,17 +9,27 @@ import PopularTime from "./popularTime";
 import PieChartComponent from "./pieChart";
 import PaymentPieChart from "./paymentPie";
 import RevenueLines from "./revenueLines";
-import { restaurantCustomers, restaurantIncome } from "../../../api/admin";
+import {
+  restaurantCustomers,
+  restaurantDailyCustomersCount,
+  restaurantHourlyCustomers,
+  restaurantIncome,
+} from "../../../api/admin";
 const AdminDashboard = () => {
   const [earning, setEarning] = useState(0);
   const [customers, setCustomers] = useState(0);
-
+  const [hourlyCustomers, setHourlyCustomers] = useState([]);
+  const [dailyCustomers, setDailyCustomers] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       const income = await restaurantIncome(1);
       const customers = await restaurantCustomers(1);
+      const hourlyCustomers = await restaurantHourlyCustomers(1);
+      const dailyCustomers = await restaurantDailyCustomersCount(1);
       setEarning(income);
       setCustomers(customers);
+      setHourlyCustomers(hourlyCustomers);
+      setDailyCustomers(dailyCustomers);
     };
     fetchData();
   }, []);
