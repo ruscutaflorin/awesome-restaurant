@@ -10,3 +10,13 @@ export const restaurantIncome = async (restaurantID: number) => {
     console.error(error);
   }
 };
+export const restaurantCustomers = async (restaurantID: number) => {
+  try {
+    const res = await axios.get(
+      `http://localhost:8000/api/admin/customers/${restaurantID}`
+    );
+    return res.data;
+  } catch (error) {
+    console.error(error);
+  }
+};

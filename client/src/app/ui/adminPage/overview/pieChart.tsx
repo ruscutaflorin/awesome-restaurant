@@ -12,7 +12,7 @@ const uData = [
 
 const PieChartComponent = () => {
   return (
-    <div className="bg-slate-800 h-full w-full flex justify-center items-center rounded-xl">
+    <div className="bg-slate-800 flex justify-center items-center rounded-xl ">
       <PieChart
         series={[
           {
@@ -23,10 +23,15 @@ const PieChartComponent = () => {
             cornerRadius: 5,
             startAngle: -90,
             endAngle: 180,
-            cx: 140,
+            cx: 150,
             cy: 150,
           },
         ]}
+        height={300}
+        width={300}
+        slotProps={{
+          legend: { hidden: true },
+        }}
       />
     </div>
   );

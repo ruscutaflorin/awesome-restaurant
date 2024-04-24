@@ -9,34 +9,30 @@ import PopularTime from "./popularTime";
 import PieChartComponent from "./pieChart";
 import PaymentPieChart from "./paymentPie";
 import RevenueLines from "./revenueLines";
-import { restaurantIncome } from "../../../api/admin";
+import { restaurantCustomers, restaurantIncome } from "../../../api/admin";
 const AdminDashboard = () => {
   const [earning, setEarning] = useState(0);
+  const [customers, setCustomers] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await restaurantIncome(1);
-      console.log(result);
-      setEarning(result);
+      const income = await restaurantIncome(1);
+      const customers = await restaurantCustomers(1);
+      setEarning(income);
+      setCustomers(customers);
     };
     fetchData();
   }, []);
   return (
-    <main className="h-full flex justify-center items-center mx-auto">
+    <main className="h-full flex justify-center items-center">
       <div className="grid-container grid-cols-4 gap-4 ">
         {/* First Row */}
-        <div className="col-span-4 grid grid-cols-4">
+        <div className="col-span-4 grid grid-cols-2">
           <div className="col-span-1 grid-item">
             <Earning actualValue={earning} oldValue={40000} />
           </div>
           <div className="col-span-1 grid-item">
-            <Customers actualValue={3209} oldValue={4100} />
-          </div>
-          <div className="col-span-1 grid-item">
-            <EmployeesRecruit actualValue={43} oldValue={39} />
-          </div>
-          <div className="col-span-1 grid-item">
-            <TotalOrders actualValue={5730} oldValue={7500} />
+            <Customers actualValue={customers} oldValue={4100} />
           </div>
         </div>
 
