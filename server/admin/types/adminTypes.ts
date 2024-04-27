@@ -22,3 +22,7 @@ export type CustomRestaurantMostPopularItems = Prisma.OrderItemFieldRefs & {
     limit: number
   ): Promise<any>;
 };
+
+export type CustomRestaurantReviews = Prisma.ReviewFieldRefs & {
+  getRestaurantReviewsGroupedByRating(restaurantId: number): Promise<any>;
+};

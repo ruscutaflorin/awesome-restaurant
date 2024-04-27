@@ -11,6 +11,7 @@ import {
   restaurantHourlyCustomersCount,
   restaurantIncomeFromOrdersService,
   restaurantMostOrderedItems,
+  restaurantReviewsGroupedByRating,
 } from "../admin/services/admin";
 
 let db: PrismaClient;
@@ -105,7 +106,7 @@ if (!globalThis.__db) {
             const result = await paginatedRestaurants(offset, limit);
             return result;
           } catch (error) {
-            console.log(error);
+            console.error(error);
             throw error;
           }
         },
@@ -122,7 +123,18 @@ if (!globalThis.__db) {
             );
             return result;
           } catch (error) {
-            console.log(error);
+            console.error(error);
+            throw error;
+          }
+        },
+      },
+      review: {
+        async getRestaurantReviewsGroupedByRating(restaurantId: number) {
+          try {
+            const result = await restaurantReviewsGroupedByRating(restaurantId);
+            return result;
+          } catch (error) {
+            console.error(error);
             throw error;
           }
         },

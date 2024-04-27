@@ -10,6 +10,7 @@ import {
   restaurantHourlyCustomersCount,
   restaurantIncomeFromOrders,
   restaurantMostOrderedItems,
+  restaurantReviews,
 } from "./views";
 
 export const router = express.Router();
@@ -24,9 +25,11 @@ router.get(
   restaurantHourlyCustomersCount
 );
 router.get(
-  "/daily-activity/:id/:limit",
+  "/daily-activity/:id",
   validateRestaurantId,
   restaurantDailyCustomersCount
 );
 
 router.get("/popular", validateRestaurantAndLimit, restaurantMostOrderedItems);
+
+router.get("/reviews/:id", validateRestaurantId, restaurantReviews);

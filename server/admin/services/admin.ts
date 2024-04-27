@@ -146,3 +146,27 @@ export const restaurantMostOrderedItems = async (
     throw new Error(error);
   }
 };
+
+export const restaurantReviewsGroupedByRating = async (
+  restaurantID: number
+) => {
+  try {
+    const reviews = await db.review.groupBy({
+      by: ["rating"],
+      _count: {
+        id: true,
+      },
+      where: {
+        restaurantId: restaurantID,
+      },
+    });
+    const reviewsMap: { [key: number]: number } = {};
+    reviews.forEach((review) => {
+      reviewsMap[review.rating] = review._count.id;
+    });
+
+    return reviewsMap;
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
