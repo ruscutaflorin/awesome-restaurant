@@ -2,3 +2,8 @@ de spart frontul pe servicii si logica, cum ar fi useEffectu
 TODO: sa imbunatatesc searchul
 TODO:pe pagina de restaurante sa intorc un arr de restaurante cu mai putine detalii
 TODO:cand merg pe restaurant cu GO il trimit pe url restaurant/id si acolo fac requestul mare.
+TOOD: de scos pos x si y de pe dining tables
+TODO: Add the remaining form fields & <pe productform> !this should be prompted when the user clicks on the "Add Product" button
+TODO: display the products into a datagrid but first make it work(datagrid)
+TODO: react-admin
+TODO: validari pe formulare folosind ZOD

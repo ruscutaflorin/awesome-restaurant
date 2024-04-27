@@ -97,8 +97,3 @@ const ProductForm: React.FC<ProductFormProps> = ({
 };
 
 export default ProductForm;
-// TODO: Add the remaining form fields &
-// TODO: this should be prompted when the user clicks on the "Add Product" button
-// TODO: display the products into a datagrid but first make it work(datagrid)
-// TODO: react-admin
-// todo: cel mai cautata categorie, produs, ocupatia restaurantului in functie de ziua saptamanii/ore
