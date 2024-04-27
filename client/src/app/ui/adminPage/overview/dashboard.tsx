@@ -11,25 +11,33 @@ import PaymentPieChart from "./paymentPie";
 import RevenueLines from "./revenueLines";
 import {
   restaurantCustomers,
-  restaurantDailyCustomersCount,
+  restaurantDailyCustomers,
   restaurantHourlyCustomers,
   restaurantIncome,
+  restaurantMostOrderedItems,
+  restaurantReviews,
 } from "../../../api/admin";
 const AdminDashboard = () => {
   const [earning, setEarning] = useState(0);
   const [customers, setCustomers] = useState(0);
-  const [hourlyCustomers, setHourlyCustomers] = useState([]);
-  const [dailyCustomers, setDailyCustomers] = useState([]);
+  const [hourlyCustomers, setHourlyCustomers] = useState<number[]>([]);
+  const [dailyCustomers, setDailyCustomers] = useState<number[]>([]);
+  const [popularItems, setPopularItems] = useState<[]>([]);
+  const [reviews, setReviews] = useState<{}>({});
   useEffect(() => {
     const fetchData = async () => {
       const income = await restaurantIncome(1);
       const customers = await restaurantCustomers(1);
       const hourlyCustomers = await restaurantHourlyCustomers(1);
-      const dailyCustomers = await restaurantDailyCustomersCount(1);
+      const dailyCustomers = await restaurantDailyCustomers(1);
+      const popularItems = await restaurantMostOrderedItems(1, 5);
+      const reviwsInfo = await restaurantReviews(1);
       setEarning(income);
       setCustomers(customers);
       setHourlyCustomers(hourlyCustomers);
       setDailyCustomers(dailyCustomers);
+      setPopularItems(popularItems);
+      setReviews(reviwsInfo);
     };
     fetchData();
   }, []);
@@ -49,20 +57,32 @@ const AdminDashboard = () => {
         {/* Second Row */}
         <div className="col-span-3 grid gap-10 grid-cols-3 mx-5 mt-5">
           <div className="col-span-1 grid-item">
-            <PopularTime />
+            <h1 className="flex text-white justify-center items-center">
+              Customers by Day
+            </h1>
+            <PopularTime customersByDay={dailyCustomers} />
           </div>
           <div className="col-span-1 grid-item">
-            <PieChartComponent />
+            <h1 className="flex text-white justify-center items-center">
+              Most Ordered Products
+            </h1>
+            <PieChartComponent popularItems={popularItems} />
           </div>
           <div className="col-span-1 grid-item">
-            <PaymentPieChart />
+            <h1 className="flex text-white justify-center items-center">
+              Reviews
+            </h1>
+            <PaymentPieChart reviews={reviews} />
           </div>
         </div>
 
         {/* Third Row */}
         <div className="col-span-2 grid grid-cols-2 mx-5 mt-5">
           <div className="col-span-1 grid-item">
-            <RevenueLines />
+            <h1 className="flex text-white justify-center items-center">
+              Popular Time
+            </h1>
+            <RevenueLines hourlyCustomers={hourlyCustomers} />
           </div>
           <div className=" grid-col-span-2 grid grid-cols-1 my-auto gap-5">
             <div className="col-span-1 grid-item">

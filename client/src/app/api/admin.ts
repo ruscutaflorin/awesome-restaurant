@@ -23,20 +23,45 @@ export const restaurantCustomers = async (restaurantID: number) => {
 export const restaurantHourlyCustomers = async (restaurantID: number) => {
   try {
     const res = await axios.get(
-      `http://localhost:8000/api/admin/hourlyCustomers/${restaurantID}`
+      `http://localhost:8000/api/admin/hourly-activity/${restaurantID}`
     );
     return res.data;
   } catch (error) {
     console.error(error);
   }
-}
-export const restaurantDailyCustomersCount = async (restaurantID: number) => {
+};
+export const restaurantDailyCustomers = async (restaurantID: number) => {
   try {
     const res = await axios.get(
-      `http://localhost:8000/api/admin/dailyCustomers/${restaurantID}`
+      `http://localhost:8000/api/admin/daily-activity/${restaurantID}/`
     );
     return res.data;
   } catch (error) {
     console.error(error);
   }
-}
+};
+
+export const restaurantMostOrderedItems = async (
+  restaurantID: number,
+  numberOfItems: number
+) => {
+  try {
+    const res = await axios.get(
+      `http://localhost:8000/api/admin/popular?id=${restaurantID}&limit=${numberOfItems}`
+    );
+    return res.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const restaurantReviews = async (restaurantID: number) => {
+  try {
+    const res = await axios.get(
+      `http://localhost:8000/api/admin/reviews/${restaurantID}`
+    );
+    return res.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
