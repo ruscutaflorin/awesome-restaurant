@@ -1,5 +1,6 @@
 import { Category } from "@/app/types/types";
-import ProductForm from "@/app/ui/adminPage/management/product/modifyProducts";
+import DisplayProducts from "@/app/ui/adminPage/management/product/DisplayProducts";
+import ProductForm from "@/app/ui/adminPage/management/product/ProductForm";
 import React from "react";
 const categories: Category[] = [
   {
@@ -41,6 +42,7 @@ const categories: Category[] = [
 const Products = () => {
   return (
     <div>
+      <DisplayProducts />
       <ProductForm categories={categories} />
     </div>
   );
