@@ -1,28 +1,29 @@
 "use client";
-import React from "react";
-import { Product, Category } from "@/app/types/types";
+import React, { useState } from "react";
+import { Reservation } from "@/app/types/types";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-type ProductFormProps = {
-  product?: Product;
-  categories: Category[];
+type ReservationsFormProps = {
+  reservations: Reservation[];
 };
 
 const schema = z.object({
   name: z.string().min(3).max(255),
-  description: z.string().min(3).max(255),
-  price: z.number().min(0),
-  basePrice: z.number().min(0),
-  ingredients: z.string().min(3).max(255),
-  availability: z.boolean(),
-  category: z.number().min(1),
+  email: z.string().email(),
+  phone: z.string().min(10).max(15),
+  persons: z.string().min(1),
+  date: z.string(),
+  time: z.string(),
+  message: z.string().min(3).max(255),
 });
 
 type FormFields = z.infer<typeof schema>;
 
-const ProductForm: React.FC<ProductFormProps> = ({ product, categories }) => {
+const ReservationsForm: React.FC<ReservationsFormProps> = ({
+  reservations,
+}) => {
   const {
     register,
     handleSubmit,
@@ -30,19 +31,16 @@ const ProductForm: React.FC<ProductFormProps> = ({ product, categories }) => {
     setError,
   } = useForm<FormFields>({
     defaultValues: {
-      name: product?.name || "",
-      description: product?.description || "",
-      price: product?.price || 0,
-      basePrice: product?.basePrice || 0,
-      ingredients: Array.isArray(product?.ingredients)
-        ? product?.ingredients.join(", ")
-        : product?.ingredients ?? "",
-      availability: product?.availability || true,
-      category: product?.category?.id || 1,
+      name: "",
+      email: "",
+      phone: "",
+      persons: "",
+      date: "",
+      time: "",
+      message: "",
     },
     resolver: zodResolver(schema),
   });
-
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -79,111 +77,105 @@ const ProductForm: React.FC<ProductFormProps> = ({ product, categories }) => {
         </div>
         <div className="mb-4">
           <label
-            htmlFor="description"
+            htmlFor="email"
             className="block text-sm font-medium text-gray-700"
           >
-            Description:
+            Email:
           </label>
           <input
-            {...register("description")}
-            type="text"
-            name="description"
+            {...register("email")}
+            type="email"
+            name="email"
             className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           />
         </div>
-        {errors.description && (
-          <div className="text-red-500">{errors.description.message}</div>
+        {errors.email && (
+          <div className="text-red-500">{errors.email.message}</div>
         )}
         <div className="mb-4">
           <label
-            htmlFor="price"
+            htmlFor="phone"
             className="block text-sm font-medium text-gray-700"
           >
-            Price:
+            Phone:
           </label>
           <input
-            {...register("price")}
-            type="number"
-            name="price"
+            {...register("phone")}
+            type="string"
+            name="phone"
             className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           />
         </div>
-        {errors.price && (
-          <div className="text-red-500">{errors.price.message}</div>
+        {errors.phone && (
+          <div className="text-red-500">{errors.phone.message}</div>
         )}
         <div className="mb-4">
           <label
-            htmlFor="basePrice"
+            htmlFor="persons"
             className="block text-sm font-medium text-gray-700"
           >
-            Base Price:
+            Persons:
           </label>
           <input
-            {...register("basePrice")}
+            {...register("persons")}
             type="number"
-            name="basePrice"
+            name="persons"
             className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           />
-          {errors.basePrice && (
-            <div className="text-red-500">{errors.basePrice.message}</div>
+          {errors.persons && (
+            <div className="text-red-500">{errors.persons.message}</div>
           )}
         </div>
         <div className="mb-4">
           <label
-            htmlFor="ingredients"
+            htmlFor="date"
             className="block text-sm font-medium text-gray-700"
           >
-            Ingredients:
+            Date:
           </label>
           <input
-            {...register("ingredients")}
-            type="text"
-            name="ingredients"
+            {...register("date")}
+            type="date"
+            name="date"
             className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           />
-          {errors.ingredients && (
-            <div className="text-red-500">{errors.ingredients.message}</div>
+          {errors.date && (
+            <div className="text-red-500">{errors.date.message}</div>
           )}
         </div>
         <div className="mb-4">
           <label
-            htmlFor="availability"
+            htmlFor="time"
             className="block text-sm font-medium text-gray-700"
           >
-            Availability:
+            Time:
           </label>
-          <select
-            {...register("availability")}
-            name="availability"
+          <input
+            {...register("time")}
+            type="time"
+            name="time"
             className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-          >
-            <option value="true">Available</option>
-            <option value="false">Not Available</option>
-          </select>
-          {errors.availability && (
-            <div className="text-red-500">{errors.availability.message}</div>
+          />
+
+          {errors.time && (
+            <div className="text-red-500">{errors.time.message}</div>
           )}
         </div>
         <div className="mb-4">
           <label
-            htmlFor="category"
+            htmlFor="message"
             className="block text-sm font-medium text-gray-700"
           >
-            Category:
+            Message:
           </label>
-          {/* Assume you have a function to fetch categories */}
-          <select
-            {...register("category")}
-            id="category"
-            name="category"
+          <input
+            {...register("message")}
+            type="text"
+            name="message"
             className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-          >
-            {/* Render options dynamically based on fetched categories */}
-            {/* For each category in fetched categories */}
-            <option value="{categoryId}">Category Name</option>
-          </select>
-          {errors.category && (
-            <div className="text-red-500">{errors.category.message}</div>
+          />
+          {errors.message && (
+            <div className="text-red-500">{errors.message.message}</div>
           )}
         </div>
         <div className="flex justify-end">
@@ -203,4 +195,4 @@ const ProductForm: React.FC<ProductFormProps> = ({ product, categories }) => {
   );
 };
 
-export default ProductForm;
+export default ReservationsForm;

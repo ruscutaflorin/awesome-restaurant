@@ -7,3 +7,4 @@ TODO: Add the remaining form fields & <pe productform> !this should be prompted 
 TODO: display the products into a datagrid but first make it work(datagrid)
 TODO: react-admin
 TODO: validari pe formulare folosind ZOD
+TODO: facut toate stilurile formsurilor dupa restaurant details

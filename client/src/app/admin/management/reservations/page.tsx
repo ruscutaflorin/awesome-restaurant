@@ -1,5 +1,5 @@
 import { Reservation } from "@/app/types/types";
-import ReservationManagement from "@/app/ui/adminPage/management/reservations/modifyReservations";
+import ReservationManagement from "@/app/ui/adminPage/management/reservations/ReservationsForm";
 import React from "react";
 const reservations: Reservation[] = [
   {

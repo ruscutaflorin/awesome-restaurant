@@ -1,5 +1,5 @@
 import { DiningTable } from "@/app/types/types";
-import ModifyDiningTables from "@/app/ui/adminPage/management/dinningTables/modifyDiningTables";
+import ModifyDiningTables from "@/app/ui/adminPage/management/dinningTables/DiningTableForm";
 import React from "react";
 const diningTables: DiningTable[] = [
   {

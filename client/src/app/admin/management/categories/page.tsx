@@ -1,5 +1,5 @@
 import React from "react";
-import ModifyCategory from "@/app/ui/adminPage/management/category/modifyCategory";
+import ModifyCategory from "@/app/ui/adminPage/management/category/CategoryForm";
 import { Category } from "@/app/types/types";
 const categories: Category[] = [
   {

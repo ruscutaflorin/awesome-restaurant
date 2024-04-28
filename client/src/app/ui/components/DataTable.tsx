@@ -38,7 +38,7 @@ export default function DataGridDemo({ columns, rows }: Props) {
         initialState={{
           pagination: {
             paginationModel: {
-              pageSize: 2,
+              pageSize: 5,
             },
           },
         }}
