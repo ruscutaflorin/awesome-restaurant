@@ -2,12 +2,19 @@ import { Request, Response } from "express";
 import { db } from "../config/db";
 import { validationResult } from "express-validator";
 import {
+  CustomRestaurantCategories,
   CustomRestaurantCustomersCount,
   CustomRestaurantDailyCustomersCount,
+  CustomRestaurantDetails,
+  CustomRestaurantDiningTables,
   CustomRestaurantHourlyCustomersCount,
   CustomRestaurantIncome,
   CustomRestaurantMostPopularItems,
+  CustomRestaurantOrders,
+  CustomRestaurantProducts,
+  CustomRestaurantReservations,
   CustomRestaurantReviews,
+  CustomRestaurantStaffUsers,
 } from "./types/adminTypes";
 
 export async function restaurantIncomeFromOrders(req: Request, res: Response) {
@@ -124,6 +131,130 @@ export const restaurantReviews = async (req: Request, res: Response) => {
     const result = await (
       db.review as unknown as CustomRestaurantReviews
     ).getRestaurantReviewsGroupedByRating(restaurantID);
+    return res.status(200).json(result);
+  } catch (error: any) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const restaurantCategories = async (req: Request, res: Response) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    const restaurantID: number = parseInt(req.params.id as string);
+    const result = await (
+      db.category as unknown as CustomRestaurantCategories
+    ).getRestaurantCategories(restaurantID);
+    return res.status(200).json(result);
+  } catch (error: any) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const restaurantDiningTables = async (req: Request, res: Response) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    const restaurantID: number = parseInt(req.params.id as string);
+    const result = await (
+      db.diningTable as unknown as CustomRestaurantDiningTables
+    ).getDiningTablesByRestaurantId(restaurantID);
+    return res.status(200).json(result);
+  } catch (error: any) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const restaurantOrders = async (req: Request, res: Response) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    const restaurantID: number = parseInt(req.params.id as string);
+    const result = await (
+      db.order as unknown as CustomRestaurantOrders
+    ).getRestaurantOrders(restaurantID);
+
+    return res.status(200).json(result);
+  } catch (error: any) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const restaurantProducts = async (req: Request, res: Response) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    const restaurantID: number = parseInt(req.params.id as string);
+    const result = await (
+      db.product as unknown as CustomRestaurantProducts
+    ).getRestaurantProducts(restaurantID);
+
+    return res.status(200).json(result);
+  } catch (error: any) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const restaurantReservations = async (req: Request, res: Response) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    const restaurantID: number = parseInt(req.params.id as string);
+    const result = await (
+      db.reservation as unknown as CustomRestaurantReservations
+    ).getRestaurantReservations(restaurantID);
+
+    return res.status(200).json(result);
+  } catch (error: any) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const restaurantDetails = async (req: Request, res: Response) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    const restaurantID: number = parseInt(req.params.id as string);
+    const result = await (
+      db.restaurant as unknown as CustomRestaurantDetails
+    ).getRestaurantDetails(restaurantID);
+
+    return res.status(200).json(result);
+  } catch (error: any) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const restaurantStaffUsers = async (req: Request, res: Response) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    const restaurantID: number = parseInt(req.params.id as string);
+    const result = await (
+      db.staffUser as unknown as CustomRestaurantStaffUsers
+    ).getRestaurantStaffUsers(restaurantID);
+
     return res.status(200).json(result);
   } catch (error: any) {
     console.error(error);

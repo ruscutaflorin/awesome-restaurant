@@ -170,3 +170,151 @@ export const restaurantReviewsGroupedByRating = async (
     throw new Error(error);
   }
 };
+
+export const restaurantCategories = async (restaurantID: number) => {
+  try {
+    const categories = await db.category.findMany({
+      where: {
+        restaurantId: restaurantID,
+      },
+      select: {
+        id: true,
+        name: true,
+        createdAt: true,
+      },
+    });
+
+    return categories;
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+
+export const restaurantDiningTables = async (restaurantID: number) => {
+  try {
+    const diningTables = await db.diningTable.findMany({
+      where: {
+        restaurantId: restaurantID,
+      },
+      // select: {
+      //   id: true,
+      //   name: true,
+      //   createdAt: true,
+      // },
+    });
+
+    return diningTables;
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+
+export const restaurantOrders = async (restaurantID: number) => {
+  try {
+    const orders = await db.order.findMany({
+      where: {
+        diningTable: {
+          restaurantId: restaurantID,
+        },
+      },
+      // select: {
+      //   id: true,
+      //   totalAmount: true,
+      //   createdAt: true,
+      // },
+    });
+
+    return orders;
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+
+export const restaurantProducts = async (restaurantID: number) => {
+  try {
+    const products = await db.product.findMany({
+      where: {
+        category: {
+          restaurantId: restaurantID,
+        },
+      },
+      // select: {
+      //   id: true,
+      //   name: true,
+      //   price: true,
+      //   createdAt: true,
+      // },
+    });
+    return products;
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+
+export const restaurantReservations = async (restaurantID: number) => {
+  try {
+    const reservations = await db.reservation.findMany({
+      where: {
+        diningTable: {
+          restaurantId: restaurantID,
+        },
+      },
+      // select: {
+      //   id: true,
+      //   totalAmount: true,
+      //   createdAt: true,
+      // },
+    });
+
+    return reservations;
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+
+export const restaurantDetails = async (restaurantID: number) => {
+  try {
+    const restaurant = await db.restaurant.findUnique({
+      where: {
+        id: restaurantID,
+      },
+      // select: {
+      //   id: true,
+      //   name: true,
+      //   address: true,
+      //   location: true,
+      //   businessHours: true,
+      //   contact: true,
+      //   ownerId: true,
+      //   createdAt: true,
+      //   updatedAt: true,
+      // },
+    });
+    return restaurant;
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+
+export const restaurantStaffUsers = async (restaurantID: number) => {
+  try {
+    const staff = await db.staffUser.findMany({
+      where: {
+        restaurantId: restaurantID,
+      },
+      include: {
+        permissions: true,
+      },
+      // select: {
+      //   id: true,
+      //   name: true,
+      //   role: true,
+      //   createdAt: true,
+      // },
+    });
+
+    return staff;
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};

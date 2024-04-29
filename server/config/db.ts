@@ -6,12 +6,19 @@ import {
   paginatedSearchedRestaurants,
 } from "../restaurant/services/restaurant";
 import {
+  restaurantCategories,
   restaurantCustomerCount,
   restaurantDailyCustomersCount,
+  restaurantDetails,
+  restaurantDiningTables,
   restaurantHourlyCustomersCount,
   restaurantIncomeFromOrdersService,
   restaurantMostOrderedItems,
+  restaurantOrders,
+  restaurantProducts,
+  restaurantReservations,
   restaurantReviewsGroupedByRating,
+  restaurantStaffUsers,
 } from "../admin/services/admin";
 
 let db: PrismaClient;
@@ -27,6 +34,37 @@ if (!globalThis.__db) {
         async getNextReservationForTable(tableId: number) {
           try {
             const result = await nextReservationForTable(tableId);
+            return result;
+          } catch (error) {
+            console.error(error);
+            throw error;
+          }
+        },
+        async getDiningTablesByRestaurantId(restaurantId: number) {
+          try {
+            const result = restaurantDiningTables(restaurantId);
+            return result;
+          } catch (error) {
+            console.error(error);
+            throw error;
+          }
+        },
+      },
+      product: {
+        async getRestaurantProducts(restaurantId: number) {
+          try {
+            const result = await restaurantProducts(restaurantId);
+            return result;
+          } catch (error) {
+            console.error(error);
+            throw error;
+          }
+        },
+      },
+      reservation: {
+        async getRestaurantReservations(restaurantId: number) {
+          try {
+            const result = await restaurantReservations(restaurantId);
             return result;
           } catch (error) {
             console.error(error);
@@ -73,6 +111,26 @@ if (!globalThis.__db) {
             throw error;
           }
         },
+        async getRestaurantOrders(restaurantId: number) {
+          try {
+            const result = await restaurantOrders(restaurantId);
+            return result;
+          } catch (error) {
+            console.error(error);
+            throw error;
+          }
+        },
+      },
+      category: {
+        async getRestaurantCategories(restaurantId: number) {
+          try {
+            const result = await restaurantCategories(restaurantId);
+            return result;
+          } catch (error) {
+            console.error(error);
+            throw error;
+          }
+        },
       },
       orderItem: {
         async getRestaurantMostPopularItems(
@@ -84,6 +142,17 @@ if (!globalThis.__db) {
               restaurantId,
               limit
             );
+            return result;
+          } catch (error) {
+            console.error(error);
+            throw error;
+          }
+        },
+      },
+      staffUser: {
+        async getRestaurantStaffUsers(restaurantId: number) {
+          try {
+            const result = await restaurantStaffUsers(restaurantId);
             return result;
           } catch (error) {
             console.error(error);
@@ -121,6 +190,15 @@ if (!globalThis.__db) {
               limit,
               query
             );
+            return result;
+          } catch (error) {
+            console.error(error);
+            throw error;
+          }
+        },
+        async getRestaurantDetails(restaurantId: number) {
+          try {
+            const result = await restaurantDetails(restaurantId);
             return result;
           } catch (error) {
             console.error(error);

@@ -26,3 +26,31 @@ export type CustomRestaurantMostPopularItems = Prisma.OrderItemFieldRefs & {
 export type CustomRestaurantReviews = Prisma.ReviewFieldRefs & {
   getRestaurantReviewsGroupedByRating(restaurantId: number): Promise<any>;
 };
+
+export type CustomRestaurantCategories = Prisma.CategoryFieldRefs & {
+  getRestaurantCategories(restaurantId: number): Promise<any>;
+};
+
+export type CustomRestaurantDiningTables = Prisma.DiningTableFieldRefs & {
+  getDiningTablesByRestaurantId(restaurantId: number): Promise<any>;
+};
+
+export type CustomRestaurantOrders = Prisma.OrderFieldRefs & {
+  getRestaurantOrders(restaurantId: number): Promise<any>;
+};
+
+export type CustomRestaurantProducts = Prisma.ProductFieldRefs & {
+  getRestaurantProducts(restaurantId: number): Promise<any>;
+};
+
+export type CustomRestaurantReservations = Prisma.ReservationFieldRefs & {
+  getRestaurantReservations(restaurantId: number): Promise<any>;
+};
+
+export type CustomRestaurantDetails = Prisma.RestaurantFieldRefs & {
+  getRestaurantDetails(restaurantId: number): Promise<any>;
+};
+
+export type CustomRestaurantStaffUsers = Prisma.UserFieldRefs & {
+  getRestaurantStaffUsers(restaurantId: number): Promise<any>;
+};
