@@ -4,12 +4,11 @@ import react from "react";
 import { z } from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { GridColDef } from "@mui/x-data-grid";
-import CloseIcon from "@mui/icons-material/Close"; // Import the Close icon from Material-UI
+import CloseIcon from "@mui/icons-material/Close";
 
 type CategoryFormProps = {
   categories: Category[];
-  onClose: () => void; // Function to handle closing the form
+  onClose: () => void;
 };
 
 const schema = z.object({
@@ -26,7 +25,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ categories, onClose }) => {
     setError,
   } = useForm<FormFields>({
     defaultValues: {
-      name: "",
+      name: categories.name,
     },
     resolver: zodResolver(schema),
   });

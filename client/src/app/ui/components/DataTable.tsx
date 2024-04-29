@@ -46,30 +46,33 @@ export default function DataGridDemo({ columns, rows, form }: Props) {
   };
 
   const closeForm = () => {
-    setIsFormVisible(false); // Close the form
+    setIsFormVisible(false);
   };
 
   const renderForm = () => {
     const selectedRow = rows.find((row) => row.id === selectedRowId);
-    console.log(selectedRow);
     switch (form) {
       case "category":
-        return <CategoryForm categories={rows} onClose={closeForm} />;
+        return <CategoryForm categories={selectedRow} onClose={closeForm} />;
       case "diningTable":
-        return <DiningTableForm diningTables={rows} onClose={closeForm} />;
+        return (
+          <DiningTableForm diningTables={selectedRow} onClose={closeForm} />
+        );
       case "product":
         const { product, categories } = selectedRow || {};
         return (
           <ProductForm
-            product={product}
+            product={selectedRow}
             categories={categories}
             onClose={closeForm}
           />
         );
       case "reservations":
-        return <ReservationsForm reservations={rows} onClose={closeForm} />;
+        return (
+          <ReservationsForm reservations={selectedRow} onClose={closeForm} />
+        );
       case "staff":
-        return <StaffForm staffUsers={rows} onClose={closeForm} />;
+        return <StaffForm staffUsers={selectedRow} onClose={closeForm} />;
       default:
         return null;
     }

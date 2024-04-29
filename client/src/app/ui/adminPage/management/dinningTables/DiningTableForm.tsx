@@ -29,11 +29,11 @@ const DiningTableForm: React.FC<DiningTableFormProps> = ({
     setError,
   } = useForm<FormFields>({
     defaultValues: {
-      name: "",
-      status: "",
-      capacity: 0,
-      positionX: 0,
-      positionY: 0,
+      name: diningTables.name,
+      status: diningTables.status,
+      capacity: diningTables.capacity,
+      positionX: diningTables.positionX,
+      positionY: diningTables.positionY,
     },
     resolver: zodResolver(schema),
   });

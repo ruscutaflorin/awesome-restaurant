@@ -18,7 +18,6 @@ const schema = z.object({
   persons: z.string().min(1),
   date: z.string(),
   time: z.string(),
-  message: z.string().min(3).max(255),
 });
 
 type FormFields = z.infer<typeof schema>;
@@ -34,16 +33,16 @@ const ReservationsForm: React.FC<ReservationsFormProps> = ({
     setError,
   } = useForm<FormFields>({
     defaultValues: {
-      name: "",
-      email: "",
-      phone: "",
-      persons: "",
-      date: "",
-      time: "",
-      message: "",
+      name: reservations.customerName,
+      email: reservations.customerEmail,
+      phone: reservations.customerPhone,
+      persons: reservations.numberOfGuests,
+      date: new Date(reservations.reservationDate).toISOString().slice(0, 10),
+      time: new Date(reservations.reservationDate).toISOString().slice(11, 16),
     },
     resolver: zodResolver(schema),
   });
+
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 1000));

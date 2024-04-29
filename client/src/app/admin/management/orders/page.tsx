@@ -85,7 +85,6 @@ const Order = () => {
         <p>Loading...</p>
       ) : (
         <div>
-          {/* <OrderTable orders={orders} /> */}
           <DataGridDemo rows={orders} columns={columns} />
         </div>
       )}

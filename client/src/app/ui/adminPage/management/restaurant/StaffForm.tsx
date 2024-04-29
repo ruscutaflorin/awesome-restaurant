@@ -12,7 +12,6 @@ type StaffFormProps = {
 
 const schema = z.object({
   name: z.string().min(3).max(255),
-  email: z.string().email(),
   role: z.string().min(3).max(255),
   restaurantId: z.number().min(1),
   permissions: z.array(
@@ -34,15 +33,14 @@ const StaffForm: React.FC<StaffFormProps> = ({ staffUsers, onClose }) => {
     setError,
   } = useForm<FormFields>({
     defaultValues: {
-      name: "",
-      email: "",
-      role: "",
-      restaurantId: 0,
-      permissions: [],
+      name: staffUsers.name,
+      role: staffUsers.role,
+      restaurantId: staffUsers.restaurantId,
+      permissions: staffUsers.permissions,
     },
     resolver: zodResolver(schema),
   });
-
+  console.log(staffUsers);
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -82,7 +80,7 @@ const StaffForm: React.FC<StaffFormProps> = ({ staffUsers, onClose }) => {
             )}
           </label>
         </div>
-        <div className="mb-4">
+        {/* <div className="mb-4">
           <label
             htmlFor="email"
             className="block text-sm font-medium text-gray-700"
@@ -97,7 +95,7 @@ const StaffForm: React.FC<StaffFormProps> = ({ staffUsers, onClose }) => {
               <div className="text-red-500">{errors.email.message}</div>
             )}
           </label>
-        </div>
+        </div> */}
         <div className="mb-4">
           <label
             htmlFor="role"

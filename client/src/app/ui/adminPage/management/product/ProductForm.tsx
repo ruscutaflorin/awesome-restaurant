@@ -43,7 +43,7 @@ const ProductForm = ({ product, categories, onClose }: ProductFormProps) => {
       : {},
     resolver: zodResolver(schema),
   });
-
+  console.log(product);
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 1000));
