@@ -65,3 +65,80 @@ export const restaurantReviews = async (restaurantID: number) => {
     console.error(error);
   }
 };
+
+export const restaurantCategories = async (restaurantID: number) => {
+  try {
+    const res = await axios.get(
+      `http://localhost:8000/api/admin/categories/${restaurantID}`
+    );
+    return res.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const restaurantDiningTables = async (restaurantID: number) => {
+  try {
+    const res = await axios.get(
+      `http://localhost:8000/api/admin/tables/${restaurantID}`
+    );
+    return res.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const restaurantOrders = async (restaurantID: number) => {
+  try {
+    const res = await axios.get(
+      `http://localhost:8000/api/admin/orders/${restaurantID}`
+    );
+    return res.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const restaurantProducts = async (restaurantID: number) => {
+  try {
+    const res = await axios.get(
+      `http://localhost:8000/api/admin/products/${restaurantID}`
+    );
+    return res.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const restaurantReservations = async (restaurantID: number) => {
+  try {
+    const res = await axios.get(
+      `http://localhost:8000/api/admin/reservations/${restaurantID}`
+    );
+    return res.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const restaurantDetails = async (restaurantID: number) => {
+  try {
+    const res = await axios.get(
+      `http://localhost:8000/api/admin/restaurant/${restaurantID}`
+    );
+    return res.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const restaurantStaff = async (restaurantID: number) => {
+  try {
+    const res = await axios.get(
+      `http://localhost:8000/api/admin/staff/${restaurantID}`
+    );
+    return res.data;
+  } catch (error) {
+    console.error(error);
+  }
+};

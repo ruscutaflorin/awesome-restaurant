@@ -5,6 +5,7 @@ import react from "react";
 import { z } from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { GridColDef } from "@mui/x-data-grid";
 
 type CategoryFormProps = {
   categories: Category[];
@@ -47,6 +48,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ categories }) => {
         onSubmit={handleSubmit(onSubmit)}
         className="w-96 p-4 bg-white rounded-lg shadow-md"
       >
+        <h1 className="text-2xl font-semibold mb-4">Category Form</h1>
         <div className="mb-4">
           <label
             htmlFor="name"
@@ -54,11 +56,12 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ categories }) => {
           >
             Name:
           </label>
+
           <input
             {...register("name")}
             type="text"
             name="name"
-            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            className="mt-1 p-2 w-full border border-gray-300 rounded-md"
           />
           {errors.name && (
             <div className="text-red-500">{errors.name.message}</div>

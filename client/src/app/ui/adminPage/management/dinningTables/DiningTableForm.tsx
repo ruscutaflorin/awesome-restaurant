@@ -1,7 +1,4 @@
-"use client";
-import { useState } from "react";
 import { DiningTable } from "@/app/types/types";
-import { type } from "os";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -53,92 +50,94 @@ const DiningTableForm: React.FC<DiningTableFormProps> = ({ diningTables }) => {
         onSubmit={handleSubmit(onSubmit)}
         className="w-96 p-4 bg-white rounded-lg shadow-md"
       >
+        <h1 className="text-2xl font-semibold mb-4">Dining Table Form</h1>
+
         <div className="mb-4">
           <label
             htmlFor="name"
             className="block text-sm font-medium text-gray-700"
           >
             Name:
+            <input
+              {...register("name", { required: true })}
+              type="text"
+              id="name"
+              className="mt-1 p-2 w-full border border-gray-300 rounded-md"
+            />
+            {errors.name && (
+              <div className="text-red-500">This field is required</div>
+            )}
           </label>
-          <input
-            {...register("name", { required: true })}
-            type="text"
-            id="name"
-            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-          />
-          {errors.name && (
-            <div className="text-red-500">This field is required</div>
-          )}
-        </div>
-        <div>
-          <label
-            htmlFor="status"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Status:
-          </label>
-          <input
-            {...register("status", { required: true })}
-            type="text"
-            id="status"
-            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-          />
-          {errors.status && (
-            <div className="text-red-500">This field is required</div>
-          )}
-        </div>
-        <div>
-          <label
-            htmlFor="capacity"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Capacity:
-          </label>
-          <input
-            {...register("capacity", { required: true })}
-            type="number"
-            id="capacity"
-            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-          />
-          {errors.capacity && (
-            <div className="text-red-500">This field is required</div>
-          )}
-        </div>
-        <div>
-          <label
-            htmlFor="positionX"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Position X:
-          </label>
-          <input
-            {...register("positionX", { required: true })}
-            type="number"
-            id="positionX"
-            disabled={true}
-            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-          />
-          {errors.positionX && (
-            <div className="text-red-500">This field is required</div>
-          )}
-        </div>
-        <div>
-          <label
-            htmlFor="positionY"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Position Y:
-          </label>
-          <input
-            {...register("positionY", { required: true })}
-            type="number"
-            id="positionY"
-            disabled={true}
-            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-          />
-          {errors.positionY && (
-            <div className="text-red-500">This field is required</div>
-          )}
+          <div>
+            <label
+              htmlFor="status"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Status:
+              <input
+                {...register("status", { required: true })}
+                type="text"
+                id="status"
+                className="mt-1 p-2 w-full border border-gray-300 rounded-md"
+              />
+              {errors.status && (
+                <div className="text-red-500">This field is required</div>
+              )}
+            </label>
+          </div>
+          <div>
+            <label
+              htmlFor="capacity"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Capacity:
+              <input
+                {...register("capacity", { required: true })}
+                type="number"
+                id="capacity"
+                className="mt-1 p-2 w-full border border-gray-300 rounded-md"
+              />
+              {errors.capacity && (
+                <div className="text-red-500">This field is required</div>
+              )}
+            </label>
+          </div>
+          <div>
+            <label
+              htmlFor="positionX"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Position X:
+              <input
+                {...register("positionX", { required: true })}
+                type="number"
+                id="positionX"
+                disabled={true}
+                className="mt-1 p-2 w-full border border-gray-300 rounded-md"
+              />
+              {errors.positionX && (
+                <div className="text-red-500">This field is required</div>
+              )}
+            </label>
+          </div>
+          <div>
+            <label
+              htmlFor="positionY"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Position Y:
+            </label>
+            <input
+              {...register("positionY", { required: true })}
+              type="number"
+              id="positionY"
+              disabled={true}
+              className="mt-1 p-2 w-full border border-gray-300 rounded-md"
+            />
+            {errors.positionY && (
+              <div className="text-red-500">This field is required</div>
+            )}
+          </div>
         </div>
         <div className="flex justify-end">
           <button

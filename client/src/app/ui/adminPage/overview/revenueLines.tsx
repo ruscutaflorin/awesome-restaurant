@@ -16,8 +16,8 @@ const RevenueLines = ({ hourlyCustomers }: RevenueLinesProps) => {
           yAxis={[{ scaleType: "band", data: xLabels }]}
           series={[{ data: chartData, type: "bar", color: "white" }]}
           layout="horizontal"
-          width={500}
-          height={400}
+          width={400}
+          height={350}
         />
       )}
     </div>

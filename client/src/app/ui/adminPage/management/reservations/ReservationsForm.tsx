@@ -58,6 +58,7 @@ const ReservationsForm: React.FC<ReservationsFormProps> = ({
         onSubmit={handleSubmit(onSubmit)}
         className="w-96 p-4 bg-white rounded-lg shadow-md"
       >
+        <h1 className="text-2xl font-semibold mb-4">Reservation Form</h1>
         <div className="mb-4">
           <label
             htmlFor="name"
@@ -69,7 +70,7 @@ const ReservationsForm: React.FC<ReservationsFormProps> = ({
             {...register("name")}
             type="text"
             name="name"
-            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            className="mt-1 p-2 w-full border border-gray-300 rounded-md"
           />
           {errors.name && (
             <div className="text-red-500">{errors.name.message}</div>
@@ -86,7 +87,7 @@ const ReservationsForm: React.FC<ReservationsFormProps> = ({
             {...register("email")}
             type="email"
             name="email"
-            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            className="mt-1 p-2 w-full border border-gray-300 rounded-md"
           />
         </div>
         {errors.email && (
@@ -103,7 +104,7 @@ const ReservationsForm: React.FC<ReservationsFormProps> = ({
             {...register("phone")}
             type="string"
             name="phone"
-            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            className="mt-1 p-2 w-full border border-gray-300 rounded-md"
           />
         </div>
         {errors.phone && (
@@ -120,7 +121,7 @@ const ReservationsForm: React.FC<ReservationsFormProps> = ({
             {...register("persons")}
             type="number"
             name="persons"
-            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            className="mt-1 p-2 w-full border border-gray-300 rounded-md"
           />
           {errors.persons && (
             <div className="text-red-500">{errors.persons.message}</div>
@@ -137,7 +138,7 @@ const ReservationsForm: React.FC<ReservationsFormProps> = ({
             {...register("date")}
             type="date"
             name="date"
-            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            className="mt-1 p-2 w-full border border-gray-300 rounded-md"
           />
           {errors.date && (
             <div className="text-red-500">{errors.date.message}</div>
@@ -154,7 +155,7 @@ const ReservationsForm: React.FC<ReservationsFormProps> = ({
             {...register("time")}
             type="time"
             name="time"
-            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            className="mt-1 p-2 w-full border border-gray-300 rounded-md"
           />
 
           {errors.time && (
@@ -172,7 +173,7 @@ const ReservationsForm: React.FC<ReservationsFormProps> = ({
             {...register("message")}
             type="text"
             name="message"
-            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            className="mt-1 p-2 w-full border border-gray-300 rounded-md"
           />
           {errors.message && (
             <div className="text-red-500">{errors.message.message}</div>

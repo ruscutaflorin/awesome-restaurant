@@ -62,11 +62,14 @@ const StaffForm: React.FC<StaffFormProps> = ({ staffUsers }) => {
       >
         <h1 className="text-2xl font-semibold mb-4">Staff Form</h1>
         <div className="mb-4">
-          <label htmlFor="name" className="block text-gray-700 font-bold mb-2">
+          <label
+            htmlFor="name"
+            className="block text-sm font-medium text-gray-700"
+          >
             Name:
             <input
               type="text"
-              className="form-input mt-1 block w-full"
+              className="mt-1 p-2 w-full border border-gray-300 rounded-md"
               {...register("name")}
             />
             {errors.name && (
@@ -75,11 +78,14 @@ const StaffForm: React.FC<StaffFormProps> = ({ staffUsers }) => {
           </label>
         </div>
         <div className="mb-4">
-          <label htmlFor="email" className="block text-gray-700 font-bold mb-2">
+          <label
+            htmlFor="email"
+            className="block text-sm font-medium text-gray-700"
+          >
             Email:
             <input
               type="email"
-              className="form-input mt-1 block w-full"
+              className="mt-1 p-2 w-full border border-gray-300 rounded-md"
               {...register("email")}
             />
             {errors.email && (
@@ -88,11 +94,14 @@ const StaffForm: React.FC<StaffFormProps> = ({ staffUsers }) => {
           </label>
         </div>
         <div className="mb-4">
-          <label htmlFor="role" className="block text-gray-700 font-bold mb-2">
+          <label
+            htmlFor="role"
+            className="block text-sm font-medium text-gray-700"
+          >
             Role:
             <input
               type="text"
-              className="form-input mt-1 block w-full"
+              className="mt-1 p-2 w-full border border-gray-300 rounded-md"
               {...register("role")}
             />
             {errors.role && (
@@ -103,13 +112,13 @@ const StaffForm: React.FC<StaffFormProps> = ({ staffUsers }) => {
         <div className="mb-4">
           <label
             htmlFor="restaurantId"
-            className="block text-gray-700 font-bold mb-2"
+            className="block text-sm font-medium text-gray-700"
           >
             Restaurant ID:
             <input
               type="number"
               disabled={true}
-              className="form-input mt-1 block w-full"
+              className="mt-1 p-2 w-full border border-gray-300 rounded-md"
               {...register("restaurantId")}
             />
             {errors.restaurantId && (
@@ -120,12 +129,12 @@ const StaffForm: React.FC<StaffFormProps> = ({ staffUsers }) => {
         <div className="mb-4">
           <label
             htmlFor="permissions"
-            className="block text-gray-700 font-bold mb-2"
+            className="block text-sm font-medium text-gray-700"
           >
             Permissions:
             <input
               type="text"
-              className="form-input mt-1 block w-full"
+              className="mt-1 p-2 w-full border border-gray-300 rounded-md"
               {...register("permissions")}
             />
             {errors.permissions && (
@@ -143,7 +152,7 @@ const StaffForm: React.FC<StaffFormProps> = ({ staffUsers }) => {
             {isSubmitting ? "Submitting..." : "Submit"}
           </button>
           {errors.root && (
-            <div className="text-red-500">{errors.root.message}</div>
+            <div className=" text-red-500">{errors.root.message}</div>
           )}
         </div>
       </form>
