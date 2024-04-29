@@ -66,7 +66,7 @@ const DisplayDiningTables: React.FC<TableProps> = ({ tables }: TableProps) => {
 
   return (
     <div>
-      <DataGridDemo columns={columns} rows={tables} />
+      <DataGridDemo columns={columns} rows={tables} form="diningTable" />
     </div>
   );
 };

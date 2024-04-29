@@ -8,3 +8,4 @@ TODO: display the products into a datagrid but first make it work(datagrid)
 TODO: react-admin
 TODO: validari pe formulare folosind ZOD
 TODO: facut toate stilurile formsurilor dupa restaurant details
+TODO: de adaugat o modala/form pt permisiuni pentru staffform

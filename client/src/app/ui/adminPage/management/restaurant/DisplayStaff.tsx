@@ -38,7 +38,7 @@ const DisplayStaff = ({ staff }: StaffProps) => {
 
   return (
     <div>
-      <DataGridDemo columns={columns} rows={staff} />
+      <DataGridDemo columns={columns} rows={staff} form="staff" />
     </div>
   );
 };

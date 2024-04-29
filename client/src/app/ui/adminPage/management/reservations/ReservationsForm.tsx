@@ -4,9 +4,11 @@ import { Reservation } from "@/app/types/types";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import CloseIcon from "@mui/icons-material/Close";
 
 type ReservationsFormProps = {
   reservations: Reservation[];
+  onClose: () => void;
 };
 
 const schema = z.object({
@@ -23,6 +25,7 @@ type FormFields = z.infer<typeof schema>;
 
 const ReservationsForm: React.FC<ReservationsFormProps> = ({
   reservations,
+  onClose,
 }) => {
   const {
     register,
@@ -56,8 +59,12 @@ const ReservationsForm: React.FC<ReservationsFormProps> = ({
     <div className="flex justify-center items-center h-full">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="w-96 p-4 bg-white rounded-lg shadow-md"
+        className="w-96 p-4 bg-white rounded-lg shadow-md absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
       >
+        <CloseIcon
+          onClick={onClose}
+          className="absolute top-2 right-2 cursor-pointer"
+        />{" "}
         <h1 className="text-2xl font-semibold mb-4">Reservation Form</h1>
         <div className="mb-4">
           <label

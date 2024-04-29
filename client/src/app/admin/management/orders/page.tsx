@@ -9,6 +9,7 @@ import { GridColDef } from "@mui/x-data-grid";
 const Order = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     const fetchOrders = async () => {
       try {
@@ -84,7 +85,7 @@ const Order = () => {
         <p>Loading...</p>
       ) : (
         <div>
-          <OrderTable orders={orders} />
+          {/* <OrderTable orders={orders} /> */}
           <DataGridDemo rows={orders} columns={columns} />
         </div>
       )}

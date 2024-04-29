@@ -8,6 +8,12 @@ import React, { useEffect, useState } from "react";
 const DiningTables = () => {
   const [tables, setTables] = useState<DiningTable[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isFormVisible, setIsFormVisible] = useState(false);
+
+  const toggleFormVisibility = () => {
+    setIsFormVisible((prev) => !prev);
+  };
+
   useEffect(() => {
     const fetchTables = async () => {
       try {
@@ -29,7 +35,12 @@ const DiningTables = () => {
       ) : (
         <div>
           <DisplayDiningTables tables={tables} />
-          <DiningTableForm diningTables={tables} />
+          {isFormVisible && (
+            <DiningTableForm
+              diningTables={tables}
+              onClose={toggleFormVisibility}
+            />
+          )}
         </div>
       )}
     </div>

@@ -4,9 +4,10 @@ import { StaffUserDetailed } from "@/app/types/types";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-
+import CloseIcon from "@mui/icons-material/Close";
 type StaffFormProps = {
   staffUsers: StaffUserDetailed[];
+  onClose: () => void;
 };
 
 const schema = z.object({
@@ -25,7 +26,7 @@ const schema = z.object({
 
 type FormFields = z.infer<typeof schema>;
 
-const StaffForm: React.FC<StaffFormProps> = ({ staffUsers }) => {
+const StaffForm: React.FC<StaffFormProps> = ({ staffUsers, onClose }) => {
   const {
     register,
     handleSubmit,
@@ -58,8 +59,12 @@ const StaffForm: React.FC<StaffFormProps> = ({ staffUsers }) => {
     <div className="flex justify-center items-center h-full">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="w-96 p-4 bg-white rounded-lg shadow-md"
+        className="w-96 p-4 bg-white rounded-lg shadow-md absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
       >
+        <CloseIcon
+          onClick={onClose}
+          className="absolute top-2 right-2 cursor-pointer"
+        />{" "}
         <h1 className="text-2xl font-semibold mb-4">Staff Form</h1>
         <div className="mb-4">
           <label
@@ -142,7 +147,6 @@ const StaffForm: React.FC<StaffFormProps> = ({ staffUsers }) => {
             )}
           </label>
         </div>
-
         <div className="flex justify-end">
           <button
             type="submit"

@@ -1,4 +1,3 @@
-"use client";
 import { useState } from "react";
 import { Category } from "@/app/types/types";
 import react from "react";
@@ -6,9 +5,11 @@ import { z } from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { GridColDef } from "@mui/x-data-grid";
+import CloseIcon from "@mui/icons-material/Close"; // Import the Close icon from Material-UI
 
 type CategoryFormProps = {
   categories: Category[];
+  onClose: () => void; // Function to handle closing the form
 };
 
 const schema = z.object({
@@ -17,7 +18,7 @@ const schema = z.object({
 
 type FormFields = z.infer<typeof schema>;
 
-const CategoryForm: React.FC<CategoryFormProps> = ({ categories }) => {
+const CategoryForm: React.FC<CategoryFormProps> = ({ categories, onClose }) => {
   const {
     register,
     handleSubmit,
@@ -46,8 +47,12 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ categories }) => {
     <div className="flex justify-center items-center h-full">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="w-96 p-4 bg-white rounded-lg shadow-md"
+        className="w-96 p-4 bg-white rounded-lg shadow-md absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
       >
+        <CloseIcon
+          onClick={onClose}
+          className="absolute top-2 right-2 cursor-pointer"
+        />{" "}
         <h1 className="text-2xl font-semibold mb-4">Category Form</h1>
         <div className="mb-4">
           <label

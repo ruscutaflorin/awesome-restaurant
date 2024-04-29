@@ -10,6 +10,11 @@ const RestaurantDetails = () => {
   const [restaurant, setRestaurant] = React.useState({} as Restaurant);
   const [loading, setLoading] = React.useState(true);
   const [staffUsers, setStaffUsers] = React.useState<StaffUserDetailed[]>([]);
+  const [isFormVisible, setIsFormVisible] = React.useState(false);
+
+  const toggleFormVisibility = () => {
+    setIsFormVisible((prev) => !prev);
+  };
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -28,16 +33,23 @@ const RestaurantDetails = () => {
   }, []);
 
   return (
-    <div className="flex justify-center items-center ">
+    <div className="flex justify-center items-center">
       {loading ? (
         <p>Loading...</p>
       ) : (
-        <div>
-          <div className="flex">
+        <div className="flex-row">
+          <div className="flex-grow">
             <DetailsForm restaurant={restaurant} />
-            <StaffForm staffUsers={staffUsers} />
           </div>
-          <div>
+          <div className="flex-grow">
+            <div className="flex justify-center mb-5">
+              {isFormVisible && (
+                <StaffForm
+                  staffUsers={staffUsers}
+                  onClose={toggleFormVisibility}
+                />
+              )}
+            </div>
             <DisplayStaff staff={staffUsers} />
           </div>
         </div>

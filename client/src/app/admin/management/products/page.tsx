@@ -9,6 +9,12 @@ const Products = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isFormVisible, setIsFormVisible] = useState(false);
+
+  const toggleFormVisibility = () => {
+    setIsFormVisible((prev) => !prev);
+  };
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -31,7 +37,13 @@ const Products = () => {
       ) : (
         <div>
           <DisplayProducts products={products} />
-          <ProductForm product={products[0]} categories={categories} />
+          {isFormVisible && (
+            <ProductForm
+              product={products[0]}
+              categories={categories}
+              onClose={toggleFormVisibility}
+            />
+          )}
         </div>
       )}
     </div>

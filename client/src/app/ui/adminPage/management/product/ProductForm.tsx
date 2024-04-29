@@ -3,10 +3,12 @@ import { Product, Category } from "@/app/types/types";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import CloseIcon from "@mui/icons-material/Close";
 
 type ProductFormProps = {
   product: Product;
   categories: Category[];
+  onClose: () => void;
 };
 
 const schema = z.object({
@@ -21,7 +23,7 @@ const schema = z.object({
 
 type FormFields = z.infer<typeof schema>;
 
-const ProductForm = ({ product, categories }: ProductFormProps) => {
+const ProductForm = ({ product, categories, onClose }: ProductFormProps) => {
   const {
     register,
     handleSubmit,
@@ -57,8 +59,12 @@ const ProductForm = ({ product, categories }: ProductFormProps) => {
     <div className="flex justify-center items-center h-full">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="w-96 p-4 bg-white rounded-lg shadow-md"
+        className="w-96 p-4 bg-white rounded-lg shadow-md absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
       >
+        <CloseIcon
+          onClick={onClose}
+          className="absolute top-2 right-2 cursor-pointer"
+        />{" "}
         <h1 className="text-2xl font-semibold mb-4">Product Form</h1>
         <div className="mb-4">
           <label
@@ -164,29 +170,31 @@ const ProductForm = ({ product, categories }: ProductFormProps) => {
             <div className="text-red-500">{errors.availability.message}</div>
           )}
         </div>
-        <div className="mb-4">
-          <label
-            htmlFor="category"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Category:
-          </label>
-          <select
-            {...register("category")}
-            id="category"
-            name="category"
-            className="mt-1 p-2 w-full border border-gray-300 rounded-md"
-          >
-            {categories.map((category) => (
-              <option key={category.id} value={category.id}>
-                {category.name}
-              </option>
-            ))}
-          </select>
-          {errors.category && (
-            <div className="text-red-500">{errors.category.message}</div>
-          )}
-        </div>
+        {categories && (
+          <div className="mb-4">
+            <label
+              htmlFor="category"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Category:
+            </label>
+            <select
+              {...register("category")}
+              id="category"
+              name="category"
+              className="mt-1 p-2 w-full border border-gray-300 rounded-md"
+            >
+              {categories.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
+            {errors.category && (
+              <div className="text-red-500">{errors.category.message}</div>
+            )}
+          </div>
+        )}
         <div className="flex justify-end">
           <button
             type="submit"

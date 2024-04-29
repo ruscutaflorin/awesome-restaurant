@@ -28,7 +28,7 @@ const DisplayCategories: React.FC<TableProps> = ({
 }: TableProps) => {
   return (
     <div>
-      <DataGridDemo columns={columns} rows={categories} />
+      <DataGridDemo columns={columns} rows={categories} form="category" />
     </div>
   );
 };

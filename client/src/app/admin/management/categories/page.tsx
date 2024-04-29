@@ -8,6 +8,11 @@ import DisplayCategories from "@/app/ui/adminPage/management/category/DisplayCat
 const Categories = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isFormVisible, setIsFormVisible] = useState(false);
+
+  const toggleFormVisibility = () => {
+    setIsFormVisible((prev) => !prev);
+  };
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -30,7 +35,13 @@ const Categories = () => {
       ) : (
         <div>
           <DisplayCategories categories={categories} />
-          <CategoryForm categories={categories} />
+          {/* Render the CategoryForm component if isFormVisible is true */}
+          {isFormVisible && (
+            <CategoryForm
+              categories={categories}
+              onClose={toggleFormVisibility} // Pass the toggleFormVisibility function as onClose prop
+            />
+          )}
         </div>
       )}
     </div>

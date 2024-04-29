@@ -62,7 +62,7 @@ const DisplayProducts = ({ products }: CategoryProps) => {
 
   return (
     <div>
-      <DataGridDemo columns={columns} rows={products} />
+      <DataGridDemo columns={columns} rows={products} form="product" />
     </div>
   );
 };

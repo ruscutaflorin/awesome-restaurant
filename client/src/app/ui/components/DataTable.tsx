@@ -1,9 +1,15 @@
-"use client";
 import * as React from "react";
 import Box from "@mui/material/Box";
 import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
 import { BorderDottedIcon } from "@radix-ui/react-icons";
 import { Button, Menu, MenuItem } from "@mui/material";
+import CategoryForm from "../adminPage/management/category/CategoryForm";
+import DiningTableForm from "../adminPage/management/dinningTables/DiningTableForm";
+import ProductForm from "../adminPage/management/product/ProductForm";
+import ReservationsForm from "../adminPage/management/reservations/ReservationsForm";
+import DetailsForm from "../adminPage/management/restaurant/DetailsForm";
+import StaffForm from "../adminPage/management/restaurant/StaffForm";
+import { Category } from "@/app/types/types";
 
 type Props = {
   columns: GridColDef[];
@@ -12,55 +18,88 @@ type Props = {
 };
 
 export default function DataGridDemo({ columns, rows, form }: Props) {
-  const actionColumn: GridColDef = {
-    field: "action",
-    headerName: "Action",
-    width: 150,
-    editable: false,
-    sortable: false,
-    renderCell: (params) => {
-      const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [selectedRowId, setSelectedRowId] = React.useState<number | null>(null);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [isFormVisible, setIsFormVisible] = React.useState(false);
 
-      const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-        setAnchorEl(event.currentTarget);
-      };
-
-      const handleClose = () => {
-        setAnchorEl(null);
-      };
-
-      const handleView = () => {
-        console.log("Copy order ID", params.row.id);
-        handleClose();
-      };
-      const handleAdd = () => {
-        console.log("Copy order ID", params.row.id);
-        handleClose();
-      };
-
-      return (
-        <div className="flex h-full justify-center items-center">
-          <Button variant="outlined" size="small" onClick={handleClick}>
-            <BorderDottedIcon />
-          </Button>
-          <Menu
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
-            onClose={handleClose}
-          >
-            <MenuItem onClick={handleView}>View Row</MenuItem>
-            {/* adding a param so i can know what form should i open */}
-            <MenuItem onClick={handleAdd}>Add Row</MenuItem>
-          </Menu>
-        </div>
-      );
-    },
+  const handleClick = (
+    event: React.MouseEvent<HTMLButtonElement>,
+    rowId: number
+  ) => {
+    setSelectedRowId(rowId);
+    setAnchorEl(event.currentTarget);
   };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleView = () => {
+    console.log("Viewing row ID", selectedRowId);
+    setIsFormVisible(true);
+    handleClose();
+  };
+
+  const handleAdd = () => {
+    console.log("Adding row ID", selectedRowId);
+    handleClose();
+  };
+
+  const closeForm = () => {
+    setIsFormVisible(false); // Close the form
+  };
+
+  const renderForm = () => {
+    const selectedRow = rows.find((row) => row.id === selectedRowId);
+    console.log(selectedRow);
+    switch (form) {
+      case "category":
+        return <CategoryForm categories={rows} onClose={closeForm} />;
+      case "diningTable":
+        return <DiningTableForm diningTables={rows} onClose={closeForm} />;
+      case "product":
+        const { product, categories } = selectedRow || {};
+        return (
+          <ProductForm
+            product={product}
+            categories={categories}
+            onClose={closeForm}
+          />
+        );
+      case "reservations":
+        return <ReservationsForm reservations={rows} onClose={closeForm} />;
+      case "staff":
+        return <StaffForm staffUsers={rows} onClose={closeForm} />;
+      default:
+        return null;
+    }
+  };
+
   return (
     <Box sx={{ height: 400, width: "100%" }}>
       <DataGrid
         rows={rows}
-        columns={[...columns, actionColumn]}
+        columns={[
+          ...columns,
+          {
+            field: "action",
+            headerName: "Action",
+            width: 150,
+            editable: false,
+            sortable: false,
+            renderCell: (params) => (
+              <div className="flex h-full justify-center items-center">
+                <Button
+                  variant="outlined"
+                  size="small"
+                  onClick={(event) => handleClick(event, params.row.id)}
+                >
+                  <BorderDottedIcon />
+                </Button>
+              </div>
+            ),
+          },
+        ]}
         initialState={{
           pagination: {
             paginationModel: {
@@ -78,10 +117,12 @@ export default function DataGridDemo({ columns, rows, form }: Props) {
         pageSizeOptions={[5]}
         checkboxSelection
         disableRowSelectionOnClick
-        // disableColumnFilter
-        // disableDensitySelector
-        // disableColumnSelector
       />
+      <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
+        <MenuItem onClick={handleView}>View Row</MenuItem>
+        <MenuItem onClick={handleAdd}>Add Row</MenuItem>
+      </Menu>
+      {isFormVisible && renderForm()}
     </Box>
   );
 }

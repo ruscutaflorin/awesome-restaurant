@@ -8,6 +8,12 @@ import React, { useEffect, useState } from "react";
 const Reservations = () => {
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isFormVisible, setIsFormVisible] = useState(false);
+
+  const toggleFormVisibility = () => {
+    setIsFormVisible((prev) => !prev);
+  };
+
   useEffect(() => {
     const fetchOrders = async () => {
       try {
@@ -29,7 +35,12 @@ const Reservations = () => {
       ) : (
         <div className="flex-column">
           <DisplayReservations reservations={reservations} />
-          <ReservationManagement reservations={reservations} />
+          {isFormVisible && (
+            <ReservationManagement
+              reservations={reservations}
+              onClose={toggleFormVisibility}
+            />
+          )}
         </div>
       )}
     </div>
