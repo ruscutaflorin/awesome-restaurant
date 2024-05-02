@@ -10,6 +10,7 @@ import ReservationsForm from "../adminPage/management/reservations/ReservationsF
 import DetailsForm from "../adminPage/management/restaurant/DetailsForm";
 import StaffForm from "../adminPage/management/restaurant/StaffForm";
 import { Category } from "@/app/types/types";
+import { set } from "react-hook-form";
 
 type Props = {
   columns: GridColDef[];
@@ -21,6 +22,7 @@ export default function DataGridDemo({ columns, rows, form }: Props) {
   const [selectedRowId, setSelectedRowId] = React.useState<number | null>(null);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [isFormVisible, setIsFormVisible] = React.useState(false);
+  const [isEditFormVisible, setIsEditFormVisible] = React.useState(false);
 
   const handleClick = (
     event: React.MouseEvent<HTMLButtonElement>,
@@ -34,19 +36,21 @@ export default function DataGridDemo({ columns, rows, form }: Props) {
     setAnchorEl(null);
   };
 
+  const handleEdit = () => {
+    console.log("Editing row ID", selectedRowId);
+    setIsEditFormVisible(true);
+    handleClose();
+  };
+
   const handleView = () => {
     console.log("Viewing row ID", selectedRowId);
     setIsFormVisible(true);
     handleClose();
   };
 
-  const handleAdd = () => {
-    console.log("Adding row ID", selectedRowId);
-    handleClose();
-  };
-
   const closeForm = () => {
     setIsFormVisible(false);
+    setIsEditFormVisible(false);
   };
 
   const renderForm = () => {
@@ -73,6 +77,55 @@ export default function DataGridDemo({ columns, rows, form }: Props) {
         );
       case "staff":
         return <StaffForm staffUsers={selectedRow} onClose={closeForm} />;
+      default:
+        return null;
+    }
+  };
+  const renderEditForm = () => {
+    const selectedRow = rows.find((row) => row.id === selectedRowId);
+    switch (form) {
+      case "category":
+        return (
+          <CategoryForm
+            categories={selectedRow}
+            onClose={closeForm}
+            action="edit"
+          />
+        );
+      case "diningTable":
+        return (
+          <DiningTableForm
+            diningTables={selectedRow}
+            onClose={closeForm}
+            action="edit"
+          />
+        );
+      case "product":
+        const { product, categories } = selectedRow || {};
+        return (
+          <ProductForm
+            product={selectedRow}
+            categories={categories}
+            onClose={closeForm}
+            action="edit"
+          />
+        );
+      case "reservations":
+        return (
+          <ReservationsForm
+            reservations={selectedRow}
+            onClose={closeForm}
+            action="edit"
+          />
+        );
+      case "staff":
+        return (
+          <StaffForm
+            staffUsers={selectedRow}
+            onClose={closeForm}
+            action="edit"
+          />
+        );
       default:
         return null;
     }
@@ -122,10 +175,11 @@ export default function DataGridDemo({ columns, rows, form }: Props) {
         disableRowSelectionOnClick
       />
       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
+        <MenuItem onClick={handleEdit}>Edit Row</MenuItem>
         <MenuItem onClick={handleView}>View Row</MenuItem>
-        <MenuItem onClick={handleAdd}>Add Row</MenuItem>
       </Menu>
       {isFormVisible && renderForm()}
+      {isEditFormVisible && renderEditForm()}
     </Box>
   );
 }

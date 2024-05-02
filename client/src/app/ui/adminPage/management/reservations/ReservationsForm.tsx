@@ -9,6 +9,7 @@ import CloseIcon from "@mui/icons-material/Close";
 type ReservationsFormProps = {
   reservations: Reservation[];
   onClose: () => void;
+  action?: string;
 };
 
 const schema = z.object({
@@ -25,6 +26,7 @@ type FormFields = z.infer<typeof schema>;
 const ReservationsForm: React.FC<ReservationsFormProps> = ({
   reservations,
   onClose,
+  action,
 }) => {
   const {
     register,
@@ -168,7 +170,7 @@ const ReservationsForm: React.FC<ReservationsFormProps> = ({
             <div className="text-red-500">{errors.time.message}</div>
           )}
         </div>
-        <div className="mb-4">
+        {/* <div className="mb-4">
           <label
             htmlFor="message"
             className="block text-sm font-medium text-gray-700"
@@ -184,15 +186,25 @@ const ReservationsForm: React.FC<ReservationsFormProps> = ({
           {errors.message && (
             <div className="text-red-500">{errors.message.message}</div>
           )}
-        </div>
+        </div> */}
         <div className="flex justify-end">
-          <button
-            type="submit"
-            className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? "Submitting..." : "Submit"}
-          </button>
+          {action === "edit" ? (
+            <button
+              type="submit"
+              className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Submitting..." : "Commit Changes"}
+            </button>
+          ) : (
+            <button
+              className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              disabled={isSubmitting}
+              onClick={onClose}
+            >
+              Close
+            </button>
+          )}
           {errors.root && (
             <div className="text-red-500">{errors.root.message}</div>
           )}

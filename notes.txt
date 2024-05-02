@@ -9,3 +9,7 @@ TODO: react-admin
 TODO: validari pe formulare folosind ZOD
 TODO: facut toate stilurile formsurilor dupa restaurant details
 TODO: de adaugat o modala/form pt permisiuni pentru staffform
+TODO: fix, nu merg permisiunile pe staffUser
+TODO: sa mai pun un action param pe forms ca sa stie daca actionul e de view sau add
+TODO: eventual inca un option la actions pe datatable pentru copierea randului
+TODO: sa folosesc o tema de culori pe app

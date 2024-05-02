@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 type restaurantDetailsProps = {
   restaurant: Restaurant;
+  action?: string;
 };
 
 const schema = z.object({
@@ -18,7 +19,10 @@ const schema = z.object({
 
 type FormFields = z.infer<typeof schema>;
 
-const DetailsForm: React.FC<restaurantDetailsProps> = ({ restaurant }) => {
+const DetailsForm: React.FC<restaurantDetailsProps> = ({
+  restaurant,
+  action,
+}) => {
   const {
     register,
     handleSubmit,
@@ -141,13 +145,23 @@ const DetailsForm: React.FC<restaurantDetailsProps> = ({ restaurant }) => {
           </div>
         </div>
         <div className="flex justify-end">
-          <button
-            type="submit"
-            className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? "Submitting..." : "Submit"}
-          </button>
+          {action === "edit" ? (
+            <button
+              type="submit"
+              className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Submitting..." : "Commit Changes"}
+            </button>
+          ) : (
+            <button
+              className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              disabled={isSubmitting}
+              onClick={onClose}
+            >
+              Close
+            </button>
+          )}
           {errors.root && (
             <div className="text-red-500">{errors.root.message}</div>
           )}
