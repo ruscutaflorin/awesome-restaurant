@@ -35,12 +35,18 @@ const ReservationsForm: React.FC<ReservationsFormProps> = ({
     setError,
   } = useForm<FormFields>({
     defaultValues: {
-      name: reservations.customerName,
-      email: reservations.customerEmail,
-      phone: reservations.customerPhone,
-      persons: reservations.numberOfGuests,
-      date: new Date(reservations.reservationDate).toISOString().slice(0, 10),
-      time: new Date(reservations.reservationDate).toISOString().slice(11, 16),
+      name: reservations[0]?.customerName ?? "",
+      email: reservations[0]?.customerEmail ?? "",
+      phone: reservations[0]?.customerPhone.toString() ?? "",
+      persons: reservations[0]?.numberOfGuests.toString() ?? "",
+      date:
+        new Date(reservations[0]?.reservationDate)
+          ?.toISOString()
+          ?.slice(0, 10) ?? "",
+      time:
+        new Date(reservations[0]?.reservationDate)
+          ?.toISOString()
+          ?.slice(11, 16) ?? "",
     },
     resolver: zodResolver(schema),
   });
@@ -188,7 +194,7 @@ const ReservationsForm: React.FC<ReservationsFormProps> = ({
           )}
         </div> */}
         <div className="flex justify-end">
-          {action === "edit" ? (
+          {action == "edit" && (
             <button
               type="submit"
               className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -196,10 +202,19 @@ const ReservationsForm: React.FC<ReservationsFormProps> = ({
             >
               {isSubmitting ? "Submitting..." : "Commit Changes"}
             </button>
-          ) : (
+          )}
+          {action == "add" && (
             <button
+              type="submit"
               className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               disabled={isSubmitting}
+            >
+              {isSubmitting ? "Submitting..." : "Add"}
+            </button>
+          )}
+          {!action && (
+            <button
+              className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               onClick={onClose}
             >
               Close

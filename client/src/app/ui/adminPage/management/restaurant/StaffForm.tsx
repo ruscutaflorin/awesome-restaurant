@@ -6,7 +6,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import CloseIcon from "@mui/icons-material/Close";
 type StaffFormProps = {
-  staffUsers: StaffUserDetailed[];
+  staffUsers: StaffUserDetailed;
   onClose: () => void;
   action?: string;
 };
@@ -45,7 +45,6 @@ const StaffForm: React.FC<StaffFormProps> = ({
     },
     resolver: zodResolver(schema),
   });
-  console.log(staffUsers);
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -151,7 +150,7 @@ const StaffForm: React.FC<StaffFormProps> = ({
           </label>
         </div>
         <div className="flex justify-end">
-          {action === "edit" ? (
+          {action == "edit" && (
             <button
               type="submit"
               className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -159,17 +158,26 @@ const StaffForm: React.FC<StaffFormProps> = ({
             >
               {isSubmitting ? "Submitting..." : "Commit Changes"}
             </button>
-          ) : (
+          )}
+          {action == "add" && (
             <button
+              type="submit"
               className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               disabled={isSubmitting}
+            >
+              {isSubmitting ? "Submitting..." : "Add"}
+            </button>
+          )}
+          {!action && (
+            <button
+              className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               onClick={onClose}
             >
               Close
             </button>
           )}
           {errors.root && (
-            <div className=" text-red-500">{errors.root.message}</div>
+            <div className="text-red-500">{errors.root.message}</div>
           )}
         </div>
       </form>

@@ -145,23 +145,13 @@ const DetailsForm: React.FC<restaurantDetailsProps> = ({
           </div>
         </div>
         <div className="flex justify-end">
-          {action === "edit" ? (
-            <button
-              type="submit"
-              className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? "Submitting..." : "Commit Changes"}
-            </button>
-          ) : (
-            <button
-              className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              disabled={isSubmitting}
-              onClick={onClose}
-            >
-              Close
-            </button>
-          )}
+          <button
+            type="submit"
+            className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? "Submitting..." : "Submit"}
+          </button>
           {errors.root && (
             <div className="text-red-500">{errors.root.message}</div>
           )}

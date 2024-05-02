@@ -4,7 +4,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import CloseIcon from "@mui/icons-material/Close";
 type DiningTableFormProps = {
-  diningTables: DiningTable[];
+  diningTables: DiningTable;
   onClose: () => void;
   action?: string;
 };
@@ -149,7 +149,7 @@ const DiningTableForm: React.FC<DiningTableFormProps> = ({
           </div>
         </div>
         <div className="flex justify-end">
-          {action === "edit" ? (
+          {action == "edit" && (
             <button
               type="submit"
               className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -157,10 +157,19 @@ const DiningTableForm: React.FC<DiningTableFormProps> = ({
             >
               {isSubmitting ? "Submitting..." : "Commit Changes"}
             </button>
-          ) : (
+          )}
+          {action == "add" && (
             <button
+              type="submit"
               className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               disabled={isSubmitting}
+            >
+              {isSubmitting ? "Submitting..." : "Add"}
+            </button>
+          )}
+          {!action && (
+            <button
+              className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               onClick={onClose}
             >
               Close
