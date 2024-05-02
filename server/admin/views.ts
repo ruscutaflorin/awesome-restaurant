@@ -16,6 +16,12 @@ import {
   CustomRestaurantReviews,
   CustomRestaurantStaffUsers,
 } from "./types/adminTypes";
+import {
+  addCategory,
+  addDiningTable,
+  addReservation,
+  addStaffUser,
+} from "./services/admin";
 
 export async function restaurantIncomeFromOrders(req: Request, res: Response) {
   try {
@@ -255,6 +261,50 @@ export const restaurantStaffUsers = async (req: Request, res: Response) => {
       db.staffUser as unknown as CustomRestaurantStaffUsers
     ).getRestaurantStaffUsers(restaurantID);
 
+    return res.status(200).json(result);
+  } catch (error: any) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const addRestaurantCategory = async (req: Request, res: Response) => {
+  try {
+    const { id, category } = req.body;
+    const result = addCategory(id, category);
+    return res.status(200).json(result);
+  } catch (error: any) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const addRestaurantTable = async (req: Request, res: Response) => {
+  try {
+    const { id, name, capacity } = req.body;
+    const result = addDiningTable(id, name, capacity);
+    return res.status(200).json(result);
+  } catch (error: any) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const addRestaurantReservation = async (req: Request, res: Response) => {
+  try {
+    const { id, name, email, phone, date, persons } = req.body;
+    const result = addReservation(id, name, email, phone, date, persons);
+    return res.status(200).json(result);
+  } catch (error: any) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const addRestaurantStaffUser = async (req: Request, res: Response) => {
+  try {
+    const { id, restaurantId, name, role } = req.body;
+    const result = addStaffUser(id, restaurantId, name, role);
     return res.status(200).json(result);
   } catch (error: any) {
     console.error(error);

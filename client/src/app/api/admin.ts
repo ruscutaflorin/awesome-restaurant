@@ -142,3 +142,77 @@ export const restaurantStaff = async (restaurantID: number) => {
     console.error(error);
   }
 };
+
+export const addCategory = async (restaurantId: number, category: string) => {
+  try {
+    const res = await axios.post(
+      `http://localhost:8000/api/admin/add-category/`,
+      { id: restaurantId, category: category }
+    );
+    return res.status;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const addDiningTable = async (
+  restaurantID: number,
+  name: string,
+  capacity: number
+) => {
+  try {
+    const res = await axios.post(`http://localhost:8000/api/admin/add-table/`, {
+      id: restaurantID,
+      name: name,
+      capacity: capacity,
+    });
+    return res.status;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const addReservation = async (
+  restaurantID: number,
+  customerName: string,
+  customerEmail: string,
+  contactNumber: string,
+  reservationDate: string,
+  numberOfPeople: number
+) => {
+  try {
+    const res = await axios.post(
+      `http://localhost:8000/api/admin/add-reservation/`,
+      {
+        id: restaurantID,
+        name: customerName,
+        email: customerEmail,
+        phone: contactNumber,
+        date: reservationDate,
+        persons: numberOfPeople,
+      }
+    );
+    return res.status;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const addStaff = async (
+  userId: number,
+  restaurantID: number,
+  staffName: string,
+  staffRole: string
+) => {
+  try {
+    const res = await axios.post(`http://localhost:8000/api/admin/add-staff/`, {
+      restaurantId: restaurantID,
+      name: staffName,
+      id: userId,
+      role: staffRole,
+    });
+    return res.status;
+  } catch (error) {
+    console.error(error);
+  }
+};

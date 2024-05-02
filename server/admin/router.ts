@@ -5,6 +5,10 @@ import {
   validateRestaurantId,
 } from "./services/validation";
 import {
+  addRestaurantCategory,
+  addRestaurantReservation,
+  addRestaurantStaffUser,
+  addRestaurantTable,
   restaurantCategories,
   restaurantCustomerCount,
   restaurantDailyCustomersCount,
@@ -46,3 +50,8 @@ router.get("/products/:id", validateRestaurantId, restaurantProducts);
 router.get("/reservations/:id", validateRestaurantId, restaurantReservations);
 router.get("/restaurant/:id", validateRestaurantId, restaurantDetails);
 router.get("/staff/:id", validateRestaurantId, restaurantStaffUsers);
+
+router.post("/add-category/", addRestaurantCategory);
+router.post("/add-table/", addRestaurantTable);
+router.post("/add-reservation/", addRestaurantReservation);
+router.post("/add-staff/", addRestaurantStaffUser);

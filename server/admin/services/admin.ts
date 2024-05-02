@@ -318,3 +318,102 @@ export const restaurantStaffUsers = async (restaurantID: number) => {
     throw new Error(error);
   }
 };
+
+export const addCategory = async (restaurantID: number, name: string) => {
+  try {
+    const category = await db.category.create({
+      data: {
+        name: name,
+        restaurantId: restaurantID,
+      },
+    });
+    return category;
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+
+export const addDiningTable = async (
+  restaurantID: number,
+  name: string,
+  capacity: number
+) => {
+  try {
+    const diningTable = await db.diningTable.create({
+      data: {
+        name,
+        capacity: capacity,
+        restaurantId: restaurantID,
+        status: "Available",
+        positionX: 0,
+        positionY: 0,
+      },
+    });
+    return diningTable;
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+
+// export const addProduct = async (restaurantID: number, name: string, description: string, price: number, basePrice: number, ingredients: string[], avaibility: boolean) => {
+// categorie pt fiecare produs de adaugat in form
+
+export const addReservation = async (
+  restaurantID: number,
+  name: string,
+  email: string,
+  phone: string,
+  date: Date,
+  persons: number
+) => {
+  try {
+    const reservation = await db.reservation.create({
+      data: {
+        reservationDate: date,
+        numberOfGuests: persons,
+        customerName: name,
+        customerPhone: phone,
+        customerEmail: email,
+        reservationStatus: "Pending",
+        tableId: undefined,
+        restaurant: {
+          connect: {
+            id: restaurantID,
+          },
+        },
+        diningTable: {
+          connect: {
+            id: restaurantID,
+            // TODO:aici trebuia sa fie tableId, dar nu am adus din formular tableId
+          },
+        },
+      },
+    });
+    return reservation;
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+
+export const addStaffUser = async (
+  userId: number,
+  restaurantID: number,
+  name: string,
+  role: string
+) => {
+  try {
+    const staffUser = await db.staffUser.create({
+      data: {
+        name: name,
+        role: role,
+        restaurantId: restaurantID,
+        userId: userId,
+      },
+    });
+    return staffUser;
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+
+// folosesc connect pt a crea o inregistrare noua si pt a o lega de tabele

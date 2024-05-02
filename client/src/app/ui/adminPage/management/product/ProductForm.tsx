@@ -15,11 +15,11 @@ type ProductFormProps = {
 const schema = z.object({
   name: z.string(),
   description: z.string(),
-  price: z.number().positive(),
-  basePrice: z.number().positive(),
+  price: z.coerce.number().positive(),
+  basePrice: z.coerce.number().positive(),
   ingredients: z.string(),
   availability: z.boolean(),
-  category: z.number(),
+  category: z.coerce.number(),
 });
 
 type FormFields = z.infer<typeof schema>;
@@ -38,13 +38,13 @@ const ProductForm = ({
   } = useForm<FormFields>({
     defaultValues: product
       ? {
-          name: product.name,
-          description: product.description,
-          price: product.price,
-          basePrice: product.basePrice,
-          ingredients: product.ingredients[0],
-          availability: product.availability,
-          category: product.categoryId,
+          name: product?.name,
+          description: product?.description,
+          price: product?.price,
+          basePrice: product?.basePrice,
+          ingredients: product?.ingredients[0],
+          availability: product?.availability,
+          category: product?.categoryId,
         }
       : {},
     resolver: zodResolver(schema),

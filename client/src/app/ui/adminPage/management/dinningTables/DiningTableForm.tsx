@@ -3,6 +3,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import CloseIcon from "@mui/icons-material/Close";
+import { addDiningTable } from "@/app/api/admin";
 type DiningTableFormProps = {
   diningTables: DiningTable;
   onClose: () => void;
@@ -12,9 +13,9 @@ type DiningTableFormProps = {
 const schema = z.object({
   name: z.string().min(3).max(255),
   status: z.string().min(3).max(255),
-  capacity: z.number().min(0),
-  positionX: z.number().min(0),
-  positionY: z.number().min(0),
+  capacity: z.coerce.number(),
+  positionX: z.coerce.number(),
+  positionY: z.coerce.number(),
 });
 
 type FormFields = z.infer<typeof schema>;
@@ -31,18 +32,21 @@ const DiningTableForm: React.FC<DiningTableFormProps> = ({
     setError,
   } = useForm<FormFields>({
     defaultValues: {
-      name: diningTables.name,
-      status: diningTables.status,
-      capacity: diningTables.capacity,
-      positionX: diningTables.positionX,
-      positionY: diningTables.positionY,
+      name: diningTables?.name,
+      status: diningTables?.status || "Available",
+      capacity: diningTables?.capacity || 0,
+      positionX: diningTables?.positionX || 0,
+      positionY: diningTables?.positionY || 0,
     },
     resolver: zodResolver(schema),
   });
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      console.log(data);
+      const result = await addDiningTable(1, data.name, data.capacity);
+      if (result === 200) {
+        console.log("Adaugat cu succes");
+        onClose();
+      }
     } catch (error) {
       setError("root", {
         type: "manual",
@@ -87,6 +91,7 @@ const DiningTableForm: React.FC<DiningTableFormProps> = ({
                 {...register("status", { required: true })}
                 type="text"
                 id="status"
+                disabled={true}
                 className="mt-1 p-2 w-full border border-gray-300 rounded-md"
               />
               {errors.status && (

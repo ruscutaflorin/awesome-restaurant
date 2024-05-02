@@ -5,9 +5,10 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import CloseIcon from "@mui/icons-material/Close";
+import { addReservation } from "@/app/api/admin";
 
 type ReservationsFormProps = {
-  reservations: Reservation[];
+  reservations: Reservation;
   onClose: () => void;
   action?: string;
 };
@@ -35,25 +36,30 @@ const ReservationsForm: React.FC<ReservationsFormProps> = ({
     setError,
   } = useForm<FormFields>({
     defaultValues: {
-      name: reservations[0]?.customerName ?? "",
-      email: reservations[0]?.customerEmail ?? "",
-      phone: reservations[0]?.customerPhone.toString() ?? "",
-      persons: reservations[0]?.numberOfGuests.toString() ?? "",
-      date:
-        new Date(reservations[0]?.reservationDate)
-          ?.toISOString()
-          ?.slice(0, 10) ?? "",
-      time:
-        new Date(reservations[0]?.reservationDate)
-          ?.toISOString()
-          ?.slice(11, 16) ?? "",
+      name: reservations?.customerName ?? "",
+      email: reservations?.customerEmail ?? "",
+      phone: reservations?.customerPhone.toString() ?? "",
+      persons: reservations?.numberOfGuests.toString() ?? "",
+      date: new Date().toISOString().slice(0, 10),
+      time: new Date().toISOString().slice(11, 16),
     },
     resolver: zodResolver(schema),
   });
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const result = await addReservation(
+        1,
+        data.name,
+        data.email,
+        data.phone,
+        new Date(data.date + "T" + data.time).toISOString(),
+        parseInt(data.persons)
+      );
+      if (result === 200) {
+        console.log("Reservation added successfully");
+        onClose();
+      }
       console.log(data);
     } catch (error) {
       setError("root", {

@@ -5,6 +5,7 @@ import { z } from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import CloseIcon from "@mui/icons-material/Close";
+import { addCategory } from "@/app/api/admin";
 
 type CategoryFormProps = {
   categories: Category;
@@ -30,15 +31,18 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
     setError,
   } = useForm<FormFields>({
     defaultValues: {
-      name: categories.name,
+      name: categories?.name || "",
     },
     resolver: zodResolver(schema),
   });
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      console.log(data);
+      const res = await addCategory(1, data.name);
+      if (res === 200) {
+        console.log("Adaugat cu succes");
+        onClose();
+      }
     } catch (error) {
       setError("root", {
         type: "manual",

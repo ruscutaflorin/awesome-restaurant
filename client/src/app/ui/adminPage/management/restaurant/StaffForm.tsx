@@ -5,6 +5,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import CloseIcon from "@mui/icons-material/Close";
+import { addStaff } from "@/app/api/admin";
 type StaffFormProps = {
   staffUsers: StaffUserDetailed;
   onClose: () => void;
@@ -14,10 +15,10 @@ type StaffFormProps = {
 const schema = z.object({
   name: z.string().min(3).max(255),
   role: z.string().min(3).max(255),
-  restaurantId: z.number().min(1),
+  restaurantId: z.coerce.number().min(1),
   permissions: z.array(
     z.object({
-      id: z.number().min(1),
+      id: z.coerce.number().min(1),
       name: z.string().min(3).max(255),
       code: z.string().min(3).max(255),
     })
@@ -38,16 +39,17 @@ const StaffForm: React.FC<StaffFormProps> = ({
     setError,
   } = useForm<FormFields>({
     defaultValues: {
-      name: staffUsers.name,
-      role: staffUsers.role,
-      restaurantId: staffUsers.restaurantId,
-      permissions: staffUsers.permissions,
+      name: staffUsers?.name,
+      role: staffUsers?.role,
+      restaurantId: staffUsers?.restaurantId,
+      permissions: staffUsers?.permissions,
     },
     resolver: zodResolver(schema),
   });
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      // const result = await addStaff(2, data.restaurantId, data.name, data.role);
+      // aici ar trebui sa aleaga din userii creati or smth, e dubios
       console.log(data);
     } catch (error) {
       setError("root", {
