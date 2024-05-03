@@ -4,6 +4,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import CloseIcon from "@mui/icons-material/Close";
+import { addProduct } from "@/app/api/admin";
 
 type ProductFormProps = {
   product: Product;
@@ -18,7 +19,7 @@ const schema = z.object({
   price: z.coerce.number().positive(),
   basePrice: z.coerce.number().positive(),
   ingredients: z.string(),
-  availability: z.boolean(),
+  availability: z.coerce.boolean(),
   category: z.coerce.number(),
 });
 
@@ -49,11 +50,21 @@ const ProductForm = ({
       : {},
     resolver: zodResolver(schema),
   });
-  console.log(product);
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      console.log(data);
+      const result = await addProduct(
+        data.name,
+        data.description,
+        data.price,
+        data.basePrice,
+        data.category,
+        data.ingredients,
+        data.availability
+      );
+      if (result === 200) {
+        console.log("Product added successfully");
+        onClose();
+      }
     } catch (error) {
       setError("root", {
         type: "manual",

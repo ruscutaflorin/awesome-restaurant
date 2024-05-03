@@ -216,3 +216,31 @@ export const addStaff = async (
     console.error(error);
   }
 };
+
+export const addProduct = async (
+  name: string,
+  description: string,
+  price: number,
+  basePrice: number,
+  categoryID: number,
+  ingredients: string,
+  availability: boolean
+) => {
+  try {
+    const res = await axios.post(
+      `http://localhost:8000/api/admin/add-product/`,
+      {
+        name: name,
+        description: description,
+        price: price,
+        basePrice: basePrice,
+        categoryID: categoryID,
+        ingredients: ingredients.split(","),
+        availability: availability,
+      }
+    );
+    return res.status;
+  } catch (error) {
+    console.error(error);
+  }
+};

@@ -19,6 +19,7 @@ import {
 import {
   addCategory,
   addDiningTable,
+  addProduct,
   addReservation,
   addStaffUser,
 } from "./services/admin";
@@ -305,6 +306,33 @@ export const addRestaurantStaffUser = async (req: Request, res: Response) => {
   try {
     const { id, restaurantId, name, role } = req.body;
     const result = addStaffUser(id, restaurantId, name, role);
+    return res.status(200).json(result);
+  } catch (error: any) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const addRestaurantProduct = async (req: Request, res: Response) => {
+  try {
+    const {
+      name,
+      description,
+      price,
+      basePrice,
+      categoryID,
+      ingredients,
+      availability,
+    } = req.body;
+    const result = addProduct(
+      name,
+      description,
+      price,
+      basePrice,
+      categoryID,
+      ingredients,
+      availability
+    );
     return res.status(200).json(result);
   } catch (error: any) {
     console.error(error);

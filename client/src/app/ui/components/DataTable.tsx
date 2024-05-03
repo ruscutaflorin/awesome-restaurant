@@ -18,6 +18,8 @@ import {
   GridToolbarExport,
   GridToolbarDensitySelector,
 } from "@mui/x-data-grid";
+import { useEffect } from "react";
+import { restaurantCategories } from "@/app/api/admin";
 type Props = {
   columns: GridColDef[];
   rows: any[];
@@ -30,6 +32,21 @@ export default function DataGridDemo({ columns, rows, form }: Props) {
   const [isViewFormVisible, setIsViewFormVisible] = React.useState(false);
   const [isEditFormVisible, setIsEditFormVisible] = React.useState(false);
   const [isAddFormVisible, setIsAddFormVisible] = React.useState(false);
+  const [categories, setCategories] = React.useState<Category[]>([]);
+  const [loading, setLoading] = React.useState(true);
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const categories = await restaurantCategories(1);
+        setCategories(categories);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+        setLoading(false);
+      }
+    };
+    fetchProducts();
+  }, []);
 
   const handleClick = (
     event: React.MouseEvent<HTMLButtonElement>,
@@ -134,7 +151,6 @@ export default function DataGridDemo({ columns, rows, form }: Props) {
           />
         );
       case "product":
-        const { product, categories } = selectedRow || {};
         return (
           <ProductForm
             product={selectedRow}
@@ -183,7 +199,6 @@ export default function DataGridDemo({ columns, rows, form }: Props) {
           />
         );
       case "product":
-        const { product, categories } = selectedRow || {};
         return (
           <ProductForm
             product={selectedRow}

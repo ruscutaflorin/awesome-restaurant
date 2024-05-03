@@ -355,8 +355,32 @@ export const addDiningTable = async (
   }
 };
 
-// export const addProduct = async (restaurantID: number, name: string, description: string, price: number, basePrice: number, ingredients: string[], avaibility: boolean) => {
-// categorie pt fiecare produs de adaugat in form
+export const addProduct = async (
+  name: string,
+  description: string,
+  price: number,
+  basePrice: number,
+  categoryID: number,
+  ingredients: string[],
+  availability: boolean
+) => {
+  try {
+    const product = await db.product.create({
+      data: {
+        name: name,
+        description: description,
+        price: price,
+        basePrice: basePrice,
+        categoryId: categoryID,
+        ingredients: ingredients,
+        availability: availability,
+      },
+    });
+    return product;
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
 
 export const addReservation = async (
   restaurantID: number,

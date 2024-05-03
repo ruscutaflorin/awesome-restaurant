@@ -6,6 +6,7 @@ import {
 } from "./services/validation";
 import {
   addRestaurantCategory,
+  addRestaurantProduct,
   addRestaurantReservation,
   addRestaurantStaffUser,
   addRestaurantTable,
@@ -55,3 +56,4 @@ router.post("/add-category/", addRestaurantCategory);
 router.post("/add-table/", addRestaurantTable);
 router.post("/add-reservation/", addRestaurantReservation);
 router.post("/add-staff/", addRestaurantStaffUser);
+router.post("/add-product/", addRestaurantProduct);

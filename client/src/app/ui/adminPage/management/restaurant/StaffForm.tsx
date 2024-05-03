@@ -16,15 +16,10 @@ const schema = z.object({
   name: z.string().min(3).max(255),
   role: z.string().min(3).max(255),
   restaurantId: z.coerce.number().min(1),
-  permissions: z.array(
-    z.object({
-      id: z.coerce.number().min(1),
-      name: z.string().min(3).max(255),
-      code: z.string().min(3).max(255),
-    })
-  ),
+  permissions: z.coerce.string().min(3).max(255),
+  userId: z.coerce.number().min(1),
 });
-
+// poate sa aleg dintr-o lista de permisiuni, asa e dubios
 type FormFields = z.infer<typeof schema>;
 
 const StaffForm: React.FC<StaffFormProps> = ({
@@ -39,18 +34,26 @@ const StaffForm: React.FC<StaffFormProps> = ({
     setError,
   } = useForm<FormFields>({
     defaultValues: {
+      userId: staffUsers?.userId,
       name: staffUsers?.name,
       role: staffUsers?.role,
-      restaurantId: staffUsers?.restaurantId,
-      permissions: staffUsers?.permissions,
+      restaurantId: staffUsers?.restaurantId || 1,
+      permissions: staffUsers?.permissions.join(",") || "", // Convert array to string
     },
     resolver: zodResolver(schema),
   });
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
-      // const result = await addStaff(2, data.restaurantId, data.name, data.role);
-      // aici ar trebui sa aleaga din userii creati or smth, e dubios
-      console.log(data);
+      const result = await addStaff(
+        data.userId,
+        data.restaurantId,
+        data.name,
+        data.role
+      );
+      if (result == 200) {
+        console.log("Staff added successfully");
+        onClose();
+      }
     } catch (error) {
       setError("root", {
         type: "manual",
@@ -70,6 +73,22 @@ const StaffForm: React.FC<StaffFormProps> = ({
           className="absolute top-2 right-2 cursor-pointer"
         />{" "}
         <h1 className="text-2xl font-semibold mb-4">Staff Form</h1>
+        <div className="mb-4">
+          <label
+            htmlFor="userId"
+            className="block text-sm font-medium text-gray-700"
+          >
+            User ID:
+            <input
+              type="number"
+              className="mt-1 p-2 w-full border border-gray-300 rounded-md"
+              {...register("userId")}
+            />
+            {errors.userId && (
+              <div className="text-red-500">{errors.userId.message}</div>
+            )}
+          </label>
+        </div>
         <div className="mb-4">
           <label
             htmlFor="name"
