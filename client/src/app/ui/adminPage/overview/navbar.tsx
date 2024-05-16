@@ -38,7 +38,7 @@ const AdminNavbar = () => {
         redirectURL = "/admin/management/reservations";
         break;
       case "person":
-        redirectURL = "/admin/management/staff";
+        redirectURL = "/admin/management";
         break;
       default:
         break;

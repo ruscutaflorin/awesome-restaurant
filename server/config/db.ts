@@ -4,7 +4,24 @@ import {
   getRestaurantById,
   paginatedRestaurants,
   paginatedSearchedRestaurants,
+  getRestaurantCategoriesByUUID,
 } from "../restaurant/services/restaurant";
+import {
+  restaurantCategories,
+  restaurantCustomerCount,
+  restaurantDailyCustomersCount,
+  restaurantDetails,
+  restaurantDiningTables,
+  restaurantHourlyCustomersCount,
+  restaurantIncomeFromOrdersService,
+  restaurantMostOrderedItems,
+  restaurantOrders,
+  restaurantProducts,
+  restaurantReservations,
+  restaurantReviewsGroupedByRating,
+  restaurantStaffUsers,
+} from "../admin/services/admin";
+
 let db: PrismaClient;
 
 declare global {
@@ -18,6 +35,134 @@ if (!globalThis.__db) {
         async getNextReservationForTable(tableId: number) {
           try {
             const result = await nextReservationForTable(tableId);
+            return result;
+          } catch (error) {
+            console.error(error);
+            throw error;
+          }
+        },
+        async getDiningTablesByRestaurantId(restaurantId: number) {
+          try {
+            const result = restaurantDiningTables(restaurantId);
+            return result;
+          } catch (error) {
+            console.error(error);
+            throw error;
+          }
+        },
+      },
+      product: {
+        async getRestaurantProducts(restaurantId: number) {
+          try {
+            const result = await restaurantProducts(restaurantId);
+            return result;
+          } catch (error) {
+            console.error(error);
+            throw error;
+          }
+        },
+      },
+      reservation: {
+        async getRestaurantReservations(restaurantId: number) {
+          try {
+            const result = await restaurantReservations(restaurantId);
+            return result;
+          } catch (error) {
+            console.error(error);
+            throw error;
+          }
+        },
+      },
+      order: {
+        async getRestaurantIncomeFromOrders(restaurantId: number) {
+          try {
+            const result = await restaurantIncomeFromOrdersService(
+              restaurantId
+            );
+            return result;
+          } catch (error) {
+            console.error(error);
+            throw error;
+          }
+        },
+        async getRestaurantCustomerCount(restaurantId: number) {
+          try {
+            const result = await restaurantCustomerCount(restaurantId);
+            return result;
+          } catch (error) {
+            console.error(error);
+            throw error;
+          }
+        },
+        async getRestaurantHourlyCustomersCount(restaurantId: number) {
+          try {
+            const result = await restaurantHourlyCustomersCount(restaurantId);
+            return result;
+          } catch (error) {
+            console.error(error);
+            throw error;
+          }
+        },
+        async getRestaurantDailyCustomersCount(restaurantId: number) {
+          try {
+            const result = await restaurantDailyCustomersCount(restaurantId);
+            return result;
+          } catch (error) {
+            console.error(error);
+            throw error;
+          }
+        },
+        async getRestaurantOrders(restaurantId: number) {
+          try {
+            const result = await restaurantOrders(restaurantId);
+            return result;
+          } catch (error) {
+            console.error(error);
+            throw error;
+          }
+        },
+      },
+      category: {
+        async getRestaurantCategories(restaurantId: number) {
+          try {
+            const result = await restaurantCategories(restaurantId);
+            return result;
+          } catch (error) {
+            console.error(error);
+            throw error;
+          }
+        },
+        async getRestaurantCategoriesByUUID(uuid: string) {
+          try {
+            const result = await getRestaurantCategoriesByUUID(uuid);
+            return result;
+          } catch (error) {
+            console.error(error);
+            throw error;
+          }
+        },
+      },
+      orderItem: {
+        async getRestaurantMostPopularItems(
+          restaurantId: number,
+          limit: number
+        ) {
+          try {
+            const result = await restaurantMostOrderedItems(
+              restaurantId,
+              limit
+            );
+            return result;
+          } catch (error) {
+            console.error(error);
+            throw error;
+          }
+        },
+      },
+      staffUser: {
+        async getRestaurantStaffUsers(restaurantId: number) {
+          try {
+            const result = await restaurantStaffUsers(restaurantId);
             return result;
           } catch (error) {
             console.error(error);
@@ -40,7 +185,7 @@ if (!globalThis.__db) {
             const result = await paginatedRestaurants(offset, limit);
             return result;
           } catch (error) {
-            console.log(error);
+            console.error(error);
             throw error;
           }
         },
@@ -57,7 +202,27 @@ if (!globalThis.__db) {
             );
             return result;
           } catch (error) {
-            console.log(error);
+            console.error(error);
+            throw error;
+          }
+        },
+        async getRestaurantDetails(restaurantId: number) {
+          try {
+            const result = await restaurantDetails(restaurantId);
+            return result;
+          } catch (error) {
+            console.error(error);
+            throw error;
+          }
+        },
+      },
+      review: {
+        async getRestaurantReviewsGroupedByRating(restaurantId: number) {
+          try {
+            const result = await restaurantReviewsGroupedByRating(restaurantId);
+            return result;
+          } catch (error) {
+            console.error(error);
             throw error;
           }
         },

@@ -3,6 +3,7 @@ import { auth } from "../auth/middleware/auth";
 import {
   getClosestReservationForTableId,
   getRestaurantById,
+  getRestaurantCategories,
   getRestaurants,
   getRestaurantsPaginated,
 } from "./views";
@@ -14,7 +15,7 @@ import {
 
 export const router = express.Router();
 
-router.use(auth);
+// router.use(auth);
 router.get(
   "/paginate",
   validateGetPaginatedRestaurants,
@@ -27,3 +28,4 @@ router.get(
   getClosestReservationForTableId
 );
 router.get("/:uuid", validateGetRestaurantById, getRestaurantById);
+router.get("/:uuid/categories", getRestaurantCategories);

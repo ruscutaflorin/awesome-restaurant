@@ -5,12 +5,12 @@ import { db } from "../config/db";
 import {
   CustomDiningTable,
   CustomPaginatedRestaurant,
+  CustomRestaurantCategories,
   CustomRestaurantDetailed,
   CustomSearchPaginatedRestaurant,
   Restaurant,
   RestaurantDetailed,
 } from "./types/types";
-
 export async function getRestaurants(req: Request, res: Response) {
   try {
     const restaurants = await listRestaurants();
@@ -88,3 +88,21 @@ export async function getRestaurantsPaginated(req: Request, res: Response) {
     return res.status(500).json(error.message);
   }
 }
+
+export const getRestaurantCategories = async (req: Request, res: Response) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    const restaurantUUID: string = req.params.uuid as string;
+
+    const result = await (
+      db.category as unknown as CustomRestaurantCategories
+    ).getRestaurantCategoriesByUUID(restaurantUUID);
+    return res.status(200).json(result);
+  } catch (error: any) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};

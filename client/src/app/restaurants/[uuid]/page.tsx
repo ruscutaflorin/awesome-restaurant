@@ -36,13 +36,11 @@ const RestaurantDetails: React.FC<RestaurantDetailed> = () => {
 
   return (
     <div className="m-0 p-0">
-      {/*    {loading && !restaurant ? (
+      {loading && !restaurant ? (
         <div>Loading...</div>
       ) : (
-        <Menu restaurant={restaurant} />
+        <RestaurantWelcomePage restaurant={restaurant} />
       )}
- */}
-      <RestaurantWelcomePage restaurant={restaurant} />
     </div>
   );
 };

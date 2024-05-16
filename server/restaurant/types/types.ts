@@ -1,7 +1,9 @@
 import { Prisma } from "@prisma/client";
+
 export type CustomDiningTable = Prisma.DiningTableFieldRefs & {
   getNextReservationForTable(tableId: number): Promise<Restaurant | string>;
 };
+
 export type CustomRestaurantDetailed = Prisma.RestaurantFieldRefs & {
   getRestaurantById(id: string): Promise<RestaurantDetailed | string>;
 };
@@ -217,4 +219,8 @@ export type OrderItem = {
   diningTableId: number | null;
   createdAt: Date;
   updatedAt: Date;
+};
+
+export type CustomRestaurantCategories = Prisma.CategoryFieldRefs & {
+  getRestaurantCategoriesByUUID(uuid: string): Promise<any>;
 };

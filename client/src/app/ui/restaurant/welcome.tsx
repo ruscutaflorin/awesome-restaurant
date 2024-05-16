@@ -12,7 +12,10 @@ type Props = {
 };
 const RestaurantWelcomePage: React.FC<Props> = ({ restaurant }: Props) => {
   const pathname = usePathname();
-
+  if (restaurant) {
+    restaurant.contact = null;
+  }
+  // TODO vezi IN restaurnantheaderimage si restaurantheadetext fiindca crapa daca nu e null asta
   return (
     <div className="flex flex-col h-screen items-center justify-center">
       <div className="flex-1 flex items-center">

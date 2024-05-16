@@ -12,6 +12,8 @@ export const useLogin = () => {
     try {
       setIsLoading(true);
       const response = await fetchUsers(email, password);
+      console.log(response, "here");
+
       if (response) {
         if (token === "") {
           setLoggedUser(response);

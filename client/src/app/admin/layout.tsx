@@ -5,7 +5,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
       <AdminNavbar />
-      <div className="h-screen flex justify-center items-center mx-auto">
+      <div className="h-screen flex justify-center items-center w-full">
         {children}
       </div>
     </div>

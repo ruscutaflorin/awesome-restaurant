@@ -67,3 +67,23 @@ export const searchRestaurants = async (
     throw err;
   }
 };
+
+export const getRestaurantCategories = async (
+  uuid: string | string[],
+  token: string
+) => {
+  try {
+    const response = await axios.get(
+      `http://localhost:8000/api/restaurants/${uuid}/categories`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+};

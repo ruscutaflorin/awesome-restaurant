@@ -172,7 +172,6 @@ const OrderTable: React.FC<OrderTableProps> = ({ orders }) => {
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
-
   const table = useReactTable({
     data: orders,
     columns,
@@ -189,6 +188,12 @@ const OrderTable: React.FC<OrderTableProps> = ({ orders }) => {
       columnFilters,
       columnVisibility,
       rowSelection,
+    },
+    initialState: {
+      pagination: {
+        pageIndex: 0, //custom initial page index
+        pageSize: 5, //custom default page size
+      },
     },
   });
 

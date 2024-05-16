@@ -1,20 +1,25 @@
 import React from "react";
-import { LineChart } from "@mui/x-charts/LineChart";
+import { BarChart } from "@mui/x-charts/BarChart";
+import { DAILY_HOURS } from "@/lib/utils/constants";
 
-const RevenueLines = () => {
+type RevenueLinesProps = {
+  hourlyCustomers: number[];
+};
+
+const RevenueLines = ({ hourlyCustomers }: RevenueLinesProps) => {
+  const chartData = hourlyCustomers;
+  const xLabels = DAILY_HOURS;
   return (
     <div className="bg-slate-800 h-full w-full flex justify-center items-center rounded-xl">
-      <LineChart
-        xAxis={[{ data: [1, 2, 3, 5, 8, 10] }]}
-        series={[
-          {
-            data: [2, 5.5, 2, 8.5, 1.5, 5],
-            area: true,
-          },
-        ]}
-        width={500}
-        height={300}
-      />
+      {chartData.length > 0 && (
+        <BarChart
+          yAxis={[{ scaleType: "band", data: xLabels }]}
+          series={[{ data: chartData, type: "bar", color: "white" }]}
+          layout="horizontal"
+          width={400}
+          height={350}
+        />
+      )}
     </div>
   );
 };

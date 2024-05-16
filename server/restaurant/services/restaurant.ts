@@ -133,3 +133,26 @@ export const paginatedSearchedRestaurants = async (
   const numberOfPages = Math.ceil(countRestaurants / limit);
   return { restaurants, numberOfPages };
 };
+
+export const getRestaurantCategoriesByUUID = async (
+  uuid: string
+): Promise<string[]> => {
+  const result = await db.restaurant.findMany({
+    where: {
+      uuid: uuid,
+    },
+    select: {
+      categories: {
+        select: {
+          name: true,
+        },
+      },
+    },
+  });
+
+  const categories = result.flatMap(
+    (item) => item.categories?.map((category) => category.name) || []
+  );
+
+  return categories;
+};
