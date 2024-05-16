@@ -55,27 +55,31 @@ export const RestaurantHomePage = () => {
   }
 
   return (
-    <div>
+    <div className="p-4">
       <Button
         variant="contained"
         color="primary"
         onClick={handleToggleCategories}
         endIcon={showCategories ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-        className="mt-4"
+        className="block md:hidden mt-4"
       >
         {showCategories ? "Hide Categories" : "Show Categories"}
       </Button>
-      {showCategories && (
-        <Grid container spacing={2} className="mt-4">
+      <div
+        className={`md:flex md:overflow-x-auto md:w-4/5 md:mx-auto mt-4 flex justify-center items-center ${
+          showCategories ? "block" : "hidden md:block"
+        }`}
+      >
+        <div className="flex md:space-x-4">
           {categories.map((category, index) => (
-            <Grid item xs={6} sm={4} md={3} key={index}>
-              <Paper className="p-4 text-center">
+            <div key={index} className="w-full md:w-auto">
+              <Paper className="p-4 text-center m-2">
                 <Typography variant="h6">{category.name}</Typography>
               </Paper>
-            </Grid>
+            </div>
           ))}
-        </Grid>
-      )}
+        </div>
+      </div>
       <p className="flex items-center justify-center mt-20">Featured Items</p>
       <RestaurantFeaturedItems />
       {restaurant && <RestaurantProducts categories={categories} />}
