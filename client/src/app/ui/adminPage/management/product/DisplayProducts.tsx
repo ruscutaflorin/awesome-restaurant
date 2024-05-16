@@ -1,13 +1,14 @@
 import { Category, Product } from "@/app/types/types";
 import DataGridDemo from "@/app/ui/components/DataTable";
 import { GridColDef } from "@mui/x-data-grid";
-import React from "react";
+import React, { useState } from "react";
 
 type CategoryProps = {
   products: Product[];
 };
 
 const DisplayProducts = ({ products }: CategoryProps) => {
+  const [loading, setLoading] = useState(false);
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 90 },
     {
@@ -61,8 +62,14 @@ const DisplayProducts = ({ products }: CategoryProps) => {
   ];
 
   return (
-    <div>
-      <DataGridDemo columns={columns} rows={products} form="product" />
+    <div className="flex flex-row justify-center items-center">
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <div className="">
+          <DataGridDemo columns={columns} rows={products} form="product" />
+        </div>
+      )}
     </div>
   );
 };

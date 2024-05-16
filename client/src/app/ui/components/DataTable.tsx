@@ -230,7 +230,7 @@ export default function DataGridDemo({ columns, rows, form }: Props) {
 
   return (
     <Box sx={{ width: "100%" }}>
-      <Box sx={{ height: 400, width: "100%", mb: 2 }}>
+      <Box sx={{ height: 400, width: "100%", mb: 2, overflowX: "auto" }}>
         <DataGrid
           sx={{
             boxShadow: 2,
@@ -241,28 +241,7 @@ export default function DataGridDemo({ columns, rows, form }: Props) {
             },
           }}
           rows={rows}
-          columns={[
-            ...columns,
-            {
-              field: "action",
-              headerName: "Action",
-              width: 150,
-              editable: false,
-              sortable: false,
-              headerAlign: "center",
-              renderCell: (params) => (
-                <div className="flex h-full justify-center items-center">
-                  <Button
-                    variant="outlined"
-                    size="small"
-                    onClick={(event) => handleClick(event, params.row.id)}
-                  >
-                    <BorderDottedIcon />
-                  </Button>
-                </div>
-              ),
-            },
-          ]}
+          columns={columns}
           initialState={{
             pagination: {
               paginationModel: {
@@ -296,9 +275,11 @@ export default function DataGridDemo({ columns, rows, form }: Props) {
         {isEditFormVisible && renderEditForm()}
         {isAddFormVisible && renderAddForm()}
       </Box>
-      <Button variant="contained" onClick={handleAdd}>
-        Add New Row
-      </Button>
+      {form !== "orders" && (
+        <Button variant="contained" onClick={handleAdd}>
+          Add New Row
+        </Button>
+      )}
     </Box>
   );
 }
