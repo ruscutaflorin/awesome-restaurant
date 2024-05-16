@@ -5,7 +5,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import CloseIcon from "@mui/icons-material/Close";
-import { addReservation } from "@/app/api/admin";
+import { addReservation, editReservation } from "@/app/api/admin";
 
 type ReservationsFormProps = {
   reservations: Reservation;
@@ -14,6 +14,7 @@ type ReservationsFormProps = {
 };
 
 const schema = z.object({
+  id: z.coerce.number(),
   name: z.string().min(3).max(255),
   email: z.string().email(),
   phone: z.string().min(10).max(15),
@@ -36,6 +37,7 @@ const ReservationsForm: React.FC<ReservationsFormProps> = ({
     setError,
   } = useForm<FormFields>({
     defaultValues: {
+      id: reservations?.id,
       name: reservations?.customerName ?? "",
       email: reservations?.customerEmail ?? "",
       phone: reservations?.customerPhone.toString() ?? "",
@@ -48,19 +50,34 @@ const ReservationsForm: React.FC<ReservationsFormProps> = ({
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
-      const result = await addReservation(
-        1,
-        data.name,
-        data.email,
-        data.phone,
-        new Date(data.date + "T" + data.time).toISOString(),
-        parseInt(data.persons)
-      );
-      if (result === 200) {
-        console.log("Reservation added successfully");
-        onClose();
+      if (action === "edit") {
+        const result = await editReservation(
+          1,
+          data.id,
+          data.name,
+          data.email,
+          data.phone,
+          new Date(data.date + "T" + data.time).toISOString(),
+          parseInt(data.persons)
+        );
+        if (result === 200) {
+          console.log("Updated successfully but date doesnt change");
+          onClose();
+        }
+      } else {
+        const result = await addReservation(
+          1,
+          data.name,
+          data.email,
+          data.phone,
+          new Date(data.date + "T" + data.time).toISOString(),
+          parseInt(data.persons)
+        );
+        if (result === 200) {
+          console.log("Reservation added successfully");
+          onClose();
+        }
       }
-      console.log(data);
     } catch (error) {
       setError("root", {
         type: "manual",

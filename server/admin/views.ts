@@ -22,6 +22,12 @@ import {
   addProduct,
   addReservation,
   addStaffUser,
+  editCategory,
+  editDiningTable,
+  editProduct,
+  editReservation,
+  editRestaurant,
+  editStaffUser,
 } from "./services/admin";
 
 export async function restaurantIncomeFromOrders(req: Request, res: Response) {
@@ -332,6 +338,112 @@ export const addRestaurantProduct = async (req: Request, res: Response) => {
       categoryID,
       ingredients,
       availability
+    );
+    return res.status(200).json(result);
+  } catch (error: any) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const editRestaurantCategory = async (req: Request, res: Response) => {
+  try {
+    const { restaurantId, id, category } = req.body;
+    const result = editCategory(restaurantId, id, category);
+    return res.status(200).json(result);
+  } catch (error: any) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const editRestaurantDiningTable = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const { restaurantId, id, name, capacity } = req.body;
+    console.log(restaurantId, id, name, capacity);
+    const result = await editDiningTable(restaurantId, id, name, capacity);
+    return res.status(200).json(result);
+  } catch (error: any) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const editRestaurantProduct = async (req: Request, res: Response) => {
+  try {
+    const {
+      id,
+      name,
+      description,
+      price,
+      basePrice,
+      categoryID,
+      ingredients,
+      availability,
+    } = req.body;
+    const result = await editProduct(
+      id,
+      name,
+      description,
+      price,
+      basePrice,
+      categoryID,
+      ingredients,
+      availability
+    );
+    return res.status(200).json(result);
+  } catch (error: any) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const editRestaurantReservation = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const { restaurantId, id, name, email, phone, date, persons } = req.body;
+    const result = editReservation(
+      restaurantId,
+      id,
+      name,
+      email,
+      phone,
+      date,
+      persons
+    );
+    return res.status(200).json(result);
+  } catch (error: any) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const editRestaurantStaffUser = async (req: Request, res: Response) => {
+  try {
+    const { restaurantId, id, name, role } = req.body;
+    const result = editStaffUser(restaurantId, id, name, role);
+    return res.status(200).json(result);
+  } catch (error: any) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const editRestaurantDetails = async (req: Request, res: Response) => {
+  try {
+    const { id, name, address, location, businessHours, contact } = req.body;
+    const result = await editRestaurant(
+      id,
+      name,
+      address,
+      location,
+      businessHours,
+      contact
     );
     return res.status(200).json(result);
   } catch (error: any) {

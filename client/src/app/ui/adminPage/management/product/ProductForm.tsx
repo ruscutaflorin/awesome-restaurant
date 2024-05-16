@@ -4,7 +4,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import CloseIcon from "@mui/icons-material/Close";
-import { addProduct } from "@/app/api/admin";
+import { addProduct, editProduct } from "@/app/api/admin";
 
 type ProductFormProps = {
   product: Product;
@@ -14,6 +14,7 @@ type ProductFormProps = {
 };
 
 const schema = z.object({
+  id: z.coerce.number(),
   name: z.string(),
   description: z.string(),
   price: z.coerce.number().positive(),
@@ -39,6 +40,7 @@ const ProductForm = ({
   } = useForm<FormFields>({
     defaultValues: product
       ? {
+          id: product?.id,
           name: product?.name,
           description: product?.description,
           price: product?.price,
@@ -52,18 +54,35 @@ const ProductForm = ({
   });
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
-      const result = await addProduct(
-        data.name,
-        data.description,
-        data.price,
-        data.basePrice,
-        data.category,
-        data.ingredients,
-        data.availability
-      );
-      if (result === 200) {
-        console.log("Product added successfully");
-        onClose();
+      if (action === "edit") {
+        const result = await editProduct(
+          data.id,
+          data.name,
+          data.description,
+          data.price,
+          data.basePrice,
+          data.category,
+          data.ingredients,
+          data.availability
+        );
+        if (result === 200) {
+          console.log("Updated successfully");
+          onClose();
+        }
+      } else {
+        const result = await addProduct(
+          data.name,
+          data.description,
+          data.price,
+          data.basePrice,
+          data.category,
+          data.ingredients,
+          data.availability
+        );
+        if (result === 200) {
+          console.log("Product added successfully");
+          onClose();
+        }
       }
     } catch (error) {
       setError("root", {

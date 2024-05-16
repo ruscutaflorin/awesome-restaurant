@@ -244,3 +244,142 @@ export const addProduct = async (
     console.error(error);
   }
 };
+
+export const editCategory = async (
+  restaurantId: number,
+  categoryId: number,
+  category: string
+) => {
+  try {
+    const res = await axios.put(
+      `http://localhost:8000/api/admin/edit-category/`,
+      { restaurantId: restaurantId, id: categoryId, category: category }
+    );
+    return res.status;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const editDiningTable = async (
+  restaurantId: number,
+  tableId: number,
+  name: string,
+  capacity: number
+) => {
+  try {
+    const res = await axios.put(`http://localhost:8000/api/admin/edit-table`, {
+      restaurantId: restaurantId,
+      id: tableId,
+      name: name,
+      capacity: capacity,
+    });
+    return res.status;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+export const editProduct = async (
+  productId: number,
+  name: string,
+  description: string,
+  price: number,
+  basePrice: number,
+  categoryID: number,
+  ingredients: string,
+  availability: boolean
+) => {
+  try {
+    const res = await axios.put(
+      `http://localhost:8000/api/admin/edit-product/`,
+      {
+        id: productId,
+        name: name,
+        description: description,
+        price: price,
+        basePrice: basePrice,
+        categoryID: categoryID,
+        ingredients: ingredients.split(","),
+        availability: availability,
+      }
+    );
+    return res.status;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const editReservation = async (
+  restaurantId: number,
+  reservationId: number,
+  customerName: string,
+  customerEmail: string,
+  contactNumber: string,
+  reservationDate: string,
+  numberOfPeople: number
+) => {
+  try {
+    const res = await axios.put(
+      `http://localhost:8000/api/admin/edit-reservation/`,
+      {
+        id: restaurantId,
+        reservationId: reservationId,
+        name: customerName,
+        email: customerEmail,
+        phone: contactNumber,
+        date: reservationDate,
+        persons: numberOfPeople,
+      }
+    );
+    return res.status;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const editStaff = async (
+  userId: number,
+  restaurantId: number,
+  staffName: string,
+  staffRole: string
+) => {
+  try {
+    const res = await axios.put(`http://localhost:8000/api/admin/edit-staff/`, {
+      id: userId,
+      restaurantId: restaurantId,
+      name: staffName,
+      role: staffRole,
+    });
+    return res.status;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const editRestaurantDetails = async (
+  restaurantId: number,
+  name: string,
+  address: string,
+  location: string,
+  businessHours: string[],
+  contact: string
+) => {
+  try {
+    const res = await axios.put(
+      `http://localhost:8000/api/admin/edit-restaurant/`,
+      {
+        id: restaurantId,
+        name: name,
+        address: address,
+        location: location,
+        businessHours: businessHours,
+        contact: contact,
+      }
+    );
+    return res.status;
+  } catch (error) {
+    console.error(error);
+  }
+};

@@ -5,7 +5,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import CloseIcon from "@mui/icons-material/Close";
-import { addStaff } from "@/app/api/admin";
+import { addStaff, editStaff } from "@/app/api/admin";
 type StaffFormProps = {
   staffUsers: StaffUserDetailed;
   onClose: () => void;
@@ -44,15 +44,28 @@ const StaffForm: React.FC<StaffFormProps> = ({
   });
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
-      const result = await addStaff(
-        data.userId,
-        data.restaurantId,
-        data.name,
-        data.role
-      );
-      if (result == 200) {
-        console.log("Staff added successfully");
-        onClose();
+      if (action === "edit") {
+        const result = await editStaff(
+          data.userId,
+          data.restaurantId,
+          data.name,
+          data.role
+        );
+        if (result === 200) {
+          console.log("Updated successfully");
+          onClose();
+        }
+      } else {
+        const result = await addStaff(
+          data.userId,
+          data.restaurantId,
+          data.name,
+          data.role
+        );
+        if (result == 200) {
+          console.log("Staff added successfully");
+          onClose();
+        }
       }
     } catch (error) {
       setError("root", {

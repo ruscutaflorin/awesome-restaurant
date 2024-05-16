@@ -3,7 +3,8 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import CloseIcon from "@mui/icons-material/Close";
-import { addDiningTable } from "@/app/api/admin";
+import { addDiningTable, editDiningTable } from "@/app/api/admin"; // Import updateDiningTable function
+
 type DiningTableFormProps = {
   diningTables: DiningTable;
   onClose: () => void;
@@ -11,6 +12,7 @@ type DiningTableFormProps = {
 };
 
 const schema = z.object({
+  id: z.coerce.number(),
   name: z.string().min(3).max(255),
   status: z.string().min(3).max(255),
   capacity: z.coerce.number(),
@@ -32,6 +34,7 @@ const DiningTableForm: React.FC<DiningTableFormProps> = ({
     setError,
   } = useForm<FormFields>({
     defaultValues: {
+      id: diningTables?.id,
       name: diningTables?.name,
       status: diningTables?.status || "Available",
       capacity: diningTables?.capacity || 0,
@@ -40,12 +43,26 @@ const DiningTableForm: React.FC<DiningTableFormProps> = ({
     },
     resolver: zodResolver(schema),
   });
+
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
-      const result = await addDiningTable(1, data.name, data.capacity);
-      if (result === 200) {
-        console.log("Adaugat cu succes");
-        onClose();
+      if (action === "edit") {
+        const result = await editDiningTable(
+          1,
+          data.id,
+          data.name,
+          data.capacity
+        );
+        if (result === 200) {
+          console.log("Updated successfully");
+          onClose();
+        }
+      } else {
+        const result = await addDiningTable(1, data.name, data.capacity);
+        if (result === 200) {
+          console.log("Added successfully");
+          onClose();
+        }
       }
     } catch (error) {
       setError("root", {
@@ -54,6 +71,7 @@ const DiningTableForm: React.FC<DiningTableFormProps> = ({
       });
     }
   };
+
   return (
     <div className="flex justify-center items-center h-full">
       <form
@@ -63,7 +81,7 @@ const DiningTableForm: React.FC<DiningTableFormProps> = ({
         <CloseIcon
           onClick={onClose}
           className="absolute top-2 right-2 cursor-pointer"
-        />{" "}
+        />
         <h1 className="text-2xl font-semibold mb-4">Dining Table Form</h1>
         <div className="mb-4">
           <label
@@ -154,7 +172,7 @@ const DiningTableForm: React.FC<DiningTableFormProps> = ({
           </div>
         </div>
         <div className="flex justify-end">
-          {action == "edit" && (
+          {action === "edit" && (
             <button
               type="submit"
               className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -163,7 +181,7 @@ const DiningTableForm: React.FC<DiningTableFormProps> = ({
               {isSubmitting ? "Submitting..." : "Commit Changes"}
             </button>
           )}
-          {action == "add" && (
+          {action === "add" && (
             <button
               type="submit"
               className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"

@@ -241,7 +241,32 @@ export default function DataGridDemo({ columns, rows, form }: Props) {
             },
           }}
           rows={rows}
-          columns={columns}
+          columns={[
+            ...columns,
+            ...(form !== "orders"
+              ? [
+                  {
+                    field: "action",
+                    headerName: "Action",
+                    width: 150,
+                    editable: false,
+                    sortable: false,
+                    headerAlign: "center",
+                    renderCell: (params) => (
+                      <div className="flex h-full justify-center items-center">
+                        <Button
+                          variant="outlined"
+                          size="small"
+                          onClick={(event) => handleClick(event, params.row.id)}
+                        >
+                          <BorderDottedIcon />
+                        </Button>
+                      </div>
+                    ),
+                  },
+                ]
+              : []),
+          ]}
           initialState={{
             pagination: {
               paginationModel: {

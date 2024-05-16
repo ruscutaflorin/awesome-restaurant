@@ -5,7 +5,7 @@ import { z } from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import CloseIcon from "@mui/icons-material/Close";
-import { addCategory } from "@/app/api/admin";
+import { addCategory, editCategory } from "@/app/api/admin";
 
 type CategoryFormProps = {
   categories: Category;
@@ -14,6 +14,7 @@ type CategoryFormProps = {
 };
 
 const schema = z.object({
+  id: z.coerce.number(),
   name: z.string().min(3).max(255),
 });
 
@@ -31,6 +32,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
     setError,
   } = useForm<FormFields>({
     defaultValues: {
+      id: categories?.id,
       name: categories?.name || "",
     },
     resolver: zodResolver(schema),
@@ -38,10 +40,18 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
-      const res = await addCategory(1, data.name);
-      if (res === 200) {
-        console.log("Adaugat cu succes");
-        onClose();
+      if (action === "edit") {
+        const result = await editCategory(1, data.id, data.name);
+        if (result === 200) {
+          console.log("Updated successfully");
+          onClose();
+        }
+      } else {
+        const res = await addCategory(1, data.name);
+        if (res === 200) {
+          console.log("Adaugat cu succes");
+          onClose();
+        }
       }
     } catch (error) {
       setError("root", {

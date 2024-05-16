@@ -23,6 +23,12 @@ import {
   restaurantReservations,
   restaurantReviews,
   restaurantStaffUsers,
+  editRestaurantCategory,
+  editRestaurantDiningTable,
+  editRestaurantProduct,
+  editRestaurantReservation,
+  editRestaurantStaffUser,
+  editRestaurantDetails,
 } from "./views";
 
 export const router = express.Router();
@@ -57,3 +63,9 @@ router.post("/add-table/", addRestaurantTable);
 router.post("/add-reservation/", addRestaurantReservation);
 router.post("/add-staff/", addRestaurantStaffUser);
 router.post("/add-product/", addRestaurantProduct);
+router.put("/edit-category/", editRestaurantCategory);
+router.put("/edit-table/", editRestaurantDiningTable);
+router.put("/edit-product/", editRestaurantProduct);
+router.put("/edit-reservation/", editRestaurantReservation);
+router.put("/edit-staff/", editRestaurantStaffUser);
+router.put("/edit-restaurant/", editRestaurantDetails);

@@ -3,6 +3,7 @@ import { Restaurant } from "@/app/types/types";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { editRestaurantDetails } from "@/app/api/admin";
 
 type restaurantDetailsProps = {
   restaurant: Restaurant;
@@ -10,6 +11,7 @@ type restaurantDetailsProps = {
 };
 
 const schema = z.object({
+  id: z.coerce.number(),
   name: z.string().min(3).max(255),
   address: z.string().min(3).max(255),
   location: z.string().min(3).max(255),
@@ -30,6 +32,7 @@ const DetailsForm: React.FC<restaurantDetailsProps> = ({
     setError,
   } = useForm<FormFields>({
     defaultValues: {
+      id: restaurant?.id,
       name: restaurant.name,
       address: restaurant.address,
       location: restaurant.location,
@@ -40,8 +43,17 @@ const DetailsForm: React.FC<restaurantDetailsProps> = ({
   });
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      console.log(data);
+      const result = await editRestaurantDetails(
+        data.id,
+        data.name,
+        data.address,
+        data.location,
+        data.businessHours.split(",").map((hour) => hour.trim()),
+        data.contact
+      );
+      if (result === 200) {
+        console.log("Added successfully");
+      }
     } catch (error) {
       setError("root", {
         type: "manual",
