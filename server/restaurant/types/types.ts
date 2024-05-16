@@ -220,3 +220,7 @@ export type OrderItem = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+export type CustomRestaurantCategories = Prisma.CategoryFieldRefs & {
+  getRestaurantCategoriesByUUID(uuid: string): Promise<any>;
+};

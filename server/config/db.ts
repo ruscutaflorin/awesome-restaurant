@@ -4,6 +4,7 @@ import {
   getRestaurantById,
   paginatedRestaurants,
   paginatedSearchedRestaurants,
+  getRestaurantCategoriesByUUID,
 } from "../restaurant/services/restaurant";
 import {
   restaurantCategories,
@@ -125,6 +126,15 @@ if (!globalThis.__db) {
         async getRestaurantCategories(restaurantId: number) {
           try {
             const result = await restaurantCategories(restaurantId);
+            return result;
+          } catch (error) {
+            console.error(error);
+            throw error;
+          }
+        },
+        async getRestaurantCategoriesByUUID(uuid: string) {
+          try {
+            const result = await getRestaurantCategoriesByUUID(uuid);
             return result;
           } catch (error) {
             console.error(error);
