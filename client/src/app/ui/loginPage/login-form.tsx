@@ -1,18 +1,46 @@
-import React, { useEffect, useState } from "react";
+"use client";
+import React, { useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useLogin } from "@/app/hooks/useLogin";
 import { useLogout } from "@/app/hooks/useLogout";
 
-const LoginPage = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+// Define the schema using zod
+const schema = z.object({
+  email: z.string(),
+  // email: z.string().email("Invalid email address"),
+  password: z.string().min(4, "Password must be at least 4 characters"),
+});
+
+type FormFields = z.infer<typeof schema>;
+
+const LoginPage: React.FC = () => {
   const { logIn, isLoading } = useLogin();
   const { logOut } = useLogout();
 
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
-     await logIn(username, password);
+  // Initialize useForm with the zod schema
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    setError,
+  } = useForm<FormFields>({
+    resolver: zodResolver(schema),
+  });
+
+  const onSubmit: SubmitHandler<FormFields> = async (data) => {
+    try {
+      const result = await logIn(data.email, data.password);
+    } catch (err: any) {
+      console.log(err.response.data.message, "aici");
+      setError("root", {
+        type: "manual",
+        message: `${err.response.data.message}`,
+      });
+    }
   };
 
   const handleLogout = async (e: any) => {
@@ -21,39 +49,53 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="mx-auto mt-16 p-8 bg-gray-100 max-w-md rounded-lg">
-      <h4 className="text-center text-xl mb-4">Login</h4>
-      <form onSubmit={(e) => e.preventDefault()} className="space-y-4">
-        <Input
-          type="email"
-          placeholder="Email"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <Input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-teal-400 to-lightTeal">
+      <div className="p-12 bg-veryPaleGrey max-w-lg rounded-lg shadow-lg w-full">
+        <h4 className="text-center text-3xl mb-6 text-darkOrange">Login</h4>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          <div>
+            <Input
+              type="text"
+              placeholder="Email"
+              {...register("email")}
+              className="border border-mediumGrey p-4 rounded-md w-full"
+            />
+            {errors.email && (
+              <p className="text-red-500 mt-1">{errors.email.message}</p>
+            )}
+          </div>
+          <div>
+            <Input
+              type="password"
+              placeholder="Password"
+              {...register("password")}
+              className="border border-mediumGrey p-4 rounded-md w-full"
+            />
+            {errors.password && (
+              <p className="text-red-500 mt-1">{errors.password.message}</p>
+            )}
+          </div>
 
-        <div className="flex p-4">
-          <Button
-            disabled={isLoading}
-            color="primary"
-            onClick={handleSubmit}
-            className="bg-blue-500 text-white hover:bg-blue-700 focus:outline-none focus:ring focus:border-blue-300 mx-auto "
-          >
-            Login
-          </Button>
-          <Button
-            color="secondary"
-            onClick={handleLogout}
-            className="focus:outline-none focus:ring focus:border-blue-300 mx-auto"
-          >
-            LogOut
-          </Button>
-        </div>
-      </form>
+          <div className="flex justify-between">
+            <Button
+              disabled={isLoading}
+              type="submit"
+              className="bg-darkOrange text-white hover:bg-lightYellowOrange focus:outline-none focus:ring-2 focus:ring-darkOrange px-6 py-3 rounded-md"
+            >
+              Login
+            </Button>
+            <Button
+              onClick={handleLogout}
+              className="bg-mediumGrey text-white hover:bg-darkGrey focus:outline-none focus:ring-2 focus:ring-mediumGrey px-6 py-3 rounded-md"
+            >
+              Logout
+            </Button>
+          </div>
+          {errors.root && (
+            <p className="text-red-500 text-center">{errors.root.message}</p>
+          )}
+        </form>
+      </div>
     </div>
   );
 };

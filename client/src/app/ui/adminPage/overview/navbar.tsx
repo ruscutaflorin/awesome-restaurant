@@ -47,7 +47,7 @@ const AdminNavbar = () => {
     setSelectedIcon(iconName);
   };
   return (
-    <main className="flex flex-col justify-between items-center h-screen bg-slate-900 w-1/12">
+    <main className="flex flex-col justify-between items-center h-screen bg-veryPaleGrey w-1/12">
       <div className="user-info mt-10 mx-2">
         <img
           src={defaultImage.src}

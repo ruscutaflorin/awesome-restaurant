@@ -10,12 +10,16 @@ const PaymentPieChart = ({ reviews }: PaymentPieChartProps) => {
     value: reviews[key],
   }));
   return (
-    <div className=" bg-slate-800 flex justify-center items-center rounded-xl">
+    <div className="bg-veryPaleGrey flex justify-center items-center rounded-xl p-6 shadow-lg">
       {reviews && (
         <PieChart
           series={[
             {
               data: data,
+              paddingAngle: 5,
+              cornerRadius: 5,
+              startAngle: -90,
+              endAngle: 180,
               cx: 150,
               cy: 150,
               innerRadius: 40,
@@ -25,7 +29,11 @@ const PaymentPieChart = ({ reviews }: PaymentPieChartProps) => {
           height={300}
           width={300}
           slotProps={{
-            legend: { hidden: true },
+            legend: {
+              direction: "row",
+              position: { vertical: "top", horizontal: "middle" },
+              hidden: false,
+            },
           }}
         />
       )}

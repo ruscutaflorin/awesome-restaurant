@@ -3,7 +3,7 @@ import AdminNavbar from "../ui/adminPage/overview/navbar";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
+    <div className="flex h-screen  md:flex-row md:overflow-hidden bg-mediumGrey">
       <AdminNavbar />
       <div className="h-screen flex justify-center items-center w-full">
         {children}

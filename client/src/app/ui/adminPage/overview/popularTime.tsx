@@ -11,12 +11,12 @@ const PopularTime = ({ customersByDay }: PopularTimeProps) => {
   const xLabels = WEEK_DAYS;
 
   return (
-    <div className="bg-slate-800  flex justify-center items-center rounded-xl">
+    <div className="bg-veryPaleGrey flex justify-center items-center rounded-xl p-6 shadow-lg">
       {uData.length > 0 && (
         <BarChart
           width={500}
           height={300}
-          series={[{ data: uData, type: "bar" }]}
+          series={[{ data: uData, label: " Daily Customers", type: "bar" }]}
           xAxis={[{ scaleType: "band", data: xLabels }]}
         />
       )}

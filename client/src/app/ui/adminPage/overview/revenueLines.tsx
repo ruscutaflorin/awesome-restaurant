@@ -10,11 +10,18 @@ const RevenueLines = ({ hourlyCustomers }: RevenueLinesProps) => {
   const chartData = hourlyCustomers;
   const xLabels = DAILY_HOURS;
   return (
-    <div className="bg-slate-800 h-full w-full flex justify-center items-center rounded-xl">
+    <div className="bg-veryPaleGrey h-full w-full flex justify-center items-center rounded-xl p-6 shadow-lg">
       {chartData.length > 0 && (
         <BarChart
           yAxis={[{ scaleType: "band", data: xLabels }]}
-          series={[{ data: chartData, type: "bar", color: "white" }]}
+          series={[
+            {
+              type: "bar",
+              label: "Popular Time",
+              data: chartData,
+              color: "#02B2AF",
+            },
+          ]}
           layout="horizontal"
           width={400}
           height={350}

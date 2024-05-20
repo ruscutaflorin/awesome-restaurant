@@ -12,7 +12,6 @@ export const useLogin = () => {
     try {
       setIsLoading(true);
       const response = await fetchUsers(email, password);
-      console.log(response, "here");
 
       if (response) {
         if (token === "") {
@@ -22,6 +21,8 @@ export const useLogin = () => {
         } else {
           showToast("warning", `Already logged in!`);
         }
+      } else {
+        showToast("error", `Email or Password combination mismatch!`);
       }
     } catch (error: any) {
       console.error(error);
