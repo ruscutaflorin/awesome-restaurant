@@ -20,8 +20,8 @@ module.exports = {
       colors: {
         darkOrange: "#FF6600",
         lightYellowOrange: "#FFCC66",
-        mediumGrey: "#919999",
-        veryPaleGrey: "#F1F1F9",
+        veryPaleGrey: "#DCF2F1",
+        mediumGrey: "#3C5B6F",
         teal: "#00CCCC",
         lightTeal: "#99FFFF",
         darkPurple: "#660099",
