@@ -1,6 +1,12 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
-import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
+import {
+  DataGrid,
+  GridAlignment,
+  GridCellParams,
+  GridColDef,
+  GridToolbar,
+} from "@mui/x-data-grid";
 import { BorderDottedIcon } from "@radix-ui/react-icons";
 import { Button, Menu, MenuItem } from "@mui/material";
 import CategoryForm from "../adminPage/management/category/CategoryForm";
@@ -20,6 +26,7 @@ import {
 } from "@mui/x-data-grid";
 import { useEffect } from "react";
 import { restaurantCategories } from "@/app/api/admin";
+
 type Props = {
   columns: GridColDef[];
   rows: any[];
@@ -34,6 +41,7 @@ export default function DataGridDemo({ columns, rows, form }: Props) {
   const [isAddFormVisible, setIsAddFormVisible] = React.useState(false);
   const [categories, setCategories] = React.useState<Category[]>([]);
   const [loading, setLoading] = React.useState(true);
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -131,6 +139,7 @@ export default function DataGridDemo({ columns, rows, form }: Props) {
         return null;
     }
   };
+
   const renderAddForm = () => {
     const selectedRow = rows.find((row) => row.id === selectedRowId);
     switch (form) {
@@ -179,6 +188,7 @@ export default function DataGridDemo({ columns, rows, form }: Props) {
         return null;
     }
   };
+
   const renderEditForm = () => {
     const selectedRow = rows.find((row) => row.id === selectedRowId);
     switch (form) {
@@ -230,80 +240,79 @@ export default function DataGridDemo({ columns, rows, form }: Props) {
 
   return (
     <Box sx={{ width: "100%" }}>
-      <Box sx={{ height: 400, width: "100%", mb: 2, overflowX: "auto" }}>
-        <DataGrid
-          sx={{
-            boxShadow: 2,
-            border: 2,
-            borderColor: "primary.light",
-            "& .MuiDataGrid-cell:hover": {
-              color: "primary.main",
-            },
-          }}
-          rows={rows}
-          columns={[
-            ...columns,
-            ...(form !== "orders"
-              ? [
-                  {
-                    field: "action",
-                    headerName: "Action",
-                    width: 150,
-                    editable: false,
-                    sortable: false,
-                    headerAlign: "center",
-                    renderCell: (params) => (
-                      <div className="flex h-full justify-center items-center">
-                        <Button
-                          variant="outlined"
-                          size="small"
-                          onClick={(event) => handleClick(event, params.row.id)}
-                        >
-                          <BorderDottedIcon />
-                        </Button>
-                      </div>
-                    ),
-                  },
-                ]
-              : []),
-          ]}
-          initialState={{
-            pagination: {
-              paginationModel: {
-                pageSize: 5,
+      <Box sx={{ bgcolor: "white", p: 1, borderRadius: 2, boxShadow: 1 }}>
+        <Box sx={{ height: 400, width: "100%", overflowX: "auto" }}>
+          <DataGrid
+            sx={{
+              boxShadow: 2,
+              border: 2,
+              borderColor: "primary.light",
+              "& .MuiDataGrid-cell:hover": {
+                color: "primary.main",
               },
-            },
-          }}
-          // slots={{ toolbar: GridToolbar }}
-          // slotProps={{
-          //   toolbar: {
-          //     showQuickFilter: true,
-          //     quickFilterProps: { debounceMs: 500 },
-          //   },
-          // }}
-          slots={{
-            toolbar: CustomToolbar,
-          }}
-          pageSizeOptions={[5, 10, 25]}
-          checkboxSelection
-          disableRowSelectionOnClick
-        />
-        <Menu
-          anchorEl={anchorEl}
-          open={Boolean(anchorEl)}
-          onClose={handleClose}
-        >
-          <MenuItem onClick={handleEdit}>Edit Row</MenuItem>
-          <MenuItem onClick={handleView}>View Row</MenuItem>
-        </Menu>
-        {isViewFormVisible && renderViewForm()}
-        {isEditFormVisible && renderEditForm()}
-        {isAddFormVisible && renderAddForm()}
+            }}
+            rows={rows}
+            columns={[
+              ...columns,
+              ...(form !== "orders"
+                ? [
+                    {
+                      field: "action",
+                      headerName: "Action",
+                      width: 150,
+                      editable: false,
+                      sortable: false,
+                      headerAlign: "center" as GridAlignment,
+                      renderCell: (params: GridCellParams) => (
+                        <div className="flex h-full justify-center items-center">
+                          <Button
+                            variant="outlined"
+                            size="small"
+                            onClick={(event) =>
+                              handleClick(event, params.row.id)
+                            }
+                          >
+                            <BorderDottedIcon />
+                          </Button>
+                        </div>
+                      ),
+                    },
+                  ]
+                : []),
+            ]}
+            initialState={{
+              pagination: {
+                paginationModel: {
+                  pageSize: 5,
+                },
+              },
+            }}
+            slots={{
+              toolbar: CustomToolbar,
+            }}
+            pageSizeOptions={[5, 10, 25]}
+            checkboxSelection
+            disableRowSelectionOnClick
+          />
+          <Menu
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+          >
+            <MenuItem onClick={handleEdit}>Edit Row</MenuItem>
+            <MenuItem onClick={handleView}>View Row</MenuItem>
+          </Menu>
+          {isViewFormVisible && renderViewForm()}
+          {isEditFormVisible && renderEditForm()}
+          {isAddFormVisible && renderAddForm()}
+        </Box>
       </Box>
       {form !== "orders" && (
-        <Button variant="contained" onClick={handleAdd}>
-          Add New Row
-        </Button>
+        <div className="mt-5">
+          <Button variant="contained" onClick={handleAdd}>
+            Add New Row
+          </Button>
+        </div>
       )}
     </Box>
   );
