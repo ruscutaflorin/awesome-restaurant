@@ -21,6 +21,17 @@ export type CustomSearchPaginatedRestaurant = Restaurant & {
   ): Promise<{ restaurants: Restaurant[] | null; numberOfPages: number }>;
 };
 
+export type CustomAddRestaurant = Restaurant & {
+  addRestaurant(
+    name: string,
+    address: string,
+    location: string,
+    businessHours: string[],
+    contact: string | null,
+    ownerId: number
+  ): Promise<Restaurant>;
+};
+
 export type RestaurantDetailed = {
   diningTables: DiningTable[];
   categories: Category[];

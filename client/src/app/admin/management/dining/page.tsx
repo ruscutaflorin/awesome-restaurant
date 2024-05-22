@@ -1,5 +1,6 @@
 "use client";
 import { restaurantDiningTables } from "@/app/api/admin";
+import { useAuthStore } from "@/app/store/user";
 import { DiningTable } from "@/app/types/types";
 import DiningTableForm from "@/app/ui/adminPage/management/dinningTables/DiningTableForm";
 import DisplayDiningTables from "@/app/ui/adminPage/management/dinningTables/DiningTables";
@@ -9,6 +10,8 @@ const DiningTables = () => {
   const [tables, setTables] = useState<DiningTable[]>([]);
   const [loading, setLoading] = useState(true);
   const [isFormVisible, setIsFormVisible] = useState(false);
+  const restaurantId = useAuthStore((state) => state.user?.restaurantId);
+  const token = useAuthStore((state) => state.token);
 
   const toggleFormVisibility = () => {
     setIsFormVisible((prev) => !prev);
@@ -17,10 +20,11 @@ const DiningTables = () => {
   useEffect(() => {
     const fetchTables = async () => {
       try {
-        const tables = await restaurantDiningTables(1);
-        setTables(tables);
-        setLoading(false);
-        console.log("asda");
+        if (restaurantId && token) {
+          const tables = await restaurantDiningTables(restaurantId, token);
+          setTables(tables);
+          setLoading(false);
+        }
       } catch (error) {
         console.error("Error fetching tables:", error);
         setLoading(false);

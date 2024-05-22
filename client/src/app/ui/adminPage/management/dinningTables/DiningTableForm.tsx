@@ -3,10 +3,11 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import CloseIcon from "@mui/icons-material/Close";
-import { addDiningTable, editDiningTable } from "@/app/api/admin"; // Import updateDiningTable function
+import { addDiningTable, editDiningTable } from "@/app/api/admin";
+import { useAuthStore } from "@/app/store/user";
 
 type DiningTableFormProps = {
-  diningTables: DiningTable;
+  diningTables?: DiningTable;
   onClose: () => void;
   action?: string;
 };
@@ -27,6 +28,8 @@ const DiningTableForm: React.FC<DiningTableFormProps> = ({
   onClose,
   action,
 }) => {
+  const token = useAuthStore((state) => state.token);
+  const restaurantId = useAuthStore((state) => state.user?.restaurantId);
   const {
     register,
     handleSubmit,
@@ -34,8 +37,8 @@ const DiningTableForm: React.FC<DiningTableFormProps> = ({
     setError,
   } = useForm<FormFields>({
     defaultValues: {
-      id: diningTables?.id,
-      name: diningTables?.name,
+      id: diningTables?.id || 0,
+      name: diningTables?.name || "",
       status: diningTables?.status || "Available",
       capacity: diningTables?.capacity || 0,
       positionX: diningTables?.positionX || 0,
@@ -45,23 +48,32 @@ const DiningTableForm: React.FC<DiningTableFormProps> = ({
   });
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
+    console.log(data);
     try {
-      if (action === "edit") {
-        const result = await editDiningTable(
-          1,
-          data.id,
-          data.name,
-          data.capacity
-        );
-        if (result === 200) {
-          console.log("Updated successfully");
-          onClose();
-        }
-      } else {
-        const result = await addDiningTable(1, data.name, data.capacity);
-        if (result === 200) {
-          console.log("Added successfully");
-          onClose();
+      if (restaurantId && token) {
+        if (action === "edit") {
+          const result = await editDiningTable(
+            restaurantId,
+            data.id,
+            data.name,
+            data.capacity,
+            token
+          );
+          if (result === 200) {
+            console.log("Updated successfully");
+            onClose();
+          }
+        } else {
+          const result = await addDiningTable(
+            restaurantId,
+            data.name,
+            data.capacity,
+            token
+          );
+          if (result === 200) {
+            console.log("Added successfully");
+            onClose();
+          }
         }
       }
     } catch (error) {
@@ -158,17 +170,17 @@ const DiningTableForm: React.FC<DiningTableFormProps> = ({
               className="block text-sm font-medium text-gray-700"
             >
               Position Y:
+              <input
+                {...register("positionY", { required: true })}
+                type="number"
+                id="positionY"
+                disabled={true}
+                className="mt-1 p-2 w-full border border-gray-300 rounded-md"
+              />
+              {errors.positionY && (
+                <div className="text-red-500">This field is required</div>
+              )}
             </label>
-            <input
-              {...register("positionY", { required: true })}
-              type="number"
-              id="positionY"
-              disabled={true}
-              className="mt-1 p-2 w-full border border-gray-300 rounded-md"
-            />
-            {errors.positionY && (
-              <div className="text-red-500">This field is required</div>
-            )}
           </div>
         </div>
         <div className="flex justify-end">

@@ -8,7 +8,6 @@ import { Input } from "@/components/ui/input";
 import { useLogin } from "@/app/hooks/useLogin";
 import { useLogout } from "@/app/hooks/useLogout";
 
-// Define the schema using zod
 const schema = z.object({
   email: z.string(),
   // email: z.string().email("Invalid email address"),
@@ -21,7 +20,6 @@ const LoginPage: React.FC = () => {
   const { logIn, isLoading } = useLogin();
   const { logOut } = useLogout();
 
-  // Initialize useForm with the zod schema
   const {
     register,
     handleSubmit,
@@ -34,6 +32,10 @@ const LoginPage: React.FC = () => {
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
       const result = await logIn(data.email, data.password);
+      if (result === 200) {
+        console.log("Login successful");
+        console.log(result);
+      }
     } catch (err: any) {
       console.log(err.response.data.message, "aici");
       setError("root", {

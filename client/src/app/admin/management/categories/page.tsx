@@ -4,12 +4,14 @@ import CategoryForm from "@/app/ui/adminPage/management/category/CategoryForm";
 import { restaurantCategories } from "@/app/api/admin";
 import { Category } from "@/app/types/types";
 import DisplayCategories from "@/app/ui/adminPage/management/category/DisplayCategories";
+import { useAuthStore } from "@/app/store/user";
 
 const Categories = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [isFormVisible, setIsFormVisible] = useState(false);
-
+  const restaurantId = useAuthStore((state) => state.user?.restaurantId);
+  const token = useAuthStore((state) => state.token);
   const toggleFormVisibility = () => {
     setIsFormVisible((prev) => !prev);
   };
@@ -17,9 +19,11 @@ const Categories = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const categories = await restaurantCategories(1);
-        setCategories(categories);
-        setLoading(false);
+        if (restaurantId && token) {
+          const categories = await restaurantCategories(restaurantId, token);
+          setCategories(categories);
+          setLoading(false);
+        }
       } catch (error) {
         console.error("Error fetching categories:", error);
         setLoading(false);
@@ -35,11 +39,10 @@ const Categories = () => {
       ) : (
         <div>
           <DisplayCategories categories={categories} />
-          {/* Render the CategoryForm component if isFormVisible is true */}
           {isFormVisible && (
             <CategoryForm
               categories={categories}
-              onClose={toggleFormVisibility} // Pass the toggleFormVisibility function as onClose prop
+              onClose={toggleFormVisibility}
             />
           )}
         </div>

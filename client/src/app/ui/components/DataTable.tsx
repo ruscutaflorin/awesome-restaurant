@@ -26,6 +26,7 @@ import {
 } from "@mui/x-data-grid";
 import { useEffect } from "react";
 import { restaurantCategories } from "@/app/api/admin";
+import { useAuthStore } from "@/app/store/user";
 
 type Props = {
   columns: GridColDef[];
@@ -41,20 +42,26 @@ export default function DataGridDemo({ columns, rows, form }: Props) {
   const [isAddFormVisible, setIsAddFormVisible] = React.useState(false);
   const [categories, setCategories] = React.useState<Category[]>([]);
   const [loading, setLoading] = React.useState(true);
-
+  const token = useAuthStore((state) => state.token);
+  const restaurantId = useAuthStore((state) => state.user?.restaurantId);
   useEffect(() => {
-    const fetchProducts = async () => {
+    const fetchCategories = async () => {
       try {
-        const categories = await restaurantCategories(1);
-        setCategories(categories);
-        setLoading(false);
+        if (token && restaurantId) {
+          const fetchedCategories = await restaurantCategories(
+            restaurantId,
+            token
+          );
+          setCategories(fetchedCategories);
+        }
       } catch (error) {
-        console.error("Error fetching products:", error);
+        console.error("Error fetching categories:", error);
+      } finally {
         setLoading(false);
       }
     };
-    fetchProducts();
-  }, []);
+    fetchCategories();
+  }, [restaurantId, token]);
 
   const handleClick = (
     event: React.MouseEvent<HTMLButtonElement>,
@@ -131,7 +138,7 @@ export default function DataGridDemo({ columns, rows, form }: Props) {
         );
       case "reservations":
         return (
-          <ReservationsForm reservations={selectedRow} onClose={closeForm} />
+          <ReservationsForm reservation={selectedRow} onClose={closeForm} />
         );
       case "staff":
         return <StaffForm staffUsers={selectedRow} onClose={closeForm} />;
@@ -171,7 +178,7 @@ export default function DataGridDemo({ columns, rows, form }: Props) {
       case "reservations":
         return (
           <ReservationsForm
-            reservations={selectedRow}
+            reservation={selectedRow}
             onClose={closeForm}
             action="add"
           />
@@ -220,7 +227,7 @@ export default function DataGridDemo({ columns, rows, form }: Props) {
       case "reservations":
         return (
           <ReservationsForm
-            reservations={selectedRow}
+            reservation={selectedRow}
             onClose={closeForm}
             action="edit"
           />

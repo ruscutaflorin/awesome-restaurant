@@ -6,8 +6,9 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import CloseIcon from "@mui/icons-material/Close";
 import { addStaff, editStaff } from "@/app/api/admin";
+import { useAuthStore } from "@/app/store/user";
 type StaffFormProps = {
-  staffUsers: StaffUserDetailed[];
+  staffUsers: StaffUserDetailed;
   onClose: () => void;
   action?: string;
 };
@@ -27,6 +28,8 @@ const StaffForm: React.FC<StaffFormProps> = ({
   onClose,
   action,
 }) => {
+  const token = useAuthStore((state) => state.token);
+
   const {
     register,
     handleSubmit,
@@ -34,11 +37,11 @@ const StaffForm: React.FC<StaffFormProps> = ({
     setError,
   } = useForm<FormFields>({
     defaultValues: {
-      userId: staffUsers[0]?.userId,
-      name: staffUsers[0]?.name,
-      role: staffUsers[0]?.role,
-      restaurantId: staffUsers[0]?.restaurantId || 1,
-      permissions: staffUsers[0]?.permissions.join(",") || "", // Convert array to string
+      userId: staffUsers.userId || 0,
+      name: staffUsers.name || "",
+      role: staffUsers.role || "",
+      restaurantId: staffUsers.restaurantId || 1,
+      permissions: staffUsers.permissions.join(",") || "",
     },
     resolver: zodResolver(schema),
   });
@@ -49,7 +52,8 @@ const StaffForm: React.FC<StaffFormProps> = ({
           data.userId,
           data.restaurantId,
           data.name,
-          data.role
+          data.role,
+          token
         );
         if (result === 200) {
           console.log("Updated successfully");
@@ -60,7 +64,8 @@ const StaffForm: React.FC<StaffFormProps> = ({
           data.userId,
           data.restaurantId,
           data.name,
-          data.role
+          data.role,
+          token
         );
         if (result == 200) {
           console.log("Staff added successfully");

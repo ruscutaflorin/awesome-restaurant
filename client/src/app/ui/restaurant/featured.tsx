@@ -26,9 +26,8 @@ const RestaurantFeaturedItems = () => {
         const response = await getRestaurantCategories(params.uuid, token);
         setCategories(response.data);
         setLoading(false);
-        console.log(response.data);
       } catch (err) {
-        console.log(err);
+        console.error(err);
         setLoading(false);
       }
     };

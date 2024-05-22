@@ -35,6 +35,13 @@ export const loginService = async (userEmail: string, userPassword: string) => {
       where: {
         email: userEmail,
       },
+      include: {
+        restaurants: {
+          select: {
+            id: true,
+          },
+        },
+      },
     });
     if (!user) {
       throw new AuthenticationError();
@@ -45,14 +52,17 @@ export const loginService = async (userEmail: string, userPassword: string) => {
     }
     let token = createToken(user.id);
     let decodedToken = jwt.verify(token, JWT_SECRET);
-    // if (!decodedToken) {
-    //   throw new AuthorizationError();
-    // }
     if (!decodedToken || (decodedToken as any).exp * 1000 < Date.now()) {
       token = createToken(user.id);
       decodedToken = jwt.verify(token, JWT_SECRET);
     }
-    return { user, token };
+
+    const restaurantId = user.restaurants[0].id;
+    return {
+      ...user,
+      restaurantId: restaurantId,
+      token,
+    };
   } catch (err) {
     throw err;
   }
@@ -60,6 +70,6 @@ export const loginService = async (userEmail: string, userPassword: string) => {
 
 const createToken = (id: number) => {
   return jwt.sign({ id }, JWT_SECRET, {
-    expiresIn: "120s",
+    expiresIn: "3d",
   });
 };

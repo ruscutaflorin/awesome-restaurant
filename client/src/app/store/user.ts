@@ -3,6 +3,8 @@ import { persist, PersistOptions } from "zustand/middleware";
 
 type User = {
   id: number | null;
+  restaurantId: number | null;
+  restaurants: [{ id: number }] | null;
   name: string;
   email: string;
   profilePic: string | null;
@@ -28,6 +30,8 @@ export const useAuthStore = create<AuthStore & AuthActions>(
     (set) => ({
       user: {
         id: null,
+        restaurantId: null,
+        restaurants: null,
         name: "",
         email: "",
         profilePic: null,
@@ -38,7 +42,14 @@ export const useAuthStore = create<AuthStore & AuthActions>(
       },
       logOut: async () => {
         set({
-          user: { id: null, name: "", email: "", profilePic: null },
+          user: {
+            id: null,
+            restaurantId: null,
+            restaurants: null,
+            name: "",
+            email: "",
+            profilePic: null,
+          },
           token: "",
         });
       },

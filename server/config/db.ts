@@ -5,6 +5,7 @@ import {
   paginatedRestaurants,
   paginatedSearchedRestaurants,
   getRestaurantCategoriesByUUID,
+  addRestaurant,
 } from "../restaurant/services/restaurant";
 import {
   restaurantCategories,
@@ -209,6 +210,29 @@ if (!globalThis.__db) {
         async getRestaurantDetails(restaurantId: number) {
           try {
             const result = await restaurantDetails(restaurantId);
+            return result;
+          } catch (error) {
+            console.error(error);
+            throw error;
+          }
+        },
+        async addRestaurant(
+          name: string,
+          address: string,
+          location: string,
+          businessHours: string[],
+          contact: string,
+          ownerId: number
+        ) {
+          try {
+            const result = await addRestaurant(
+              name,
+              address,
+              location,
+              businessHours,
+              contact,
+              ownerId
+            );
             return result;
           } catch (error) {
             console.error(error);

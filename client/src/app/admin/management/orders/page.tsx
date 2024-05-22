@@ -5,18 +5,22 @@ import { Order } from "@/app/types/types";
 import { restaurantOrders } from "@/app/api/admin";
 import DataGridDemo from "@/app/ui/components/DataTable";
 import { GridColDef } from "@mui/x-data-grid";
+import { useAuthStore } from "@/app/store/user";
 
 const Order = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
+  const restaurantId = useAuthStore((state) => state.user?.restaurantId);
+  const token = useAuthStore((state) => state.token);
 
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const orders = await restaurantOrders(1);
-        setOrders(orders);
-        setLoading(false);
-        console.log(orders);
+        if (restaurantId && token) {
+          const orders = await restaurantOrders(restaurantId, token);
+          setOrders(orders);
+          setLoading(false);
+        }
       } catch (error) {
         console.error("Error fetching orders:", error);
         setLoading(false);

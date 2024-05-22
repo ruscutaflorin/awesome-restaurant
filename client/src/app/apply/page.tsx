@@ -4,13 +4,13 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import restaurantImage from "@/../public/hero.avif";
+import { addRestaurant } from "../api/apply";
+import { useAuthStore } from "../store/user";
 const RestaurantSchema = z.object({
   name: z.string().min(1, "Name is required"),
   address: z.string().min(1, "Address is required"),
   location: z.string().min(1, "Location is required"),
-  businessHours: z
-    .array(z.string().min(1, "Business hour is required"))
-    .nonempty(),
+  businessHours: z.string().min(1, "Business hours is required"),
   contact: z.string().nullable(),
   ownerId: z.number().int().positive(),
 });
@@ -27,7 +27,7 @@ const AddRestaurantForm: React.FC = () => {
       name: "",
       address: "",
       location: "",
-      businessHours: [],
+      businessHours: "",
       contact: "",
       ownerId: 0,
     },
@@ -37,8 +37,22 @@ const AddRestaurantForm: React.FC = () => {
   const onSubmit: SubmitHandler<RestaurantFormValues> = async (
     data: RestaurantFormValues
   ) => {
-    // Add your database submission logic here
-    console.log("Restaurant data:", data);
+    try {
+      const result = await addRestaurant(
+        data.name,
+        data.address,
+        data.location,
+        data.businessHours.split(",").map((hour) => hour.trim()),
+        data.contact,
+        data.ownerId
+      );
+      console.log(result);
+      if (result === 200) {
+        console.log("Added successfully");
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (

@@ -3,15 +3,17 @@ import { BarChart } from "@mui/x-charts/BarChart";
 import { DAILY_HOURS } from "@/lib/utils/constants";
 
 type RevenueLinesProps = {
-  hourlyCustomers: number[];
+  hourlyCustomers?: number[]; // Marking as optional to handle undefined case
 };
 
-const RevenueLines = ({ hourlyCustomers }: RevenueLinesProps) => {
+const RevenueLines = ({ hourlyCustomers = [] }: RevenueLinesProps) => {
+  // Providing a default value of empty array
   const chartData = hourlyCustomers;
   const xLabels = DAILY_HOURS;
+
   return (
     <div className="bg-veryPaleGrey h-full w-full flex justify-center items-center rounded-xl p-6 shadow-lg">
-      {chartData.length > 0 && (
+      {chartData.length > 0 ? (
         <BarChart
           yAxis={[{ scaleType: "band", data: xLabels }]}
           series={[
@@ -26,6 +28,8 @@ const RevenueLines = ({ hourlyCustomers }: RevenueLinesProps) => {
           width={400}
           height={350}
         />
+      ) : (
+        <p>No data available</p> // Fallback when there's no data
       )}
     </div>
   );

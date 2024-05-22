@@ -17,6 +17,7 @@ import {
   restaurantMostOrderedItems,
   restaurantReviews,
 } from "../../../api/admin";
+import { useAuthStore } from "@/app/store/user";
 const AdminDashboard = () => {
   const [earning, setEarning] = useState(0);
   const [customers, setCustomers] = useState(0);
@@ -24,23 +25,38 @@ const AdminDashboard = () => {
   const [dailyCustomers, setDailyCustomers] = useState<number[]>([]);
   const [popularItems, setPopularItems] = useState<[]>([]);
   const [reviews, setReviews] = useState<{}>({});
+  const restaurantId = useAuthStore((state) => state.user?.restaurantId);
+  const token = useAuthStore((state) => state.token);
+
   useEffect(() => {
     const fetchData = async () => {
-      const income = await restaurantIncome(1);
-      const customers = await restaurantCustomers(1);
-      const hourlyCustomers = await restaurantHourlyCustomers(1);
-      const dailyCustomers = await restaurantDailyCustomers(1);
-      const popularItems = await restaurantMostOrderedItems(1, 5);
-      const reviwsInfo = await restaurantReviews(1);
-      setEarning(income);
-      setCustomers(customers);
-      setHourlyCustomers(hourlyCustomers);
-      setDailyCustomers(dailyCustomers);
-      setPopularItems(popularItems);
-      setReviews(reviwsInfo);
+      if (restaurantId && token) {
+        const income = await restaurantIncome(restaurantId, token);
+        const customers = await restaurantCustomers(restaurantId, token);
+        const hourlyCustomers = await restaurantHourlyCustomers(
+          restaurantId,
+          token
+        );
+        const dailyCustomers = await restaurantDailyCustomers(
+          restaurantId,
+          token
+        );
+        const popularItems = await restaurantMostOrderedItems(
+          restaurantId,
+          5,
+          token
+        );
+        const reviewsInfo = await restaurantReviews(restaurantId, token);
+        setEarning(income);
+        setCustomers(customers);
+        setHourlyCustomers(hourlyCustomers);
+        setDailyCustomers(dailyCustomers);
+        setPopularItems(popularItems);
+        setReviews(reviewsInfo);
+      }
     };
     fetchData();
-  }, []);
+  }, [restaurantId]);
   return (
     <main className="h-full flex justify-center items-center">
       <div className="grid-container grid-cols-2 gap-4 ">

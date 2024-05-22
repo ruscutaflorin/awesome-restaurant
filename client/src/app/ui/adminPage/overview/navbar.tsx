@@ -12,10 +12,11 @@ import {
   CalendarIcon,
 } from "@radix-ui/react-icons";
 import { useRouter } from "next/navigation";
-
+import { useLogout } from "@/app/hooks/useLogout";
 const AdminNavbar = () => {
   const [selectedIcon, setSelectedIcon] = useState(null);
   const { push } = useRouter();
+  const { logOut } = useLogout();
   const handleIconClick = (iconName: any) => {
     let redirectURL = "";
     switch (iconName) {
@@ -39,6 +40,10 @@ const AdminNavbar = () => {
         break;
       case "person":
         redirectURL = "/admin/management";
+        break;
+      case "logout":
+        redirectURL = "/login";
+        logOut();
         break;
       default:
         break;
@@ -149,8 +154,20 @@ const AdminNavbar = () => {
           />
         </div>
       </div>
-      <div className="logout mb-16">
-        <ExitIcon className="w-8 h-16 text-gray-500" />
+      <div className="navbar flex flex-col justify-center items-center gap-4  mb-16">
+        <div className="flex items-center">
+          <div
+            className={`w-1 h-16 mr-2 ${
+              selectedIcon === "logout" ? "bg-red-500" : "bg-transparent"
+            }`}
+          ></div>
+          <ExitIcon
+            className={`w-8 h-16 ${
+              selectedIcon === "logout" ? "text-red-500" : "text-gray-500"
+            }`}
+            onClick={() => handleIconClick("logout")}
+          />
+        </div>
       </div>
     </main>
   );

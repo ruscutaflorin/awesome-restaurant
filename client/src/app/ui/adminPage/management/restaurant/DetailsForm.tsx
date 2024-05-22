@@ -4,6 +4,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { editRestaurantDetails } from "@/app/api/admin";
+import { useAuthStore } from "@/app/store/user";
 
 type restaurantDetailsProps = {
   restaurant: Restaurant;
@@ -25,6 +26,7 @@ const DetailsForm: React.FC<restaurantDetailsProps> = ({
   restaurant,
   action,
 }) => {
+  const token = useAuthStore((state) => state.token);
   const {
     register,
     handleSubmit,
@@ -43,16 +45,19 @@ const DetailsForm: React.FC<restaurantDetailsProps> = ({
   });
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
-      const result = await editRestaurantDetails(
-        data.id,
-        data.name,
-        data.address,
-        data.location,
-        data.businessHours.split(",").map((hour) => hour.trim()),
-        data.contact
-      );
-      if (result === 200) {
-        console.log("Added successfully");
+      if (token) {
+        const result = await editRestaurantDetails(
+          data.id,
+          data.name,
+          data.address,
+          data.location,
+          data.businessHours.split(",").map((hour) => hour.trim()),
+          data.contact,
+          token
+        );
+        if (result === 200) {
+          console.log("Added successfully");
+        }
       }
     } catch (error) {
       setError("root", {

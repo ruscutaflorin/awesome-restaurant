@@ -2,16 +2,19 @@ import React from "react";
 import { PieChart } from "@mui/x-charts/PieChart";
 
 type PaymentPieChartProps = {
-  reviews: { [key: string]: number };
+  reviews?: { [key: string]: number }; // Marking as optional to handle undefined case
 };
-const PaymentPieChart = ({ reviews }: PaymentPieChartProps) => {
+
+const PaymentPieChart = ({ reviews = {} }: PaymentPieChartProps) => {
+  // Providing a default value of empty object
   const data = Object.keys(reviews).map((key) => ({
     label: key,
     value: reviews[key],
   }));
+
   return (
     <div className="bg-veryPaleGrey flex justify-center items-center rounded-xl p-6 shadow-lg">
-      {reviews && (
+      {data.length > 0 ? (
         <PieChart
           series={[
             {
@@ -36,6 +39,8 @@ const PaymentPieChart = ({ reviews }: PaymentPieChartProps) => {
             },
           }}
         />
+      ) : (
+        <p>No data available</p> // Fallback when there's no data
       )}
     </div>
   );

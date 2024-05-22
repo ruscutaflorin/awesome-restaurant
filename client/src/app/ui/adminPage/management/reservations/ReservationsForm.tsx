@@ -1,14 +1,15 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import { Reservation } from "@/app/types/types";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import CloseIcon from "@mui/icons-material/Close";
 import { addReservation, editReservation } from "@/app/api/admin";
+import { useAuthStore } from "@/app/store/user";
 
 type ReservationsFormProps = {
-  reservations: Reservation;
+  reservation?: Reservation;
   onClose: () => void;
   action?: string;
 };
@@ -26,10 +27,12 @@ const schema = z.object({
 type FormFields = z.infer<typeof schema>;
 
 const ReservationsForm: React.FC<ReservationsFormProps> = ({
-  reservations,
+  reservation,
   onClose,
   action,
 }) => {
+  const token = useAuthStore((state) => state.token);
+  const restaurantId = useAuthStore((state) => state.user?.restaurantId);
   const {
     register,
     handleSubmit,
@@ -37,54 +40,66 @@ const ReservationsForm: React.FC<ReservationsFormProps> = ({
     setError,
   } = useForm<FormFields>({
     defaultValues: {
-      id: reservations?.id,
-      name: reservations?.customerName ?? "",
-      email: reservations?.customerEmail ?? "",
-      phone: reservations?.customerPhone.toString() ?? "",
-      persons: reservations?.numberOfGuests.toString() ?? "",
-      date: new Date().toISOString().slice(0, 10),
-      time: new Date().toISOString().slice(11, 16),
+      id: reservation?.id || 0,
+      name: reservation?.customerName ?? "",
+      email: reservation?.customerEmail ?? "",
+      phone: reservation?.customerPhone.toString() ?? "",
+      persons: reservation?.numberOfGuests.toString() ?? "",
+      date: reservation
+        ? new Date(reservation.reservationDate).toISOString().slice(0, 10)
+        : new Date().toISOString().slice(0, 10),
+      time: reservation
+        ? new Date(reservation.reservationDate).toISOString().slice(11, 16)
+        : new Date().toISOString().slice(11, 16),
     },
     resolver: zodResolver(schema),
   });
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
-      if (action === "edit") {
-        const result = await editReservation(
-          1,
-          data.id,
-          data.name,
-          data.email,
-          data.phone,
-          new Date(data.date + "T" + data.time).toISOString(),
-          parseInt(data.persons)
-        );
-        if (result === 200) {
-          console.log("Updated successfully but date doesnt change");
-          onClose();
-        }
-      } else {
-        const result = await addReservation(
-          1,
-          data.name,
-          data.email,
-          data.phone,
-          new Date(data.date + "T" + data.time).toISOString(),
-          parseInt(data.persons)
-        );
-        if (result === 200) {
-          console.log("Reservation added successfully");
-          onClose();
+      if (restaurantId && token) {
+        const dateTime = new Date(data.date + "T" + data.time).toISOString();
+        if (action === "edit") {
+          console.log(restaurantId);
+          const result = await editReservation(
+            restaurantId,
+            data.id,
+            data.name,
+            data.email,
+            data.phone,
+            dateTime,
+            parseInt(data.persons),
+            token
+          );
+          if (result === 200) {
+            console.log("Updated successfully");
+            onClose();
+          }
+        } else {
+          const result = await addReservation(
+            restaurantId,
+            data.name,
+            data.email,
+            data.phone,
+            dateTime,
+            parseInt(data.persons),
+            token
+          );
+          if (result === 200) {
+            console.log("Reservation added successfully");
+            onClose();
+          }
         }
       }
     } catch (error) {
+      console.error(error);
       setError("root", {
         type: "manual",
         message: "An error occurred while submitting the form",
       });
     }
   };
+
   return (
     <div className="flex justify-center items-center h-full">
       <form
@@ -94,7 +109,7 @@ const ReservationsForm: React.FC<ReservationsFormProps> = ({
         <CloseIcon
           onClick={onClose}
           className="absolute top-2 right-2 cursor-pointer"
-        />{" "}
+        />
         <h1 className="text-2xl font-semibold mb-4">Reservation Form</h1>
         <div className="mb-4">
           <label
@@ -126,10 +141,10 @@ const ReservationsForm: React.FC<ReservationsFormProps> = ({
             name="email"
             className="mt-1 p-2 w-full border border-gray-300 rounded-md"
           />
+          {errors.email && (
+            <div className="text-red-500">{errors.email.message}</div>
+          )}
         </div>
-        {errors.email && (
-          <div className="text-red-500">{errors.email.message}</div>
-        )}
         <div className="mb-4">
           <label
             htmlFor="phone"
@@ -139,14 +154,14 @@ const ReservationsForm: React.FC<ReservationsFormProps> = ({
           </label>
           <input
             {...register("phone")}
-            type="string"
+            type="text"
             name="phone"
             className="mt-1 p-2 w-full border border-gray-300 rounded-md"
           />
+          {errors.phone && (
+            <div className="text-red-500">{errors.phone.message}</div>
+          )}
         </div>
-        {errors.phone && (
-          <div className="text-red-500">{errors.phone.message}</div>
-        )}
         <div className="mb-4">
           <label
             htmlFor="persons"
@@ -194,30 +209,12 @@ const ReservationsForm: React.FC<ReservationsFormProps> = ({
             name="time"
             className="mt-1 p-2 w-full border border-gray-300 rounded-md"
           />
-
           {errors.time && (
             <div className="text-red-500">{errors.time.message}</div>
           )}
         </div>
-        {/* <div className="mb-4">
-          <label
-            htmlFor="message"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Message:
-          </label>
-          <input
-            {...register("message")}
-            type="text"
-            name="message"
-            className="mt-1 p-2 w-full border border-gray-300 rounded-md"
-          />
-          {errors.message && (
-            <div className="text-red-500">{errors.message.message}</div>
-          )}
-        </div> */}
         <div className="flex justify-end">
-          {action == "edit" && (
+          {action === "edit" && (
             <button
               type="submit"
               className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -226,7 +223,7 @@ const ReservationsForm: React.FC<ReservationsFormProps> = ({
               {isSubmitting ? "Submitting..." : "Commit Changes"}
             </button>
           )}
-          {action == "add" && (
+          {action === "add" && (
             <button
               type="submit"
               className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
