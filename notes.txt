@@ -14,3 +14,4 @@ TODO: sa mai pun un action param pe forms ca sa stie daca actionul e de view sau
 TODO: eventual inca un option la actions pe datatable pentru copierea randului
 TODO: sa folosesc o tema de culori pe app
 TODO: SA VAD CUM FAC CA VIEW FORM SA IA VALORILE RANDULUI PT CA ACUM CU [0] NU LE IA
+TODO: pe pagina de apply pe langa form de restaurant sa am si form de register user ca practic sa pot sa inregistrez restaurantu pe useru ala.
