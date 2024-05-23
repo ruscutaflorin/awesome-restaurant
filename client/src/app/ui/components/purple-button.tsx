@@ -7,7 +7,7 @@ type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   hover?: string;
 };
 
-const DarkButton = ({
+const PurpleButton = ({
   text,
   width,
   hover,
@@ -15,8 +15,8 @@ const DarkButton = ({
 }: ButtonProps): JSX.Element => {
   const buttonClasses = clsx(
     "text-white",
-    "bg-zinc-800",
-    hover ? "hover:bg-zinc-600" : "",
+    "bg-darkPurple",
+    hover ? "hover:bg-mediumGrey" : "",
     "rounded-lg",
     "px-4 py-2",
     { "w-full": width }
@@ -29,4 +29,4 @@ const DarkButton = ({
   );
 };
 
-export default DarkButton;
+export default PurpleButton;

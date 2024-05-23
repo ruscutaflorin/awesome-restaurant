@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { Prisma, Restaurant } from "@prisma/client";
 import { db } from "../../config/db";
 import bcrypt from "bcrypt";
 import { AuthenticationError, AuthorizationError } from "../errors";
@@ -65,6 +65,49 @@ export const loginService = async (userEmail: string, userPassword: string) => {
     };
   } catch (err) {
     throw err;
+  }
+};
+
+export const addRestaurantToUser = async (
+  name: string,
+  address: string,
+  location: string,
+  businessHours: string[],
+  contact: string,
+  username: string,
+  email: string,
+  password: string
+): Promise<Restaurant> => {
+  try {
+    // Register the user
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    const user = await db.user.create({
+      data: {
+        name: username,
+        email,
+        password: hashedPassword,
+      },
+    });
+
+    // Use the registered user's ID as the ownerId
+    const restaurant = await db.restaurant.create({
+      data: {
+        name,
+        address,
+        location,
+        businessHours,
+        contact,
+        owner: {
+          connect: {
+            id: user.id,
+          },
+        },
+      },
+    });
+
+    return restaurant;
+  } catch (error) {
+    throw error;
   }
 };
 

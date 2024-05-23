@@ -485,7 +485,6 @@ export const editDiningTable = async (
   capacity: number
 ) => {
   try {
-    console.log(restaurantID, tableId, name, capacity);
     const diningTable = await db.diningTable.update({
       where: {
         id: tableId,

@@ -6,7 +6,6 @@ type PaymentPieChartProps = {
 };
 
 const PaymentPieChart = ({ reviews = {} }: PaymentPieChartProps) => {
-  // Providing a default value of empty object
   const data = Object.keys(reviews).map((key) => ({
     label: key,
     value: reviews[key],
@@ -40,7 +39,7 @@ const PaymentPieChart = ({ reviews = {} }: PaymentPieChartProps) => {
           }}
         />
       ) : (
-        <p>No data available</p> // Fallback when there's no data
+        <p>No data available</p>
       )}
     </div>
   );

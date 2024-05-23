@@ -37,7 +37,6 @@ const LoginPage: React.FC = () => {
         console.log(result);
       }
     } catch (err: any) {
-      console.log(err.response.data.message, "aici");
       setError("root", {
         type: "manual",
         message: `${err.response.data.message}`,
@@ -51,9 +50,9 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-teal-400 to-lightTeal">
-      <div className="p-12 bg-veryPaleGrey max-w-lg rounded-lg shadow-lg w-full">
-        <h4 className="text-center text-3xl mb-6 text-darkOrange">Login</h4>
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-teal-400 to-lightTeal mb-20">
+      <div className="p-12 bg-white max-w-lg rounded-lg shadow-lg w-full">
+        <h4 className="text-center text-3xl mb-6 text-dark">Login</h4>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div>
             <Input

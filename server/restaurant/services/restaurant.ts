@@ -106,6 +106,7 @@ export const paginatedSearchedRestaurants = async (
     where: {
       name: {
         contains: query,
+        mode: "insensitive",
       },
     },
     select: {

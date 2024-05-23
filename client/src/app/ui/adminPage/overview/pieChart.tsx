@@ -2,11 +2,10 @@ import React from "react";
 import { PieChart } from "@mui/x-charts";
 
 type PieChartProps = {
-  popularItems?: { name: string; quantity: number; productId: number }[]; // Marking as optional to handle undefined case
+  popularItems?: { name: string; quantity: number; productId: number }[];
 };
 
 const PieChartComponent = ({ popularItems = [] }: PieChartProps) => {
-  // Providing a default value of empty array
   const uData = popularItems.map((item) => ({
     label: item.name,
     value: item.quantity,

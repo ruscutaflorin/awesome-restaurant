@@ -13,7 +13,9 @@ import {
 } from "@radix-ui/react-icons";
 import { useRouter } from "next/navigation";
 import { useLogout } from "@/app/hooks/useLogout";
+import { useAuthStore } from "@/app/store/user";
 const AdminNavbar = () => {
+  const adminName = useAuthStore((state) => state.user?.name);
   const [selectedIcon, setSelectedIcon] = useState(null);
   const { push } = useRouter();
   const { logOut } = useLogout();
@@ -53,14 +55,15 @@ const AdminNavbar = () => {
   };
   return (
     <main className="flex flex-col justify-between items-center h-screen bg-veryPaleGrey w-1/12">
-      <div className="user-info mt-10 mx-2">
+      <div className="user-info mt-10 mx-2 flex flex-col items-center">
         <img
           src={defaultImage.src}
           alt="user"
           className="w-10 h-10 rounded-full"
         />
-        <h1 className="text-gray-500 text-sm mt-1">Admin</h1>
+        <h1 className="text-gray-500 text-sm mt-1 text-center">{adminName}</h1>
       </div>
+
       <div className="navbar flex flex-col justify-center items-center gap-4 mt-4">
         <div className="flex items-center">
           <div

@@ -3,11 +3,10 @@ import { BarChart } from "@mui/x-charts/BarChart";
 import { DAILY_HOURS } from "@/lib/utils/constants";
 
 type RevenueLinesProps = {
-  hourlyCustomers?: number[]; // Marking as optional to handle undefined case
+  hourlyCustomers?: number[];
 };
 
 const RevenueLines = ({ hourlyCustomers = [] }: RevenueLinesProps) => {
-  // Providing a default value of empty array
   const chartData = hourlyCustomers;
   const xLabels = DAILY_HOURS;
 
@@ -29,7 +28,7 @@ const RevenueLines = ({ hourlyCustomers = [] }: RevenueLinesProps) => {
           height={350}
         />
       ) : (
-        <p>No data available</p> // Fallback when there's no data
+        <p>No data available</p>
       )}
     </div>
   );

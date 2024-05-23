@@ -3,11 +3,10 @@ import { BarChart } from "@mui/x-charts";
 import React from "react";
 
 type PopularTimeProps = {
-  customersByDay?: number[]; // Marking as optional to handle undefined case
+  customersByDay?: number[];
 };
 
 const PopularTime = ({ customersByDay = [] }: PopularTimeProps) => {
-  // Providing a default value of empty array
   const uData = customersByDay;
   const xLabels = WEEK_DAYS;
 
@@ -21,7 +20,7 @@ const PopularTime = ({ customersByDay = [] }: PopularTimeProps) => {
           xAxis={[{ scaleType: "band", data: xLabels }]}
         />
       ) : (
-        <p>No data available</p> // Fallback when there's no data
+        <p>No data available</p>
       )}
     </div>
   );

@@ -6,21 +6,25 @@ export const addRestaurant = async (
   location: string,
   businessHours: string[],
   contact: string | null,
-  ownerId: number
+  username: string,
+  email: string,
+  password: string
 ) => {
   try {
     const result = await axios.post(
-      "http://localhost:8000/api/restaurants/add",
+      "http://localhost:8000/api/auth/restaurant",
       {
         name,
         address,
         location,
         businessHours,
         contact,
-        ownerId,
+        username,
+        email,
+        password,
       }
     );
-    return result.data;
+    return result.status;
   } catch (error) {
     console.error(error);
     throw error;

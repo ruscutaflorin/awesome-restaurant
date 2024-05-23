@@ -20,7 +20,6 @@ const schema = z.object({
   permissions: z.coerce.string().min(3).max(255),
   userId: z.coerce.number().min(1),
 });
-// poate sa aleg dintr-o lista de permisiuni, asa e dubios
 type FormFields = z.infer<typeof schema>;
 
 const StaffForm: React.FC<StaffFormProps> = ({
@@ -37,11 +36,11 @@ const StaffForm: React.FC<StaffFormProps> = ({
     setError,
   } = useForm<FormFields>({
     defaultValues: {
-      userId: staffUsers.userId || 0,
-      name: staffUsers.name || "",
-      role: staffUsers.role || "",
-      restaurantId: staffUsers.restaurantId || 1,
-      permissions: staffUsers.permissions.join(",") || "",
+      userId: staffUsers?.userId || 0,
+      name: staffUsers?.name || "",
+      role: staffUsers?.role || "",
+      restaurantId: staffUsers?.restaurantId || 1,
+      permissions: staffUsers?.permissions.join(",") || "",
     },
     resolver: zodResolver(schema),
   });

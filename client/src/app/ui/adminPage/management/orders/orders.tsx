@@ -191,8 +191,8 @@ const OrderTable: React.FC<OrderTableProps> = ({ orders }) => {
     },
     initialState: {
       pagination: {
-        pageIndex: 0, //custom initial page index
-        pageSize: 5, //custom default page size
+        pageIndex: 0,
+        pageSize: 5,
       },
     },
   });

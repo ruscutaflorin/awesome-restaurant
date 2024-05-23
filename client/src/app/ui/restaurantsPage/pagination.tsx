@@ -20,30 +20,30 @@ const Pagination: React.FC<Props> = ({
 }) => {
   const router = useRouter();
   if (currentPage === null) {
-    return;
+    return null;
   }
   const buttonClickHandler = (newPage: number) => {
     paginate(newPage);
     router.push(`/restaurants/?offset=${newPage}&limit=${limit}`);
   };
   return (
-    <div className="flex flex-row justify-evenly">
+    <div className="flex flex-row justify-evenly my-4">
       {currentPage > 0 && currentPage && (
         <button
-          className="join-item btn btn-outline start-0 flex-1"
+          className="bg-zinc-800 text-white hover:bg-zinc-600 py-2 px-4 rounded-lg flex-1 mx-2"
           onClick={() => buttonClickHandler(currentPage - 1)}
           disabled={!hasPreviousPage}
         >
-          Previous page
+          Previous Page
         </button>
       )}
       {currentPage < totalPages - 1 && (
         <button
-          className="join-item btn btn-outline end-0 flex-1"
+          className="bg-zinc-800 text-white hover:bg-zinc-600 py-2 px-4 rounded-lg flex-1 mx-2"
           onClick={() => buttonClickHandler(currentPage + 1)}
           disabled={!hasNextPage}
         >
-          Next
+          Next Page
         </button>
       )}
     </div>

@@ -8,13 +8,17 @@ type CardProps = {
 
 function Card({ title, description }: CardProps): JSX.Element {
   return (
-    <div className="card w-96 bg-base-100 shadow-xl">
-      <figure className="px-10 pt-10">
-        <img src={heroImage.src} alt="Shoes" className="rounded-xl" />
+    <div className="max-w-sm rounded-lg overflow-hidden shadow-lg bg-white my-5 mx-auto sm:mx-4">
+      <figure className="relative h-48 w-full">
+        <img
+          src={heroImage.src}
+          alt="Hero"
+          className="object-cover w-full h-full"
+        />
       </figure>
-      <div className="card-body items-center text-center">
-        <h2 className="card-title">{title}!</h2>
-        <p>{description}</p>
+      <div className="p-6 text-center">
+        <h2 className="text-2xl font-bold text-mediumGrey mb-2">{title}</h2>
+        <p className="text-gray-600">{description}</p>
       </div>
     </div>
   );

@@ -1,27 +1,34 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import restaurantImage from "@/../public/hero.avif";
 import { addRestaurant } from "../api/apply";
-import { useAuthStore } from "../store/user";
+
 const RestaurantSchema = z.object({
   name: z.string().min(1, "Name is required"),
   address: z.string().min(1, "Address is required"),
   location: z.string().min(1, "Location is required"),
   businessHours: z.string().min(1, "Business hours is required"),
   contact: z.string().nullable(),
-  ownerId: z.number().int().positive(),
+  userName: z.string().min(1, "User name is required"),
+  userEmail: z.string().email("Invalid email address"),
+  userPassword: z
+    .string()
+    .min(6, "Password must be at least 6 characters long"),
 });
 
 type RestaurantFormValues = z.infer<typeof RestaurantSchema>;
 
 const AddRestaurantForm: React.FC = () => {
+  const [notification, setNotification] = useState<string | null>(null);
+
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
+    reset,
   } = useForm<RestaurantFormValues>({
     defaultValues: {
       name: "",
@@ -29,14 +36,14 @@ const AddRestaurantForm: React.FC = () => {
       location: "",
       businessHours: "",
       contact: "",
-      ownerId: 0,
+      userName: "",
+      userEmail: "",
+      userPassword: "",
     },
     resolver: zodResolver(RestaurantSchema),
   });
 
-  const onSubmit: SubmitHandler<RestaurantFormValues> = async (
-    data: RestaurantFormValues
-  ) => {
+  const onSubmit: SubmitHandler<RestaurantFormValues> = async (data) => {
     try {
       const result = await addRestaurant(
         data.name,
@@ -44,20 +51,28 @@ const AddRestaurantForm: React.FC = () => {
         data.location,
         data.businessHours.split(",").map((hour) => hour.trim()),
         data.contact,
-        data.ownerId
+        data.userName,
+        data.userEmail,
+        data.userPassword
       );
       console.log(result);
       if (result === 200) {
-        console.log("Added successfully");
+        setNotification("Restaurant added successfully!");
+        reset();
       }
     } catch (error) {
       console.error(error);
+      setNotification("An error occurred while adding the restaurant.");
+    } finally {
+      setTimeout(() => {
+        setNotification(null);
+      }, 3000);
     }
   };
 
   return (
     <div
-      className="hero-container h-screen items-center flex justify-center items-center bg-cover bg-center bg-no-repeat  relative"
+      className="hero-container h-screen items-center flex justify-center items-center bg-cover bg-center bg-no-repeat relative"
       style={{
         backgroundImage: `url(${restaurantImage.src})`,
       }}
@@ -71,10 +86,62 @@ const AddRestaurantForm: React.FC = () => {
           database. Make sure all fields are correctly filled out before
           submitting.
         </p>
+        {notification && (
+          <div className="mb-4 p-4 text-center text-white bg-green-500 rounded">
+            {notification}
+          </div>
+        )}
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-wrap">
           <div className="w-full md:w-1/2 lg:w-1/3 p-2">
             <label className="block text-neutral-900 font-semibold mb-1">
-              Name
+              User Name
+            </label>
+            <input
+              {...register("userName")}
+              className="p-3 w-full border border-orange-500 rounded"
+            />
+            {errors.userName && (
+              <span className="text-red-500 text-sm">
+                {errors.userName.message}
+              </span>
+            )}
+          </div>
+
+          <div className="w-full md:w-1/2 lg:w-1/3 p-2">
+            <label className="block text-neutral-900 font-semibold mb-1">
+              User Email
+            </label>
+            <input
+              type="email"
+              {...register("userEmail")}
+              className="p-3 w-full border border-orange-500 rounded"
+            />
+            {errors.userEmail && (
+              <span className="text-red-500 text-sm">
+                {errors.userEmail.message}
+              </span>
+            )}
+          </div>
+
+          <div className="w-full md:w-1/2 lg:w-1/3 p-2">
+            <label className="block text-neutral-900 font-semibold mb-1">
+              User Password
+            </label>
+            <input
+              type="password"
+              {...register("userPassword")}
+              className="p-3 w-full border border-orange-500 rounded"
+            />
+            {errors.userPassword && (
+              <span className="text-red-500 text-sm">
+                {errors.userPassword.message}
+              </span>
+            )}
+          </div>
+
+          <div className="w-full md:w-1/2 lg:w-1/3 p-2">
+            <label className="block text-neutral-900 font-semibold mb-1">
+              Restaurant Name
             </label>
             <input
               {...register("name")}
@@ -89,7 +156,7 @@ const AddRestaurantForm: React.FC = () => {
 
           <div className="w-full md:w-1/2 lg:w-1/3 p-2">
             <label className="block text-neutral-900 font-semibold mb-1">
-              Address
+              Restaurant Address
             </label>
             <input
               {...register("address")}
@@ -104,7 +171,7 @@ const AddRestaurantForm: React.FC = () => {
 
           <div className="w-full md:w-1/2 lg:w-1/3 p-2">
             <label className="block text-neutral-900 font-semibold mb-1">
-              Location
+              Restaurant Location
             </label>
             <input
               {...register("location")}
@@ -124,7 +191,7 @@ const AddRestaurantForm: React.FC = () => {
             <textarea
               {...register("businessHours")}
               className="p-3 w-full border border-orange-500 rounded"
-              placeholder="9AM 5PM, Monday - Friday, Closed on Saturday and Sunday"
+              placeholder="9AM - 5PM, Monday - Friday, Closed on Saturday and Sunday"
             />
             {errors.businessHours && (
               <span className="text-red-500 text-sm">
@@ -135,7 +202,7 @@ const AddRestaurantForm: React.FC = () => {
 
           <div className="w-full md:w-1/2 lg:w-1/3 p-2">
             <label className="block text-neutral-900 font-semibold mb-1">
-              Contact
+              Restaurant Contact
             </label>
             <input
               {...register("contact")}
@@ -144,22 +211,6 @@ const AddRestaurantForm: React.FC = () => {
             {errors.contact && (
               <span className="text-red-500 text-sm">
                 {errors.contact.message}
-              </span>
-            )}
-          </div>
-
-          <div className="w-full md:w-1/2 lg:w-1/3 p-2">
-            <label className="block text-neutral-900 font-semibold mb-1">
-              Owner ID
-            </label>
-            <input
-              type="number"
-              {...register("ownerId", { valueAsNumber: true })}
-              className="p-3 w-full border border-orange-500 rounded"
-            />
-            {errors.ownerId && (
-              <span className="text-red-500 text-sm">
-                {errors.ownerId.message}
               </span>
             )}
           </div>

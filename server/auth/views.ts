@@ -1,5 +1,9 @@
 import { Request, Response } from "express";
-import { loginService, registerService } from "./services/user";
+import {
+  addRestaurantToUser,
+  loginService,
+  registerService,
+} from "./services/user";
 import { validationResult } from "express-validator";
 
 export async function loginView(req: Request, res: Response) {
@@ -27,3 +31,39 @@ export async function registerView(req: Request, res: Response) {
     return res.status(501).json(err.message);
   }
 }
+
+export const createRestaurant = async (req: Request, res: Response) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const {
+      name,
+      address,
+      location,
+      businessHours,
+      contact,
+      username,
+      email,
+      password,
+    } = req.body;
+
+    const restaurant = await addRestaurantToUser(
+      name,
+      address,
+      location,
+      businessHours,
+      contact,
+      username,
+      email,
+      password
+    );
+
+    return res.status(200).json(restaurant);
+  } catch (error: any) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};

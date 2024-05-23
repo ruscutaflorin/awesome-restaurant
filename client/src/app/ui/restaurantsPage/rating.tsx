@@ -1,16 +1,19 @@
 import React from "react";
+import { StarFilledIcon } from "@radix-ui/react-icons";
 
-const Rating = () => {
+type RatingProps = {
+  stars: number;
+};
+
+const Rating: React.FC<RatingProps> = ({ stars }) => {
   return (
-    <div className="rating rating-xs p-2 flex flex-row items-center">
+    <div className="rating rating-xs p-2 flex flex-row items-center mb-3">
       {[1, 2, 3, 4, 5].map((index) => (
-        <input
+        <StarFilledIcon
           key={index}
-          type="radio"
-          name={`rating-${name}`}
-          className="mask mask-star-2 bg-orange-400 mb-1"
-          checked={index === 2} // Assuming 2 is the default checked rating
-          onChange={() => console.log(`Rating ${index} selected`)} // Add your onChange logic here
+          className={`h-5 w-5 ${
+            index <= stars ? "text-orange-400" : "text-gray-200"
+          }`}
         />
       ))}
     </div>
