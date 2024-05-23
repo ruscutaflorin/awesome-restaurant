@@ -431,6 +431,7 @@ export const editReservation = async (
 
 export const editStaff = async (
   userId: number,
+  staffUserId: number,
   restaurantId: number,
   staffName: string,
   staffRole: string,
@@ -440,7 +441,8 @@ export const editStaff = async (
     const res = await axios.put(
       `http://localhost:8000/api/admin/edit-staff/`,
       {
-        id: userId,
+        userId: userId,
+        staffUserId: staffUserId,
         restaurantId: restaurantId,
         name: staffName,
         role: staffRole,

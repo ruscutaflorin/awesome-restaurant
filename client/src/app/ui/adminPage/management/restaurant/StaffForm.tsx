@@ -16,6 +16,7 @@ type StaffFormProps = {
 
 const schema = z.object({
   userId: z.coerce.number().min(1).optional(),
+  staffUserId: z.coerce.number().min(1).optional(),
   name: z.string().min(3).max(255),
   email: z.string().email("Invalid email address").optional(),
   password: z
@@ -43,13 +44,14 @@ const StaffForm: React.FC<StaffFormProps> = ({
     setError,
   } = useForm<FormFields>({
     defaultValues: {
-      userId: staffUsers?.userId,
-      name: staffUsers?.name || "",
-      email: "",
-      password: "",
+      userId: staffUsers?.id,
+      staffUserId: staffUsers?.userId,
+      name: staffUsers?.name || "Albert",
+      email: "test@yahoo.com",
+      password: "parola1234",
       restaurantId: restaurantId || 0,
-      role: staffUsers?.role || "",
-      permissions: staffUsers?.permissions.join(",") || "",
+      role: staffUsers?.role || "Servitor",
+      permissions: staffUsers?.permissions.join(",") || "WIFI",
     },
     resolver: zodResolver(schema),
   });
@@ -58,8 +60,17 @@ const StaffForm: React.FC<StaffFormProps> = ({
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
       if (action === "edit") {
+        console.log(
+          data.userId,
+          data.staffUserId,
+          data.restaurantId,
+          data.name,
+          data.role,
+          token
+        );
         const result = await editStaff(
           data.userId!,
+          data.staffUserId!,
           data.restaurantId,
           data.name,
           data.role,

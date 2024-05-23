@@ -35,10 +35,10 @@ const DetailsForm: React.FC<restaurantDetailsProps> = ({
   } = useForm<FormFields>({
     defaultValues: {
       id: restaurant?.id,
-      name: restaurant.name,
-      address: restaurant.address,
-      location: restaurant.location,
-      businessHours: restaurant.businessHours.join(", "),
+      name: restaurant?.name,
+      address: restaurant?.address,
+      location: restaurant?.location,
+      businessHours: restaurant?.businessHours.join(", "),
       contact: restaurant?.contact ?? "",
     },
     resolver: zodResolver(schema),

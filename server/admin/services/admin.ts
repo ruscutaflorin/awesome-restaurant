@@ -563,23 +563,40 @@ export const editReservation = async (
 export const editStaffUser = async (
   restaurantID: number,
   userId: number,
+  staffUserId: number,
   name: string,
   role: string
 ) => {
   try {
-    const staffUser = await db.staffUser.update({
+    const existingUser = await db.staffUser.findFirst({
       where: {
         id: userId,
         restaurantId: restaurantID,
+      },
+    });
+
+    if (!existingUser) {
+      throw new Error(
+        `Staff user with ID ${userId} at restaurant ${restaurantID} not found.`
+      );
+    }
+
+    const updatedUser = await db.staffUser.update({
+      where: {
+        userId: staffUserId,
       },
       data: {
         name: name,
         role: role,
       },
     });
-    return staffUser;
+
+    return updatedUser;
   } catch (error: any) {
-    throw new Error(error);
+    if (error instanceof Error) {
+      throw new Error(`Failed to update staff user: ${error.message}`);
+    }
+    throw new Error("An unexpected error occurred");
   }
 };
 
