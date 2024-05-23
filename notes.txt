@@ -20,3 +20,5 @@ TODO: pe pagina de apply pe langa form de restaurant sa am si form de register u
 // TODO_BACK: camp de imagine pe restaurant.
 TODO: schimbata logica la crearea unui staff user in admin, ar fi mai usor ca atunci cand dau add new row, sa se creeze un cont, iar dupa aceea,
 TODO: respectivul user sa fie legat de restaurant cu datele respective, cam cum am facut la add restaurant. am schimbat-o dar nu pot  edita ca e tampit formularu
+
+TODO: sa adaug campul de status pe forms de reservare ca sa o pot face acceptata

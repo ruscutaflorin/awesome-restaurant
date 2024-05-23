@@ -131,7 +131,7 @@ const StaffForm: React.FC<StaffFormProps> = ({
             )}
           </label>
         </div>
-        {action !== "edit" && (
+        {action === "add" && (
           <>
             <div className="mb-4">
               <label
@@ -217,7 +217,7 @@ const StaffForm: React.FC<StaffFormProps> = ({
           </label>
         </div>
         <div className="flex justify-end">
-          {action === "edit" ? (
+          {action == "edit" && (
             <button
               type="submit"
               className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -225,7 +225,8 @@ const StaffForm: React.FC<StaffFormProps> = ({
             >
               {isSubmitting ? "Submitting..." : "Commit Changes"}
             </button>
-          ) : (
+          )}
+          {action == "add" && (
             <button
               type="submit"
               className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -241,6 +242,9 @@ const StaffForm: React.FC<StaffFormProps> = ({
             >
               Close
             </button>
+          )}
+          {errors.root && (
+            <div className="text-red-500">{errors.root.message}</div>
           )}
           {errors.root && (
             <div className="text-red-500">{errors.root.message}</div>
