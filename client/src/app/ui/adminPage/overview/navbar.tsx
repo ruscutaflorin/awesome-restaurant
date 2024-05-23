@@ -12,10 +12,13 @@ import {
   CalendarIcon,
 } from "@radix-ui/react-icons";
 import { useRouter } from "next/navigation";
-
+import { useLogout } from "@/app/hooks/useLogout";
+import { useAuthStore } from "@/app/store/user";
 const AdminNavbar = () => {
+  const adminName = useAuthStore((state) => state.user?.name);
   const [selectedIcon, setSelectedIcon] = useState(null);
   const { push } = useRouter();
+  const { logOut } = useLogout();
   const handleIconClick = (iconName: any) => {
     let redirectURL = "";
     switch (iconName) {
@@ -40,6 +43,10 @@ const AdminNavbar = () => {
       case "person":
         redirectURL = "/admin/management";
         break;
+      case "logout":
+        redirectURL = "/login";
+        logOut();
+        break;
       default:
         break;
     }
@@ -47,15 +54,16 @@ const AdminNavbar = () => {
     setSelectedIcon(iconName);
   };
   return (
-    <main className="flex flex-col justify-between items-center h-screen bg-slate-900 w-1/12">
-      <div className="user-info mt-10 mx-2">
+    <main className="flex flex-col justify-between items-center h-screen bg-veryPaleGrey w-1/12">
+      <div className="user-info mt-10 mx-2 flex flex-col items-center">
         <img
           src={defaultImage.src}
           alt="user"
           className="w-10 h-10 rounded-full"
         />
-        <h1 className="text-gray-500 text-sm mt-1">Admin</h1>
+        <h1 className="text-gray-500 text-sm mt-1 text-center">{adminName}</h1>
       </div>
+
       <div className="navbar flex flex-col justify-center items-center gap-4 mt-4">
         <div className="flex items-center">
           <div
@@ -149,8 +157,20 @@ const AdminNavbar = () => {
           />
         </div>
       </div>
-      <div className="logout mb-16">
-        <ExitIcon className="w-8 h-16 text-gray-500" />
+      <div className="navbar flex flex-col justify-center items-center gap-4  mb-16">
+        <div className="flex items-center">
+          <div
+            className={`w-1 h-16 mr-2 ${
+              selectedIcon === "logout" ? "bg-red-500" : "bg-transparent"
+            }`}
+          ></div>
+          <ExitIcon
+            className={`w-8 h-16 ${
+              selectedIcon === "logout" ? "text-red-500" : "text-gray-500"
+            }`}
+            onClick={() => handleIconClick("logout")}
+          />
+        </div>
       </div>
     </main>
   );

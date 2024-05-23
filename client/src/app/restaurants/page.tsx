@@ -11,63 +11,53 @@ import { useAuthStore } from "../store/user";
 
 const Restaurants: React.FC = () => {
   const [restaurants, setRestaurants] = useState<Restaurant[] | null>(null);
-  const [currentPage, setCurrentPage] = useState<number | null>(0);
+  const [currentPage, setCurrentPage] = useState<number>(0);
   const [totalPages, setTotalPages] = useState<number>(0);
   const [limit, setLimit] = useState<number>(RESTAURANTS_PER_PAGE);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const token = useAuthStore((state) => state.token);
   const searchParams = useSearchParams();
-  const offsetQueryParam = searchParams.get(`offset`);
-  const limitQueryParam = searchParams.get(`limit`);
-  const searchQueryParam = searchParams.get(`query`);
-  useEffect(() => {
-    if (offsetQueryParam) {
-      setCurrentPage(parseInt(offsetQueryParam));
-    }
-    if (limitQueryParam) {
-      setLimit(parseInt(limitQueryParam));
-    }
-  }, []);
-  useEffect(() => {
-    const effect = async () => {
-      try {
-        if (currentPage === null) {
-          return;
-        }
-        const res = await fetchRestaurants(currentPage, limit, token);
-        console.log(res.data);
-        setRestaurants(res.data.restaurants);
-        setTotalPages(res.data.numberOfPages);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    effect();
-  }, [currentPage, token]);
+  const offsetQueryParam = searchParams.get("offset");
+  const limitQueryParam = searchParams.get("limit");
+  const searchQueryParam = searchParams.get("query");
 
   useEffect(() => {
-    try {
-      const effect = async () => {
-        if (searchQueryParam) {
-          setSearchQuery(searchQueryParam);
-          if (currentPage === null) {
-            return;
-          }
+    if (offsetQueryParam) {
+      setCurrentPage(parseInt(offsetQueryParam, 10));
+    } else {
+      setCurrentPage(0);
+    }
+    if (limitQueryParam) {
+      setLimit(parseInt(limitQueryParam, 10));
+    }
+    if (searchQueryParam) {
+      setSearchQuery(searchQueryParam);
+    }
+  }, [offsetQueryParam, limitQueryParam, searchQueryParam]);
+
+  useEffect(() => {
+    const fetchEffect = async () => {
+      try {
+        if (searchQuery) {
           const res = await searchRestaurants(
             currentPage,
             limit,
             token,
-            searchQueryParam
+            searchQuery
           );
           setRestaurants(res.data.restaurants);
           setTotalPages(res.data.numberOfPages);
+        } else {
+          const res = await fetchRestaurants(currentPage, limit, token);
+          setRestaurants(res.data.restaurants);
+          setTotalPages(res.data.numberOfPages);
         }
-      };
-      effect();
-    } catch (err) {
-      console.log(err);
-    }
-  }, [searchQuery]);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchEffect();
+  }, [currentPage, limit, searchQuery, token]);
 
   const paginate = (pageNumber: number) => {
     setCurrentPage(pageNumber);
@@ -75,10 +65,11 @@ const Restaurants: React.FC = () => {
 
   const handleSearchChange = (query: string) => {
     setSearchQuery(query);
+    setCurrentPage(0);
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-orange-100">
+    <div className="flex flex-col min-h-screen bg-bgColor my-0">
       <main className="my-5 mx-auto">
         <Search placeholder="Type..." onSearchChange={handleSearchChange} />
         {restaurants &&
@@ -95,8 +86,8 @@ const Restaurants: React.FC = () => {
           currentPage={currentPage}
           totalPages={totalPages}
           paginate={paginate}
-          hasPreviousPage={true}
-          hasNextPage={true}
+          hasPreviousPage={currentPage > 0}
+          hasNextPage={currentPage < totalPages - 1}
           limit={limit}
         />
       </main>

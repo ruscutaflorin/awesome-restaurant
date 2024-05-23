@@ -5,21 +5,22 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import CloseIcon from "@mui/icons-material/Close";
 import { addProduct, editProduct } from "@/app/api/admin";
+import { useAuthStore } from "@/app/store/user";
 
 type ProductFormProps = {
-  product: Product;
+  product?: Product;
   categories: Category[];
   onClose: () => void;
   action?: string;
 };
 
 const schema = z.object({
-  id: z.coerce.number(),
-  name: z.string(),
-  description: z.string(),
+  id: z.coerce.number().optional(),
+  name: z.string().min(1, "Name is required"),
+  description: z.string().min(1, "Description is required"),
   price: z.coerce.number().positive(),
   basePrice: z.coerce.number().positive(),
-  ingredients: z.string(),
+  ingredients: z.string().min(1, "Ingredients are required"),
   availability: z.coerce.boolean(),
   category: z.coerce.number(),
 });
@@ -32,65 +33,79 @@ const ProductForm = ({
   onClose,
   action,
 }: ProductFormProps) => {
+  const token = useAuthStore((state) => state.token);
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
     setError,
   } = useForm<FormFields>({
-    defaultValues: product
-      ? {
-          id: product?.id,
-          name: product?.name,
-          description: product?.description,
-          price: product?.price,
-          basePrice: product?.basePrice,
-          ingredients: product?.ingredients[0],
-          availability: product?.availability,
-          category: product?.categoryId,
-        }
-      : {},
+    defaultValues: {
+      id: product?.id ?? 0,
+      name: product?.name ?? "",
+      description: product?.description ?? "",
+      price: product?.price ?? 0,
+      basePrice: product?.basePrice ?? 0,
+      ingredients: product?.ingredients.join(", ") ?? "",
+      availability: product?.availability ?? true,
+      category:
+        product?.categoryId ?? (categories.length > 0 ? categories[0].id : 0),
+    },
     resolver: zodResolver(schema),
   });
+
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
-      if (action === "edit") {
-        const result = await editProduct(
-          data.id,
-          data.name,
-          data.description,
-          data.price,
-          data.basePrice,
-          data.category,
-          data.ingredients,
-          data.availability
-        );
-        if (result === 200) {
-          console.log("Updated successfully");
-          onClose();
-        }
-      } else {
-        const result = await addProduct(
-          data.name,
-          data.description,
-          data.price,
-          data.basePrice,
-          data.category,
-          data.ingredients,
-          data.availability
-        );
-        if (result === 200) {
-          console.log("Product added successfully");
-          onClose();
+      const payload = {
+        ...data,
+        ingredients: data.ingredients
+          .split(",")
+          .map((ingredient) => ingredient.trim()),
+      };
+
+      if (token) {
+        if (action === "edit") {
+          const result = await editProduct(
+            payload.id!,
+            payload.name,
+            payload.description,
+            payload.price,
+            payload.basePrice,
+            payload.category,
+            payload.ingredients.join(", "),
+            payload.availability,
+            token
+          );
+          if (result === 200) {
+            console.log("Updated successfully");
+            onClose();
+          }
+        } else {
+          const result = await addProduct(
+            payload.name,
+            payload.description,
+            payload.price,
+            payload.basePrice,
+            payload.category,
+            payload.ingredients.join(", "),
+            payload.availability,
+            token
+          );
+          if (result === 200) {
+            console.log("Product added successfully");
+            onClose();
+          }
         }
       }
     } catch (error) {
+      console.error(error);
       setError("root", {
         type: "manual",
         message: "An error occurred while submitting the form",
       });
     }
   };
+
   return (
     <div className="flex justify-center items-center h-full">
       <form
@@ -100,7 +115,7 @@ const ProductForm = ({
         <CloseIcon
           onClick={onClose}
           className="absolute top-2 right-2 cursor-pointer"
-        />{" "}
+        />
         <h1 className="text-2xl font-semibold mb-4">Product Form</h1>
         <div className="mb-4">
           <label
@@ -132,10 +147,10 @@ const ProductForm = ({
             name="description"
             className="mt-1 p-2 w-full border border-gray-300 rounded-md"
           />
+          {errors.description && (
+            <div className="text-red-500">{errors.description.message}</div>
+          )}
         </div>
-        {errors.description && (
-          <div className="text-red-500">{errors.description.message}</div>
-        )}
         <div className="mb-4">
           <label
             htmlFor="price"
@@ -149,10 +164,10 @@ const ProductForm = ({
             name="price"
             className="mt-1 p-2 w-full border border-gray-300 rounded-md"
           />
+          {errors.price && (
+            <div className="text-red-500">{errors.price.message}</div>
+          )}
         </div>
-        {errors.price && (
-          <div className="text-red-500">{errors.price.message}</div>
-        )}
         <div className="mb-4">
           <label
             htmlFor="basePrice"
@@ -257,6 +272,9 @@ const ProductForm = ({
             >
               Close
             </button>
+          )}
+          {errors.root && (
+            <div className="text-red-500">{errors.root.message}</div>
           )}
           {errors.root && (
             <div className="text-red-500">{errors.root.message}</div>

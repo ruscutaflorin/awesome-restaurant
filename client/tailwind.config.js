@@ -18,6 +18,15 @@ module.exports = {
     },
     extend: {
       colors: {
+        bgColor: "#F5F5F5",
+        darkOrange: "#FF6600",
+        lightYellowOrange: "#FFCC66",
+        mediumGrey: "#0F1035",
+        veryPaleGrey: "#E9F6FF",
+        teal: "#00CCCC",
+        lightTeal: "#99FFFF",
+        darkPurple: "#660099",
+        veryPalePurple: "#E6CCFF",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

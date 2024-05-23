@@ -8,13 +8,7 @@ import RestaurantFeaturedItems from "@/app/ui/restaurant/featured";
 import RestaurantSearch from "@/app/ui/restaurant/search";
 import RestaurantProducts from "@/app/ui/restaurant/gama";
 import { useAuthStore } from "@/app/store/user";
-import {
-  Paper,
-  Typography,
-  Grid,
-  Button,
-  CircularProgress,
-} from "@mui/material";
+import { Paper, Typography, CircularProgress, Button } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 

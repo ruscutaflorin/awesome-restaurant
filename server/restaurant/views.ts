@@ -3,6 +3,7 @@ import { listRestaurants } from "./services/restaurant";
 import { validationResult } from "express-validator";
 import { db } from "../config/db";
 import {
+  CustomAddRestaurant,
   CustomDiningTable,
   CustomPaginatedRestaurant,
   CustomRestaurantCategories,
@@ -101,6 +102,26 @@ export const getRestaurantCategories = async (req: Request, res: Response) => {
       db.category as unknown as CustomRestaurantCategories
     ).getRestaurantCategoriesByUUID(restaurantUUID);
     return res.status(200).json(result);
+  } catch (error: any) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const postRestaurant = async (req: Request, res: Response) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    const { name, address, location, businessHours, contact, ownerId } =
+      req.body;
+
+    const restaurant: Restaurant = await (
+      db.restaurant as unknown as CustomAddRestaurant
+    ).addRestaurant(name, address, location, businessHours, contact, ownerId);
+
+    return res.status(200).json(restaurant);
   } catch (error: any) {
     console.error(error);
     return res.status(500).json({ message: "Internal server error" });

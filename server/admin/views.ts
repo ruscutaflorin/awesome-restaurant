@@ -425,8 +425,8 @@ export const editRestaurantReservation = async (
 
 export const editRestaurantStaffUser = async (req: Request, res: Response) => {
   try {
-    const { restaurantId, id, name, role } = req.body;
-    const result = editStaffUser(restaurantId, id, name, role);
+    const { restaurantId, userId, staffUserId, name, role } = req.body;
+    const result = editStaffUser(restaurantId, userId, staffUserId, name, role);
     return res.status(200).json(result);
   } catch (error: any) {
     console.error(error);

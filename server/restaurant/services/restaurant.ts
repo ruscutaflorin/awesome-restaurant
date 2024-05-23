@@ -106,6 +106,7 @@ export const paginatedSearchedRestaurants = async (
     where: {
       name: {
         contains: query,
+        mode: "insensitive",
       },
     },
     select: {
@@ -155,4 +156,28 @@ export const getRestaurantCategoriesByUUID = async (
   );
 
   return categories;
+};
+
+export const addRestaurant = async (
+  name: string,
+  address: string,
+  location: string,
+  businessHours: string[],
+  contact: string,
+  ownerId: number
+): Promise<Restaurant> => {
+  async function getRandomInt(max: number) {
+    return Math.floor(Math.random() * max);
+  }
+  ownerId += await getRandomInt(1230);
+  return db.restaurant.create({
+    data: {
+      name,
+      address,
+      location,
+      businessHours,
+      contact,
+      ownerId: 171,
+    },
+  });
 };

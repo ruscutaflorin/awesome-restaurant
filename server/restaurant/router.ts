@@ -6,6 +6,7 @@ import {
   getRestaurantCategories,
   getRestaurants,
   getRestaurantsPaginated,
+  postRestaurant,
 } from "./views";
 import {
   validateGetClosestReservation,
@@ -29,3 +30,4 @@ router.get(
 );
 router.get("/:uuid", validateGetRestaurantById, getRestaurantById);
 router.get("/:uuid/categories", getRestaurantCategories);
+router.post("/add", postRestaurant);

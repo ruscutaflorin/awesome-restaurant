@@ -8,7 +8,6 @@ type TableProps = {
 };
 
 const DisplayDiningTables: React.FC<TableProps> = ({ tables }: TableProps) => {
-  console.log(tables, "firstTable");
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 90 },
     {

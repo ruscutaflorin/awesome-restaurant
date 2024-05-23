@@ -21,7 +21,7 @@ const Header = () => {
           <i className="bi bi-list text-2xl cursor-pointer"></i>
         </div>
         <Link href="/restaurants" replace>
-          <DarkButton text={"Book a table"} />
+          <DarkButton text={"Book a table"} hover="hover:bg-zinc-600" />
         </Link>
       </div>
     </header>

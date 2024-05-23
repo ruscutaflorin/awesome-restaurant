@@ -12,9 +12,9 @@ const Earning = ({
   const color = upFromLastMonth > 0 ? "text-green-500" : "text-red-500";
 
   return (
-    <main className="flex flex-col items-center mx-5 bg-slate-800 rounded-xl p-4 ">
-      <h5 className="text-white text-lg mb-2">Earning</h5>
-      <h2 className="text-white text-2xl mb-2">{`$${actualValue}`}</h2>
+    <main className="flex flex-col items-center mx-5 bg-veryPaleGrey rounded-xl p-4 ">
+      <h5 className="text-black text-lg mb-2">Earning</h5>
+      <h2 className="text-black text-2xl mb-2">{`$${actualValue}`}</h2>
       <h6 className="text-sm flex items-center">
         {upFromLastMonth > 0 ? (
           <span className={`mr-1 ${color}`}>
@@ -30,8 +30,7 @@ const Earning = ({
             ? `${upFromLastMonth.toFixed(1)}%`
             : `${Math.abs(upFromLastMonth).toFixed(1)}%`}
         </span>
-        <span>""</span>
-        <span className="text-white">from last month</span>
+        <span className="text-black">from last month</span>
       </h6>
     </main>
   );

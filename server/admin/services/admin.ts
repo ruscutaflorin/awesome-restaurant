@@ -382,6 +382,21 @@ export const addProduct = async (
   }
 };
 
+const findAvailableTable = async (restaurantID: number): Promise<number> => {
+  const tables = await db.diningTable.findMany({
+    where: { restaurantId: restaurantID },
+    orderBy: { id: "asc" },
+  });
+
+  const availableTable = tables.find((table) => table.status === "Available");
+
+  if (availableTable) {
+    return availableTable.id;
+  } else {
+    return tables[tables.length - 1].id;
+  }
+};
+
 export const addReservation = async (
   restaurantID: number,
   name: string,
@@ -391,6 +406,8 @@ export const addReservation = async (
   persons: number
 ) => {
   try {
+    const tableId: number = await findAvailableTable(restaurantID);
+
     const reservation = await db.reservation.create({
       data: {
         reservationDate: date,
@@ -399,7 +416,6 @@ export const addReservation = async (
         customerPhone: phone,
         customerEmail: email,
         reservationStatus: "Pending",
-        tableId: undefined,
         restaurant: {
           connect: {
             id: restaurantID,
@@ -407,8 +423,7 @@ export const addReservation = async (
         },
         diningTable: {
           connect: {
-            id: restaurantID,
-            // TODO:aici trebuia sa fie tableId, dar nu am adus din formular tableId
+            id: tableId,
           },
         },
       },
@@ -418,6 +433,7 @@ export const addReservation = async (
     throw new Error(error);
   }
 };
+// folosesc connect pt a crea o inregistrare noua si pt a o lega de tabele
 
 export const addStaffUser = async (
   userId: number,
@@ -439,8 +455,6 @@ export const addStaffUser = async (
     throw new Error(error);
   }
 };
-
-// folosesc connect pt a crea o inregistrare noua si pt a o lega de tabele
 
 export const editCategory = async (
   restaurantID: number,
@@ -470,7 +484,6 @@ export const editDiningTable = async (
   capacity: number
 ) => {
   try {
-    console.log(restaurantID, tableId, name, capacity);
     const diningTable = await db.diningTable.update({
       where: {
         id: tableId,
@@ -550,23 +563,40 @@ export const editReservation = async (
 export const editStaffUser = async (
   restaurantID: number,
   userId: number,
+  staffUserId: number,
   name: string,
   role: string
 ) => {
   try {
-    const staffUser = await db.staffUser.update({
+    const existingUser = await db.staffUser.findFirst({
       where: {
-        userId: userId,
+        id: userId,
         restaurantId: restaurantID,
+      },
+    });
+
+    if (!existingUser) {
+      throw new Error(
+        `Staff user with ID ${userId} at restaurant ${restaurantID} not found.`
+      );
+    }
+
+    const updatedUser = await db.staffUser.update({
+      where: {
+        userId: staffUserId,
       },
       data: {
         name: name,
         role: role,
       },
     });
-    return staffUser;
+
+    return updatedUser;
   } catch (error: any) {
-    throw new Error(error);
+    if (error instanceof Error) {
+      throw new Error(`Failed to update staff user: ${error.message}`);
+    }
+    throw new Error("An unexpected error occurred");
   }
 };
 

@@ -6,10 +6,6 @@ import RestaurantWelcomePage from "@/app/ui/restaurant/welcome";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
-// TODO_BACK: camp de slogan si camp de description pe restaurant.
-// TODO_BACK: camp de description pe restaurant.
-// TODO_BACK: camp de imagine pe restaurant.
-
 const RestaurantDetails: React.FC<RestaurantDetailed> = () => {
   const params = useParams();
   const [restaurant, setRestaurant] = useState<RestaurantDetailed | null>(null);

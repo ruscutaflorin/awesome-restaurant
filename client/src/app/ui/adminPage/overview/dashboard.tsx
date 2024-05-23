@@ -17,6 +17,7 @@ import {
   restaurantMostOrderedItems,
   restaurantReviews,
 } from "../../../api/admin";
+import { useAuthStore } from "@/app/store/user";
 const AdminDashboard = () => {
   const [earning, setEarning] = useState(0);
   const [customers, setCustomers] = useState(0);
@@ -24,38 +25,42 @@ const AdminDashboard = () => {
   const [dailyCustomers, setDailyCustomers] = useState<number[]>([]);
   const [popularItems, setPopularItems] = useState<[]>([]);
   const [reviews, setReviews] = useState<{}>({});
+  const restaurantId = useAuthStore((state) => state.user?.restaurantId);
+  const token = useAuthStore((state) => state.token);
+
   useEffect(() => {
     const fetchData = async () => {
-      const income = await restaurantIncome(1);
-      const customers = await restaurantCustomers(1);
-      const hourlyCustomers = await restaurantHourlyCustomers(1);
-      const dailyCustomers = await restaurantDailyCustomers(1);
-      const popularItems = await restaurantMostOrderedItems(1, 5);
-      const reviwsInfo = await restaurantReviews(1);
-      setEarning(income);
-      setCustomers(customers);
-      setHourlyCustomers(hourlyCustomers);
-      setDailyCustomers(dailyCustomers);
-      setPopularItems(popularItems);
-      setReviews(reviwsInfo);
+      if (restaurantId && token) {
+        const income = await restaurantIncome(restaurantId, token);
+        const customers = await restaurantCustomers(restaurantId, token);
+        const hourlyCustomers = await restaurantHourlyCustomers(
+          restaurantId,
+          token
+        );
+        const dailyCustomers = await restaurantDailyCustomers(
+          restaurantId,
+          token
+        );
+        const popularItems = await restaurantMostOrderedItems(
+          restaurantId,
+          5,
+          token
+        );
+        const reviewsInfo = await restaurantReviews(restaurantId, token);
+        setEarning(income);
+        setCustomers(customers);
+        setHourlyCustomers(hourlyCustomers);
+        setDailyCustomers(dailyCustomers);
+        setPopularItems(popularItems);
+        setReviews(reviewsInfo);
+      }
     };
     fetchData();
-  }, []);
+  }, [restaurantId]);
   return (
     <main className="h-full flex justify-center items-center">
-      <div className="grid-container grid-cols-4 gap-4 ">
-        {/* First Row */}
-        <div className="col-span-4 grid grid-cols-2">
-          <div className="col-span-1 grid-item">
-            <Earning actualValue={earning} oldValue={40000} />
-          </div>
-          <div className="col-span-1 grid-item">
-            <Customers actualValue={customers} oldValue={4100} />
-          </div>
-        </div>
-
-        {/* Second Row */}
-        <div className="col-span-3 grid gap-10 grid-cols-3 mx-5 mt-5">
+      <div className="grid-container grid-cols-2 gap-4 ">
+        <div className="col-span-3 grid gap-10 grid-cols-3 mx-5">
           <div className="col-span-1 grid-item">
             <h1 className="flex text-white justify-center items-center">
               Customers by Day
@@ -76,21 +81,16 @@ const AdminDashboard = () => {
           </div>
         </div>
 
-        {/* Third Row */}
-        <div className="col-span-2 grid grid-cols-2 mx-5 mt-5">
-          <div className="col-span-1 grid-item">
-            <h1 className="flex text-white justify-center items-center">
-              Popular Time
-            </h1>
+        {/* Second Row */}
+        <div className="col-span-4 grid grid-cols-4 mx-5 mt-5">
+          <div className="col-span-1 grid-item flex items-center justify-center">
+            <Earning actualValue={earning} oldValue={40000} />
+          </div>
+          <div className="col-span-2 col-start-2 grid-item">
             <RevenueLines hourlyCustomers={hourlyCustomers} />
           </div>
-          <div className=" grid-col-span-2 grid grid-cols-1 my-auto gap-5">
-            <div className="col-span-1 grid-item">
-              <Earning actualValue={1000} oldValue={200} />
-            </div>
-            <div className="col-span-1 grid-item">
-              <Earning actualValue={1000} oldValue={200} />
-            </div>
+          <div className="col-span-1 grid-item flex items-center justify-center ">
+            <Customers actualValue={customers} oldValue={4100} />
           </div>
         </div>
       </div>

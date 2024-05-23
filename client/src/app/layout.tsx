@@ -28,7 +28,11 @@ export default function RootLayout({
   const pathname = usePathname();
 
   // Check if the route is "/login" or starts with "/restaurants"
-  const excludeHeaderRoutes = ["/login", "/restaurants/", "/admin"];
+  const excludeHeaderRoutes = [
+    // "/login",
+    "/restaurants/",
+    "/admin",
+  ];
   const shouldExcludeHeader = excludeHeaderRoutes.some((route) =>
     pathname.startsWith(route)
   );

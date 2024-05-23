@@ -10,7 +10,7 @@ function LandingPage() {
       <div className="h-2/6">
         <Hero />
       </div>
-      <div>
+      <div className="flex w-full justify-center">
         <About />
       </div>
       <div className="h-2/6">

@@ -1,14 +1,14 @@
-import { useState } from "react";
-import { Category } from "@/app/types/types";
-import react from "react";
+import React from "react";
 import { z } from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import CloseIcon from "@mui/icons-material/Close";
 import { addCategory, editCategory } from "@/app/api/admin";
+import { Category } from "@/app/types/types";
+import { useAuthStore } from "@/app/store/user";
 
 type CategoryFormProps = {
-  categories: Category;
+  categories?: Category;
   onClose: () => void;
   action?: string;
 };
@@ -25,6 +25,8 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
   onClose,
   action,
 }) => {
+  const token = useAuthStore((state) => state.token);
+  const restaurantId = useAuthStore((state) => state.user?.restaurantId);
   const {
     register,
     handleSubmit,
@@ -32,7 +34,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
     setError,
   } = useForm<FormFields>({
     defaultValues: {
-      id: categories?.id,
+      id: categories?.id || 0,
       name: categories?.name || "",
     },
     resolver: zodResolver(schema),
@@ -40,17 +42,24 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
-      if (action === "edit") {
-        const result = await editCategory(1, data.id, data.name);
-        if (result === 200) {
-          console.log("Updated successfully");
-          onClose();
-        }
-      } else {
-        const res = await addCategory(1, data.name);
-        if (res === 200) {
-          console.log("Adaugat cu succes");
-          onClose();
+      if (restaurantId && token) {
+        if (action === "edit") {
+          const result = await editCategory(
+            restaurantId,
+            data.id,
+            data.name,
+            token
+          );
+          if (result === 200) {
+            console.log("Updated successfully");
+            onClose();
+          }
+        } else {
+          const res = await addCategory(restaurantId, data.name, token);
+          if (res === 200) {
+            console.log("Added successfully");
+            onClose();
+          }
         }
       }
     } catch (error) {
@@ -70,7 +79,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
         <CloseIcon
           onClick={onClose}
           className="absolute top-2 right-2 cursor-pointer"
-        />{" "}
+        />
         <h1 className="text-2xl font-semibold mb-4">Category Form</h1>
         <div className="mb-4">
           <label
@@ -79,7 +88,6 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
           >
             Name:
           </label>
-
           <input
             {...register("name")}
             type="text"
@@ -91,7 +99,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
           )}
         </div>
         <div className="flex justify-end">
-          {action == "edit" && (
+          {action === "edit" && (
             <button
               type="submit"
               className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -100,7 +108,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
               {isSubmitting ? "Submitting..." : "Commit Changes"}
             </button>
           )}
-          {action == "add" && (
+          {action === "add" && (
             <button
               type="submit"
               className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
