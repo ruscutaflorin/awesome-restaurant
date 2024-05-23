@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import {
   addRestaurantToUser,
+  addStaffToRestaurant,
   loginService,
   registerService,
 } from "./services/user";
@@ -62,6 +63,24 @@ export const createRestaurant = async (req: Request, res: Response) => {
     );
 
     return res.status(200).json(restaurant);
+  } catch (error: any) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const createStaffUser = async (req: Request, res: Response) => {
+  try {
+    const { restaurantId, name, email, password, role, permissions } = req.body;
+    const user = await addStaffToRestaurant(
+      restaurantId,
+      name,
+      email,
+      password,
+      role,
+      permissions
+    );
+    return res.status(200).json(user);
   } catch (error: any) {
     console.error(error);
     return res.status(500).json({ message: "Internal server error" });

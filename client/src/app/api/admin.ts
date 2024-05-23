@@ -261,26 +261,36 @@ export const addReservation = async (
 };
 
 export const addStaff = async (
-  userId: number,
-  restaurantID: number,
-  staffName: string,
-  staffRole: string,
+  name: string,
+  email: string,
+  password: string,
+  restaurantId: number,
+  role: string,
+  permissions: string,
   token: string
 ) => {
   try {
     const res = await axios.post(
-      `http://localhost:8000/api/admin/add-staff/`,
+      `http://localhost:8000/api/auth/staff/`,
       {
-        restaurantId: restaurantID,
-        name: staffName,
-        id: userId,
-        role: staffRole,
+        name,
+        email,
+        password,
+        restaurantId,
+        role,
+        permissions,
       },
-      getAuthHeaders(token)
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
     );
     return res.status;
   } catch (error) {
     console.error(error);
+    throw error;
   }
 };
 

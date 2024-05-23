@@ -1,24 +1,30 @@
 "use client";
 import React, { useState } from "react";
-import { StaffUserDetailed } from "@/app/types/types";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import CloseIcon from "@mui/icons-material/Close";
 import { addStaff, editStaff } from "@/app/api/admin";
 import { useAuthStore } from "@/app/store/user";
+import { StaffUserDetailed } from "@/app/types/types";
+
 type StaffFormProps = {
-  staffUsers: StaffUserDetailed;
+  staffUsers?: StaffUserDetailed;
   onClose: () => void;
   action?: string;
 };
 
 const schema = z.object({
+  userId: z.coerce.number().min(1).optional(),
   name: z.string().min(3).max(255),
-  role: z.string().min(3).max(255),
+  email: z.string().email("Invalid email address").optional(),
+  password: z
+    .string()
+    .min(6, "Password must be at least 6 characters long")
+    .optional(),
   restaurantId: z.coerce.number().min(1),
-  permissions: z.coerce.string().min(3).max(255),
-  userId: z.coerce.number().min(1),
+  role: z.string().min(3).max(255),
+  permissions: z.string().min(3).max(255),
 });
 type FormFields = z.infer<typeof schema>;
 
@@ -27,6 +33,7 @@ const StaffForm: React.FC<StaffFormProps> = ({
   onClose,
   action,
 }) => {
+  const restaurantId = useAuthStore((state) => state.user.restaurantId);
   const token = useAuthStore((state) => state.token);
 
   const {
@@ -36,38 +43,44 @@ const StaffForm: React.FC<StaffFormProps> = ({
     setError,
   } = useForm<FormFields>({
     defaultValues: {
-      userId: staffUsers?.userId || 0,
+      userId: staffUsers?.userId,
       name: staffUsers?.name || "",
+      email: "",
+      password: "",
+      restaurantId: restaurantId || 0,
       role: staffUsers?.role || "",
-      restaurantId: staffUsers?.restaurantId || 1,
       permissions: staffUsers?.permissions.join(",") || "",
     },
     resolver: zodResolver(schema),
   });
+  console.log(staffUsers);
+
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
       if (action === "edit") {
         const result = await editStaff(
-          data.userId,
+          data.userId!,
           data.restaurantId,
           data.name,
           data.role,
           token
         );
         if (result === 200) {
-          console.log("Updated successfully");
+          console.log("Edited successfully");
           onClose();
         }
       } else {
         const result = await addStaff(
-          data.userId,
-          data.restaurantId,
           data.name,
+          data.email!,
+          data.password!,
+          data.restaurantId,
           data.role,
+          data.permissions,
           token
         );
-        if (result == 200) {
-          console.log("Staff added successfully");
+        if (result === 200) {
+          console.log("Added successfully");
           onClose();
         }
       }
@@ -88,24 +101,9 @@ const StaffForm: React.FC<StaffFormProps> = ({
         <CloseIcon
           onClick={onClose}
           className="absolute top-2 right-2 cursor-pointer"
-        />{" "}
+        />
         <h1 className="text-2xl font-semibold mb-4">Staff Form</h1>
-        <div className="mb-4">
-          <label
-            htmlFor="userId"
-            className="block text-sm font-medium text-gray-700"
-          >
-            User ID:
-            <input
-              type="number"
-              className="mt-1 p-2 w-full border border-gray-300 rounded-md"
-              {...register("userId")}
-            />
-            {errors.userId && (
-              <div className="text-red-500">{errors.userId.message}</div>
-            )}
-          </label>
-        </div>
+
         <div className="mb-4">
           <label
             htmlFor="name"
@@ -122,22 +120,42 @@ const StaffForm: React.FC<StaffFormProps> = ({
             )}
           </label>
         </div>
-        {/* <div className="mb-4">
-          <label
-            htmlFor="email"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Email:
-            <input
-              type="email"
-              className="mt-1 p-2 w-full border border-gray-300 rounded-md"
-              {...register("email")}
-            />
-            {errors.email && (
-              <div className="text-red-500">{errors.email.message}</div>
-            )}
-          </label>
-        </div> */}
+        {action !== "edit" && (
+          <>
+            <div className="mb-4">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Email:
+                <input
+                  type="email"
+                  className="mt-1 p-2 w-full border border-gray-300 rounded-md"
+                  {...register("email")}
+                />
+                {errors.email && (
+                  <div className="text-red-500">{errors.email.message}</div>
+                )}
+              </label>
+            </div>
+            <div className="mb-4">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Password:
+                <input
+                  type="password"
+                  className="mt-1 p-2 w-full border border-gray-300 rounded-md"
+                  {...register("password")}
+                />
+                {errors.password && (
+                  <div className="text-red-500">{errors.password.message}</div>
+                )}
+              </label>
+            </div>
+          </>
+        )}
         <div className="mb-4">
           <label
             htmlFor="role"
@@ -162,9 +180,9 @@ const StaffForm: React.FC<StaffFormProps> = ({
             Restaurant ID:
             <input
               type="number"
-              disabled={true}
               className="mt-1 p-2 w-full border border-gray-300 rounded-md"
               {...register("restaurantId")}
+              readOnly
             />
             {errors.restaurantId && (
               <div className="text-red-500">{errors.restaurantId.message}</div>
@@ -188,7 +206,7 @@ const StaffForm: React.FC<StaffFormProps> = ({
           </label>
         </div>
         <div className="flex justify-end">
-          {action == "edit" && (
+          {action === "edit" ? (
             <button
               type="submit"
               className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -196,8 +214,7 @@ const StaffForm: React.FC<StaffFormProps> = ({
             >
               {isSubmitting ? "Submitting..." : "Commit Changes"}
             </button>
-          )}
-          {action == "add" && (
+          ) : (
             <button
               type="submit"
               className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"

@@ -111,6 +111,46 @@ export const addRestaurantToUser = async (
   }
 };
 
+export const addStaffToRestaurant = async (
+  restaurantId: number,
+  name: string,
+  email: string,
+  password: string,
+  role: string,
+  permissions: string
+) => {
+  try {
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    const user = await db.user.create({
+      data: {
+        name: name,
+        email,
+        password: hashedPassword,
+      },
+    });
+    // tie this user to the restaurant as a staff
+    const staff = await db.staffUser.create({
+      data: {
+        role,
+        name,
+        user: {
+          connect: {
+            id: user.id,
+          },
+        },
+        restaurant: {
+          connect: {
+            id: restaurantId,
+          },
+        },
+      },
+    });
+    return staff;
+  } catch (error) {
+    throw error;
+  }
+};
+
 const createToken = (id: number) => {
   return jwt.sign({ id }, JWT_SECRET, {
     expiresIn: "3d",

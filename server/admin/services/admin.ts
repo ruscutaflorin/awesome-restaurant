@@ -433,6 +433,7 @@ export const addReservation = async (
     throw new Error(error);
   }
 };
+// folosesc connect pt a crea o inregistrare noua si pt a o lega de tabele
 
 export const addStaffUser = async (
   userId: number,
@@ -454,8 +455,6 @@ export const addStaffUser = async (
     throw new Error(error);
   }
 };
-
-// folosesc connect pt a crea o inregistrare noua si pt a o lega de tabele
 
 export const editCategory = async (
   restaurantID: number,
@@ -570,7 +569,7 @@ export const editStaffUser = async (
   try {
     const staffUser = await db.staffUser.update({
       where: {
-        userId: userId,
+        id: userId,
         restaurantId: restaurantID,
       },
       data: {
