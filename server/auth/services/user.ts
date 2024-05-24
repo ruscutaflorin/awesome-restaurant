@@ -64,6 +64,7 @@ export const loginService = async (userEmail: string, userPassword: string) => {
       token,
     };
   } catch (err) {
+    console.log(err);
     throw err;
   }
 };

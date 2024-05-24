@@ -18,14 +18,14 @@ const PaymentPieChart = ({ reviews = {} }: PaymentPieChartProps) => {
           series={[
             {
               data: data,
-              paddingAngle: 5,
-              cornerRadius: 5,
-              startAngle: -90,
-              endAngle: 180,
-              cx: 150,
-              cy: 150,
               innerRadius: 40,
               outerRadius: 80,
+              paddingAngle: 5,
+              cornerRadius: 5,
+              // startAngle: -90,
+              // endAngle: 180,
+              cx: 150,
+              cy: 150,
             },
           ]}
           height={300}

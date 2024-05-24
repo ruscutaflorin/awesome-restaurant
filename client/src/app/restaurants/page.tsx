@@ -79,6 +79,7 @@ const Restaurants: React.FC = () => {
                 name={restaurant.name}
                 description={restaurant.name}
                 restaurant={restaurant}
+                reviews={[]}
               />
             </div>
           ))}

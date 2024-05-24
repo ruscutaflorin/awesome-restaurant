@@ -4,13 +4,14 @@ import restaurantIcon from "../../../../public/def-img.svg";
 import Link from "next/link";
 import DarkButton from "../components/dark-button";
 import Rating from "./rating";
-import { Restaurant } from "@/app/types/types";
+import { Restaurant, Review } from "@/app/types/types";
 
 type Props = {
   profilePicture?: HTMLImageElement;
   name: string;
   description: string;
   restaurant: Restaurant;
+  reviews: Review[];
 };
 
 const RestaurantCard: React.FC<Props> = ({
@@ -20,7 +21,7 @@ const RestaurantCard: React.FC<Props> = ({
   restaurant,
 }: Props): JSX.Element => {
   return (
-    <div className="bg-white shadow-lg rounded-lg overflow-hidden my-2">
+    <div className="bg-white shadow-lg rounded-lg overflow-hidden my-2 w-full">
       <div className="flex flex-row border-b-2 border-gray-200">
         <figure className="my-auto mx-auto p-4">
           {profilePicture ? (
