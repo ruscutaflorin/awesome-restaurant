@@ -77,7 +77,7 @@ const AddRestaurantForm: React.FC = () => {
         backgroundImage: `url(${restaurantImage.src})`,
       }}
     >
-      <div className="max-w-4xl mx-auto p-6 bg-white bg-opacity-85 shadow-lg rounded-lg mb-40">
+      <div className="max-w-4xl mx-auto p-6 bg-white bg-opacity-90 shadow-lg rounded-lg mb-40">
         <h2 className="text-2xl font-bold text-neutral-900 mb-4">
           Add a New Restaurant
         </h2>

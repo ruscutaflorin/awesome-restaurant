@@ -10,7 +10,7 @@ const PieChartComponent = ({ popularItems = [] }: PieChartProps) => {
     label: item.name,
     value: item.quantity,
   }));
-
+  console.log(uData);
   return (
     <div className="bg-veryPaleGrey flex justify-center items-center rounded-xl p-6 shadow-lg">
       {uData.length > 0 ? (
@@ -22,8 +22,8 @@ const PieChartComponent = ({ popularItems = [] }: PieChartProps) => {
               outerRadius: 80,
               paddingAngle: 5,
               cornerRadius: 5,
-              startAngle: -90,
-              endAngle: 180,
+              // startAngle: -90,
+              // endAngle: 180,
               cx: 150,
               cy: 150,
             },
@@ -39,7 +39,7 @@ const PieChartComponent = ({ popularItems = [] }: PieChartProps) => {
           }}
         />
       ) : (
-        <p>No data available</p> // Fallback when there's no data
+        <p>No data available</p>
       )}
     </div>
   );

@@ -17,6 +17,19 @@ export type Restaurant = {
   createdAt: Date;
   updatedAt: Date;
 };
+export type RestaurantWReviews = {
+  reviews: Review[];
+  id: number;
+  uuid: string;
+  name: string;
+  address: string;
+  location: string;
+  businessHours: string[];
+  contact: string | null;
+  ownerId: number;
+  createdAt: Date;
+  updatedAt: Date;
+};
 
 export type DiningTableDetailed = {
   reservations: Reservation[];

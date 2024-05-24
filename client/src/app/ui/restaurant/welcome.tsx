@@ -10,34 +10,37 @@ import { usePathname } from "next/navigation";
 type Props = {
   restaurant: RestaurantDetailed | null;
 };
+
 const RestaurantWelcomePage: React.FC<Props> = ({ restaurant }: Props) => {
   const pathname = usePathname();
   if (restaurant) {
     restaurant.contact = null;
   }
-  // TODO vezi IN restaurnantheaderimage si restaurantheadetext fiindca crapa daca nu e null asta
+
   return (
-    <div className="flex flex-col h-screen items-center justify-center">
-      <div className="flex-1 flex items-center">
+    <div className="flex flex-col items-center justify-center min-h-screen p-4">
+      <div className="text-center mb-8">
         <RestaurantHeaderImage
           src={restaurant?.contact || restaurantImage.src}
         />
+        <h1 className="text-4xl font-bold mt-4">{restaurant?.name}</h1>
+        <h2 className="text-2xl font-semibold mt-2">
+          {restaurant?.businessHours}
+        </h2>
       </div>
-      <div className="flex-1 mx-auto my-auto text-center">
+      <div className="text-center">
         <RestaurantHeaderText
           slogan={restaurant?.contact}
           description={restaurant?.contact}
         />
-        <div className="mt-10 flex items-center justify-center">
+        <div className="mt-10">
           <Link
             href={{
               pathname: `${pathname}/home`,
-              // query: { data: JSON.stringify(restaurant) },
-              // TODO: in componenta /home facut un fetch dupa uuid si luat restaurantul.
             }}
             passHref
           >
-            <DarkButton text={"=>"} width="10rem" />
+            <DarkButton text={"Enter"} width="10rem" />
           </Link>
         </div>
       </div>

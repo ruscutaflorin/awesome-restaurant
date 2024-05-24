@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Restaurant } from "../types/types";
+import { RestaurantWReviews } from "../types/types";
 import { RESTAURANTS_PER_PAGE } from "../../lib/utils/constants";
 
 export const fetchRestaurants = async (
@@ -9,7 +9,7 @@ export const fetchRestaurants = async (
 ) => {
   try {
     const response = await axios.get<{
-      restaurants: Restaurant[] | null;
+      restaurants: RestaurantWReviews[] | null;
       numberOfPages: number;
     }>(
       `http://localhost:8000/api/restaurants/paginate?offset=${page}&limit=${restaurantsPerPage}`,
@@ -51,7 +51,7 @@ export const searchRestaurants = async (
 ) => {
   try {
     const response = await axios.get<{
-      restaurants: Restaurant[] | null;
+      restaurants: RestaurantWReviews[] | null;
       numberOfPages: number;
     }>(
       `http://localhost:8000/api/restaurants/paginate?offset=${page}&limit=${restaurantsPerPage}&query=${querySearch}`,

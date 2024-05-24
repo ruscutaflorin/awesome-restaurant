@@ -36,12 +36,7 @@ const LoginPage: React.FC = () => {
         console.log("Login successful");
         console.log(result);
       }
-    } catch (err: any) {
-      setError("root", {
-        type: "manual",
-        message: `${err.response.data.message}`,
-      });
-    }
+    } catch (err: any) {}
   };
 
   const handleLogout = async (e: any) => {
