@@ -88,6 +88,15 @@ export const paginatedRestaurants = async (
       ownerId: true,
       createdAt: true,
       updatedAt: true,
+      reviews: {
+        select: {
+          id: true,
+          rating: true,
+          reviewText: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      },
     },
     skip: offset * limit,
     take: limit,
@@ -120,6 +129,15 @@ export const paginatedSearchedRestaurants = async (
       ownerId: true,
       createdAt: true,
       updatedAt: true,
+      reviews: {
+        select: {
+          id: true,
+          rating: true,
+          reviewText: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      },
     },
     skip: offset * limit,
     take: limit,
@@ -131,6 +149,7 @@ export const paginatedSearchedRestaurants = async (
       },
     },
   });
+
   const numberOfPages = Math.ceil(countRestaurants / limit);
   return { restaurants, numberOfPages };
 };
