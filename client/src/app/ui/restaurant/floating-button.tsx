@@ -32,7 +32,7 @@ const FloatingCategoryButton: React.FC<FloatingCategoryButtonProps> = ({
         <div className="relative">
           <IconButton
             onClick={handleToggle}
-            className="bg-orange-500 hover:bg-orange-600 text-white p-4 rounded-full shadow-lg transition-transform transform hover:scale-110"
+            className="bg-orange-500 hover:bg-orange-600 text-white p-4 rounded-full shadow-lg transition-transform transform hover:scale-125"
             size="large"
           >
             <MenuIcon />
