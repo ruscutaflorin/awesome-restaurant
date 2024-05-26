@@ -347,6 +347,7 @@ export const editDiningTable = async (
   tableId: number,
   name: string,
   capacity: number,
+  status: string,
   token: string
 ) => {
   try {
@@ -357,6 +358,7 @@ export const editDiningTable = async (
         id: tableId,
         name: name,
         capacity: capacity,
+        status: status,
       },
       getAuthHeaders(token)
     );

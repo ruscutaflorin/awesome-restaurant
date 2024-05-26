@@ -481,6 +481,7 @@ export const editDiningTable = async (
   restaurantID: number,
   tableId: number,
   name: string,
+  status: string,
   capacity: number
 ) => {
   try {
@@ -492,6 +493,7 @@ export const editDiningTable = async (
       data: {
         name: name,
         capacity: capacity,
+        status: status,
       },
     });
     return diningTable;
