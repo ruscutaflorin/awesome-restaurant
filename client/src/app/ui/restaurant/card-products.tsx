@@ -15,11 +15,12 @@ interface Product {
 
 interface ProductCardProps {
   product: Product;
+  addToCart: (product: Product) => void;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+const ProductCard: React.FC<ProductCardProps> = ({ product, addToCart }) => {
   return (
-    <div className="flex  bg-white rounded-lg shadow-md overflow-hidden m-2 w-full ">
+    <div className="flex bg-white rounded-lg shadow-md overflow-hidden m-2 w-full">
       <figure className="my-auto mx-auto p-4">
         <Image
           src={productImage.src}
@@ -37,7 +38,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         <div className="flex items-center mb-2">
           <StarFilledIcon className="w-6 h-6 text-yellow-500" />
           <span className="text-gray-600 ml-2">4.5</span>
-          <InfoCircledIcon className="w-6 h-6  ml-4" />
+          <InfoCircledIcon className="w-6 h-6 ml-4" />
           <span className="text-gray-600 ml-2">Info</span>
         </div>
         <p className="text-gray-700 mb-2">{product.description}</p>
@@ -47,9 +48,10 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             ${product.price}
           </span>
           <button
+            onClick={() => product.availability && addToCart(product)}
             className={`px-4 py-2 rounded ${
               product.availability
-                ? "bg-darkOrange hover:bg-orange-300"
+                ? "bg-orange-700 hover:bg-orange-300"
                 : "bg-gray-400 cursor-not-allowed"
             }`}
           >

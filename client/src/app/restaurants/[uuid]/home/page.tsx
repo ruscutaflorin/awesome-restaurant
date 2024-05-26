@@ -8,10 +8,12 @@ import { CircularProgress, Button } from "@mui/material";
 import ProductCard from "@/app/ui/restaurant/card-products";
 import FloatingCategoryButton from "@/app/ui/restaurant/floating-button";
 import CategoryCard from "@/app/ui/restaurantsPage/category-card";
+import FloatingCartButton from "@/app/ui/restaurant/floating-cart";
 
 const RestaurantHomePage: React.FC = () => {
   const [restaurant, setRestaurant] = useState<RestaurantDetailed | null>(null);
   const [categories, setCategories] = useState<CategoryDetailed[]>([]);
+  const [cart, setCart] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const params = useParams();
   const token = useAuthStore((state) => state.token);
@@ -44,6 +46,48 @@ const RestaurantHomePage: React.FC = () => {
     }
   };
 
+  const addToCart = (product: any) => {
+    setCart((prevCart) => {
+      const existingProduct = prevCart.find((item) => item.id === product.id);
+      if (existingProduct) {
+        return prevCart.map((item) =>
+          item.id === product.id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        );
+      } else {
+        return [...prevCart, { ...product, quantity: 1 }];
+      }
+    });
+  };
+
+  const updateCart = (product: any, action: string) => {
+    setCart((prevCart) => {
+      if (action === "increase") {
+        return prevCart.map((item) =>
+          item.id === product.id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        );
+      } else if (action === "decrease") {
+        return prevCart
+          .map((item) =>
+            item.id === product.id
+              ? { ...item, quantity: item.quantity - 1 }
+              : item
+          )
+          .filter((item) => item.quantity > 0);
+      }
+      return prevCart;
+    });
+  };
+
+  const onFinishPayment = () => {
+    // Handle the payment process here
+    alert("Payment finished successfully!");
+    setCart([]); // Clear the cart after payment
+  };
+
   if (loading) {
     return <CircularProgress />;
   }
@@ -53,6 +97,11 @@ const RestaurantHomePage: React.FC = () => {
       <FloatingCategoryButton
         categories={categories}
         scrollToCategory={scrollToCategory}
+      />
+      <FloatingCartButton
+        cartItems={cart}
+        updateCart={updateCart}
+        onFinishPayment={onFinishPayment}
       />
       <div id="all-categories" className="mt-4">
         {categories.map((category) => (
@@ -68,7 +117,11 @@ const RestaurantHomePage: React.FC = () => {
             <div className="flex flex-wrap justify-center">
               {category.products.map((product, index) => (
                 <div key={index} className="w-full sm:w-1/2 lg:w-1/3 p-2">
-                  <ProductCard key={product.id} product={product} />
+                  <ProductCard
+                    key={product.id}
+                    product={product}
+                    addToCart={addToCart}
+                  />
                 </div>
               ))}
             </div>

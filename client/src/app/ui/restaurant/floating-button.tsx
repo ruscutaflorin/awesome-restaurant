@@ -28,7 +28,7 @@ const FloatingCategoryButton: React.FC<FloatingCategoryButtonProps> = ({
 
   return (
     <ClickAwayListener onClickAway={handleClickAway}>
-      <div className="fixed bottom-6 right-6 z-50">
+      <div className="fixed bottom-6 left-6 z-50">
         <div className="relative">
           <IconButton
             onClick={handleToggle}
@@ -38,7 +38,7 @@ const FloatingCategoryButton: React.FC<FloatingCategoryButtonProps> = ({
             <MenuIcon />
           </IconButton>
           {isOpen && (
-            <Paper className="absolute bottom-full mb-2 right-0 bg-white rounded-lg shadow-lg overflow-hidden transition-all duration-300 ease-in-out">
+            <Paper className="absolute bottom-full mb-2 left-0 bg-white rounded-lg shadow-lg overflow-hidden transition-all duration-300 ease-in-out">
               {categories.map((category, index) => (
                 <Button
                   key={index}
