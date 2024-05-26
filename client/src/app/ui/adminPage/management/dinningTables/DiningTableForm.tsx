@@ -57,6 +57,7 @@ const DiningTableForm: React.FC<DiningTableFormProps> = ({
             data.id,
             data.name,
             data.capacity,
+            data.status,
             token
           );
           if (result === 200) {
@@ -121,7 +122,7 @@ const DiningTableForm: React.FC<DiningTableFormProps> = ({
                 {...register("status", { required: true })}
                 type="text"
                 id="status"
-                disabled={true}
+                disabled={action === "add" ? true : false}
                 className="mt-1 p-2 w-full border border-gray-300 rounded-md"
               />
               {errors.status && (

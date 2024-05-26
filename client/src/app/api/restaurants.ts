@@ -1,5 +1,5 @@
 import axios from "axios";
-import { RestaurantWReviews } from "../types/types";
+import { OrderItem, RestaurantWReviews } from "../types/types";
 import { RESTAURANTS_PER_PAGE } from "../../lib/utils/constants";
 
 export const fetchRestaurants = async (
@@ -79,6 +79,29 @@ export const getRestaurantCategories = async (
         headers: {
           Authorization: `Bearer ${token}`,
         },
+      }
+    );
+    return response;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+};
+
+export const createOrder = async (
+  restaurantId: number,
+  orderItems: OrderItem[],
+  totalPrice: number,
+  paymentStatus: string
+) => {
+  try {
+    const response = await axios.post(
+      `http://localhost:8000/api/restaurants/add-order`,
+      {
+        restaurantId,
+        orderItems,
+        totalPrice,
+        paymentStatus,
       }
     );
     return response;

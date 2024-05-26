@@ -362,9 +362,15 @@ export const editRestaurantDiningTable = async (
   res: Response
 ) => {
   try {
-    const { restaurantId, id, name, capacity } = req.body;
+    const { restaurantId, id, name, capacity, status } = req.body;
     console.log(restaurantId, id, name, capacity);
-    const result = await editDiningTable(restaurantId, id, name, capacity);
+    const result = await editDiningTable(
+      restaurantId,
+      id,
+      name,
+      status,
+      capacity
+    );
     return res.status(200).json(result);
   } catch (error: any) {
     console.error(error);

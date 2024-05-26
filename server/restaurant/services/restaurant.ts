@@ -1,5 +1,12 @@
+import { Decimal } from "@prisma/client/runtime/library";
 import { db } from "../../config/db";
-import { Reservation, Restaurant, RestaurantDetailed } from "../types/types";
+import {
+  Order,
+  OrderItem,
+  Reservation,
+  Restaurant,
+  RestaurantDetailed,
+} from "../types/types";
 
 export const listRestaurants = async (): Promise<Restaurant[]> => {
   return db.restaurant.findMany({
@@ -199,4 +206,57 @@ export const addRestaurant = async (
       ownerId: 171,
     },
   });
+};
+
+export const createOrder = async (
+  restaurantId: number,
+  orderItems: OrderItem[],
+  totalPrice: Decimal,
+  paymentStatus: string = "Pending"
+): Promise<Order> => {
+  try {
+    const restaurant = await db.restaurant.findUnique({
+      where: { id: restaurantId },
+      include: { diningTables: true },
+    });
+
+    if (!restaurant) {
+      throw new Error("Restaurant not found");
+    }
+
+    const availableTable = restaurant.diningTables.find(
+      (table) => table.status === "Available"
+    );
+
+    if (!availableTable) {
+      throw new Error("No available dining table found");
+    }
+
+    const newOrder = await db.order.create({
+      data: {
+        status: paymentStatus,
+        orderDate: new Date(),
+        totalAmount: totalPrice,
+        diningTable: { connect: { id: availableTable.id } },
+        orderItems: {
+          create: orderItems.map((item) => ({
+            product: { connect: { id: item.id } },
+            quantity: item.quantity,
+          })),
+        },
+      },
+    });
+
+    await db.diningTable.update({
+      where: { id: availableTable.id },
+      data: { status: "Occupied" },
+    });
+
+    return {
+      ...newOrder,
+      totalAmount: newOrder.totalAmount.toNumber(),
+    };
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
 };
