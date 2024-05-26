@@ -1,6 +1,7 @@
 import express from "express";
 import { auth } from "../auth/middleware/auth";
 import {
+  addOrderToRestaurant,
   getClosestReservationForTableId,
   getRestaurantById,
   getRestaurantCategories,
@@ -31,3 +32,4 @@ router.get(
 router.get("/:uuid", validateGetRestaurantById, getRestaurantById);
 router.get("/:uuid/categories", getRestaurantCategories);
 router.post("/add", postRestaurant);
+router.post("/add-order", addOrderToRestaurant);

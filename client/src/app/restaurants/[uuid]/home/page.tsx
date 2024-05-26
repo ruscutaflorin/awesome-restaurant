@@ -1,7 +1,7 @@
 "use client";
 import { CategoryDetailed, RestaurantDetailed } from "@/app/types/types";
 import React, { useEffect, useState, useRef } from "react";
-import { getRestaurant } from "@/app/api/restaurants";
+import { createOrder, getRestaurant } from "@/app/api/restaurants";
 import { useParams } from "next/navigation";
 import { useAuthStore } from "@/app/store/user";
 import { CircularProgress, Button } from "@mui/material";
@@ -82,10 +82,28 @@ const RestaurantHomePage: React.FC = () => {
     });
   };
 
-  const onFinishPayment = () => {
-    // Handle the payment process here
-    alert("Payment finished successfully!");
-    setCart([]); // Clear the cart after payment
+  const calculateTotalPrice = (cartItems: any[]): number => {
+    return cartItems.reduce(
+      (total, item) => total + item.price * item.quantity,
+      0
+    );
+  };
+
+  const onFinishPayment = async () => {
+    const totalAmount = calculateTotalPrice(cart);
+    try {
+      console.log(cart);
+      const res = await createOrder(
+        restaurant?.id || 1,
+        cart,
+        totalAmount,
+        "Accepted"
+      );
+      alert("Payment finished successfully!");
+      setCart([]);
+    } catch (error) {
+      console.error("Payment failed:", error);
+    }
   };
 
   if (loading) {
@@ -102,6 +120,7 @@ const RestaurantHomePage: React.FC = () => {
         cartItems={cart}
         updateCart={updateCart}
         onFinishPayment={onFinishPayment}
+        totalAmount={calculateTotalPrice(cart)}
       />
       <div id="all-categories" className="mt-4">
         {categories.map((category) => (

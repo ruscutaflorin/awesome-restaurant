@@ -14,12 +14,14 @@ interface FloatingCartButtonProps {
   cartItems: any[];
   updateCart: (product: any, action: string) => void;
   onFinishPayment: () => void;
+  totalAmount: number;
 }
 
 const FloatingCartButton: React.FC<FloatingCartButtonProps> = ({
   cartItems,
   updateCart,
   onFinishPayment,
+  totalAmount,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -86,6 +88,10 @@ const FloatingCartButton: React.FC<FloatingCartButtonProps> = ({
                         </div>
                       </div>
                     ))}
+                    <div className="flex justify-between items-center mt-4">
+                      <p className="font-semibold">Total:</p>
+                      <p className="font-semibold">${totalAmount.toFixed(2)}</p>
+                    </div>
                     <Button
                       variant="contained"
                       color="primary"

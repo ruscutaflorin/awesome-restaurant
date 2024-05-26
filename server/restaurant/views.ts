@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { listRestaurants } from "./services/restaurant";
+import { createOrder, listRestaurants } from "./services/restaurant";
 import { validationResult } from "express-validator";
 import { db } from "../config/db";
 import {
@@ -120,6 +120,28 @@ export const postRestaurant = async (req: Request, res: Response) => {
     const restaurant: Restaurant = await (
       db.restaurant as unknown as CustomAddRestaurant
     ).addRestaurant(name, address, location, businessHours, contact, ownerId);
+
+    return res.status(200).json(restaurant);
+  } catch (error: any) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const addOrderToRestaurant = async (req: Request, res: Response) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    const { restaurantId, orderItems, totalPrice, paymentStatus } = req.body;
+
+    const restaurant = await createOrder(
+      restaurantId,
+      orderItems,
+      totalPrice,
+      paymentStatus
+    );
 
     return res.status(200).json(restaurant);
   } catch (error: any) {
