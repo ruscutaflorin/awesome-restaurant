@@ -80,7 +80,6 @@ export const addRestaurantToUser = async (
   password: string
 ): Promise<Restaurant> => {
   try {
-    // Register the user
     const hashedPassword = await bcrypt.hash(password, saltRounds);
     const user = await db.user.create({
       data: {
@@ -90,7 +89,6 @@ export const addRestaurantToUser = async (
       },
     });
 
-    // Use the registered user's ID as the ownerId
     const restaurant = await db.restaurant.create({
       data: {
         name,
@@ -129,7 +127,6 @@ export const addStaffToRestaurant = async (
         password: hashedPassword,
       },
     });
-    // tie this user to the restaurant as a staff
     const staff = await db.staffUser.create({
       data: {
         role,
