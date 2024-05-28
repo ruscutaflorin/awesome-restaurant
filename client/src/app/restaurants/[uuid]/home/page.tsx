@@ -1,16 +1,19 @@
 "use client";
-import { CategoryDetailed, RestaurantDetailed } from "@/app/types/types";
 import React, { useEffect, useState, useRef } from "react";
+import { CircularProgress } from "@mui/material";
+import { useRouter, useParams } from "next/navigation";
+import axios from "axios";
+
+import { CategoryDetailed, RestaurantDetailed } from "@/app/types/types";
 import { createOrder, getRestaurant } from "@/app/api/restaurants";
-import { useParams } from "next/navigation";
 import { useAuthStore } from "@/app/store/user";
-import { CircularProgress, Button } from "@mui/material";
 import ProductCard from "@/app/ui/restaurant/card-products";
 import FloatingCategoryButton from "@/app/ui/restaurant/floating-button";
 import CategoryCard from "@/app/ui/restaurantsPage/category-card";
 import FloatingCartButton from "@/app/ui/restaurant/floating-cart";
 
 const RestaurantHomePage: React.FC = () => {
+  const { push } = useRouter();
   const [restaurant, setRestaurant] = useState<RestaurantDetailed | null>(null);
   const [categories, setCategories] = useState<CategoryDetailed[]>([]);
   const [cart, setCart] = useState<any[]>([]);
@@ -90,17 +93,23 @@ const RestaurantHomePage: React.FC = () => {
   };
 
   const onFinishPayment = async () => {
-    const totalAmount = calculateTotalPrice(cart);
+    const restaurantUUID = restaurant?.uuid;
     try {
-      console.log(cart);
-      const res = await createOrder(
-        restaurant?.id || 1,
-        cart,
-        totalAmount,
-        "Accepted"
-      );
-      alert("Payment finished successfully!");
-      setCart([]);
+      const response = await axios.post("/api/checkout-session", {
+        cartItems: cart,
+        restaurantUUID,
+        restaurantID: restaurant?.id,
+        totalAmount: calculateTotalPrice(cart),
+      });
+
+      const data = response.data;
+      const paymentLink = data.paymentLink;
+
+      if (paymentLink) {
+        push(paymentLink);
+      } else {
+        console.error("No payment link provided");
+      }
     } catch (error) {
       console.error("Payment failed:", error);
     }

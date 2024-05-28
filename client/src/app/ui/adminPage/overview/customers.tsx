@@ -14,7 +14,7 @@ const Customers = ({
   return (
     <main className="flex flex-col items-center mx-5 bg-veryPaleGrey rounded-xl p-4">
       <h5 className="text-black text-lg mb-2">Customers</h5>
-      <h2 className="text-black text-2xl mb-2">{`$${actualValue}`}</h2>
+      <h2 className="text-black text-2xl mb-2">{`€${actualValue}`}</h2>
       <h6 className="text-sm flex items-center">
         {upFromLastMonth > 0 ? (
           <span className={`mr-1 ${color}`}>
