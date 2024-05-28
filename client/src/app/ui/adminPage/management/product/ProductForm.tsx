@@ -21,7 +21,7 @@ const schema = z.object({
   price: z.coerce.number().positive(),
   basePrice: z.coerce.number().positive(),
   ingredients: z.string().min(1, "Ingredients are required"),
-  availability: z.coerce.boolean(),
+  availability: z.string(),
   category: z.coerce.number(),
 });
 
@@ -47,7 +47,7 @@ const ProductForm = ({
       price: product?.price ?? 0,
       basePrice: product?.basePrice ?? 0,
       ingredients: product?.ingredients.join(", ") ?? "",
-      availability: product?.availability ?? true,
+      availability: product?.availability.toString() ?? "false",
       category:
         product?.categoryId ?? (categories.length > 0 ? categories[0].id : 0),
     },
@@ -73,7 +73,7 @@ const ProductForm = ({
             payload.basePrice,
             payload.category,
             payload.ingredients.join(", "),
-            payload.availability,
+            payload.availability === "true" ? true : false,
             token
           );
           if (result === 200) {
@@ -88,7 +88,7 @@ const ProductForm = ({
             payload.basePrice,
             payload.category,
             payload.ingredients.join(", "),
-            payload.availability,
+            payload.availability === "true" ? true : false,
             token
           );
           if (result === 200) {
@@ -247,7 +247,7 @@ const ProductForm = ({
           </div>
         )}
         <div className="flex justify-end">
-          {action == "edit" && (
+          {action === "edit" && (
             <button
               type="submit"
               className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -256,7 +256,7 @@ const ProductForm = ({
               {isSubmitting ? "Submitting..." : "Commit Changes"}
             </button>
           )}
-          {action == "add" && (
+          {action === "add" && (
             <button
               type="submit"
               className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -272,9 +272,6 @@ const ProductForm = ({
             >
               Close
             </button>
-          )}
-          {errors.root && (
-            <div className="text-red-500">{errors.root.message}</div>
           )}
           {errors.root && (
             <div className="text-red-500">{errors.root.message}</div>
