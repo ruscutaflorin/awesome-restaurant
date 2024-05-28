@@ -9,8 +9,9 @@ import ProductCard from "@/app/ui/restaurant/card-products";
 import FloatingCategoryButton from "@/app/ui/restaurant/floating-button";
 import CategoryCard from "@/app/ui/restaurantsPage/category-card";
 import FloatingCartButton from "@/app/ui/restaurant/floating-cart";
-
+import { useRouter } from "next/navigation";
 const RestaurantHomePage: React.FC = () => {
+  const { push } = useRouter();
   const [restaurant, setRestaurant] = useState<RestaurantDetailed | null>(null);
   const [categories, setCategories] = useState<CategoryDetailed[]>([]);
   const [cart, setCart] = useState<any[]>([]);
@@ -92,15 +93,16 @@ const RestaurantHomePage: React.FC = () => {
   const onFinishPayment = async () => {
     const totalAmount = calculateTotalPrice(cart);
     try {
-      console.log(cart);
-      const res = await createOrder(
-        restaurant?.id || 1,
-        cart,
-        totalAmount,
-        "Accepted"
-      );
-      alert("Payment finished successfully!");
-      setCart([]);
+      push("https://buy.stripe.com/test_14k3eq8stf7m0bC144");
+      // console.log(cart);
+      // const res = await createOrder(
+      //   restaurant?.id || 1,
+      //   cart,
+      //   totalAmount,
+      //   "Accepted"
+      // );
+      // alert("Payment finished successfully!");
+      // setCart([]);
     } catch (error) {
       console.error("Payment failed:", error);
     }
