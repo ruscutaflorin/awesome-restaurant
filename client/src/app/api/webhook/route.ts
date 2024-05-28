@@ -2,7 +2,10 @@ import Stripe from "stripe";
 import { NextResponse, NextRequest } from "next/server";
 import { createOrder } from "../restaurants";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+  apiVersion: "2024-04-10",
+});
+
 export async function POST(req: NextRequest) {
   const payload = await req.text();
   const res = JSON.parse(payload);
@@ -38,7 +41,7 @@ export async function POST(req: NextRequest) {
     }
 
     return NextResponse.json({
-      status: "sucess",
+      status: "success",
       event: event.type,
       response: res,
     });
