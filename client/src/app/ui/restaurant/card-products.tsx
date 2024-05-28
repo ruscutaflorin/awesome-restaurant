@@ -45,7 +45,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, addToCart }) => {
         <p>Ingredients: {product.ingredients.join(", ")}</p>
         <div className="flex justify-between items-center">
           <span className="text-lg font-bold text-gray-800">
-            ${product.price}
+            €{product.price}
           </span>
           <button
             onClick={() => product.availability && addToCart(product)}
