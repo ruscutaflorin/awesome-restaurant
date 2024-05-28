@@ -10,6 +10,7 @@ import FloatingCategoryButton from "@/app/ui/restaurant/floating-button";
 import CategoryCard from "@/app/ui/restaurantsPage/category-card";
 import FloatingCartButton from "@/app/ui/restaurant/floating-cart";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 const RestaurantHomePage: React.FC = () => {
   const { push } = useRouter();
   const [restaurant, setRestaurant] = useState<RestaurantDetailed | null>(null);
@@ -91,18 +92,21 @@ const RestaurantHomePage: React.FC = () => {
   };
 
   const onFinishPayment = async () => {
-    const totalAmount = calculateTotalPrice(cart);
+    const restaurantUUID = restaurant?.uuid;
     try {
-      push("https://buy.stripe.com/test_14k3eq8stf7m0bC144");
-      // console.log(cart);
-      // const res = await createOrder(
-      //   restaurant?.id || 1,
-      //   cart,
-      //   totalAmount,
-      //   "Accepted"
-      // );
-      // alert("Payment finished successfully!");
-      // setCart([]);
+      const response = await axios.post("/api/webhook", {
+        cartItems: cart,
+        restaurantUUID,
+      });
+
+      const data = response.data;
+      const paymentLink = data.paymentLink;
+
+      if (paymentLink) {
+        window.location.href = paymentLink;
+      } else {
+        console.error("No payment link provided");
+      }
     } catch (error) {
       console.error("Payment failed:", error);
     }
