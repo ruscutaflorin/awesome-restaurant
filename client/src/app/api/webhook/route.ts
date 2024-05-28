@@ -1,44 +1,48 @@
-import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
+import { NextResponse, NextRequest } from "next/server";
+import { createOrder } from "../restaurants";
 
-if (!process.env.STRIPE_SECRET_KEY) {
-  throw new Error(
-    "STRIPE_SECRET_KEY is not defined in the environment variables."
-  );
-}
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+export async function POST(req: NextRequest) {
+  const payload = await req.text();
+  const res = JSON.parse(payload);
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2024-04-10",
-});
+  const sig = req.headers.get("Stripe-Signature");
 
-export const POST = async (req: NextRequest) => {
+  const dateTime = new Date(res?.created * 1000).toLocaleDateString();
+  const timeString = new Date(res?.created * 1000).toLocaleTimeString();
+
   try {
-    const { cartItems, restaurantUUID } = await req.json();
-    const line_items = cartItems.map((item: any) => ({
-      price_data: {
-        currency: "eur",
-        product_data: {
-          name: item.name,
-        },
-        unit_amount: Math.round(item.price * 100),
-      },
-      quantity: item.quantity,
-    }));
+    let event = stripe.webhooks.constructEvent(
+      payload,
+      sig!,
+      process.env.STRIPE_WEBHOOK_SECRET!
+    );
 
-    const params: Stripe.Checkout.SessionCreateParams = {
-      payment_method_types: ["card"],
-      line_items,
-      mode: "payment",
-      success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/restaurants/${restaurantUUID}/home`,
-      cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/restaurants/${restaurantUUID}/home`,
-    };
+    if (event.type === "checkout.session.completed") {
+      const session = event.data.object as Stripe.Checkout.Session;
+      const { restaurantID, totalAmount, cartItems } = session.metadata;
 
-    const checkoutSession: Stripe.Checkout.Session =
-      await stripe.checkout.sessions.create(params);
+      const parsedCartItems = JSON.parse(cartItems);
+      const parsedRestaurantID = parseInt(restaurantID);
+      const parsedTotalAmount = parseInt(totalAmount);
 
-    return NextResponse.json({ paymentLink: checkoutSession.url });
-  } catch (err: any) {
-    console.error("Error creating checkout session:", err);
-    return NextResponse.json({ error: err.message }, { status: 500 });
+      const res = await createOrder(
+        parsedRestaurantID,
+        parsedCartItems,
+        parsedTotalAmount,
+        "Accepted"
+      );
+
+      console.log(`Payment for session ${session.id} was successful!`);
+    }
+
+    return NextResponse.json({
+      status: "sucess",
+      event: event.type,
+      response: res,
+    });
+  } catch (error) {
+    return NextResponse.json({ status: "Failed", error });
   }
-};
+}
