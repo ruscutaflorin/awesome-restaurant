@@ -32,7 +32,7 @@ import {
 } from "./views";
 
 export const router = express.Router();
-// router.use(auth);
+router.use(auth);
 
 router.get("/income/:id", validateRestaurantId, restaurantIncomeFromOrders);
 
