@@ -260,3 +260,48 @@ export const createOrder = async (
     throw new Error(error.message);
   }
 };
+
+export const getProductRatingsBasedOnRestaurant = async (
+  restaurantId: number
+): Promise<{}> => {
+  const restaurant = await db.restaurant.findUnique({
+    where: { id: restaurantId },
+    include: {
+      categories: {
+        include: {
+          products: {
+            include: {
+              reviews: {
+                select: {
+                  rating: true,
+                  userId: true,
+                  productId: true,
+                  reviewText: true,
+                  restaurantId: true,
+                },
+                where: {
+                  restaurantId: restaurantId,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+
+  if (restaurant === null) throw new Error("Restaurant not found");
+  const ratings = restaurant.categories.flatMap((category) =>
+    category.products.flatMap((product) =>
+      product.reviews.map((review) => ({
+        restaurantId: review.restaurantId,
+        productId: review.productId,
+        rating: review.rating,
+        userId: review.userId,
+        reviewText: review.reviewText,
+      }))
+    )
+  );
+
+  return ratings;
+};

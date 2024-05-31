@@ -1,5 +1,9 @@
 import { Request, Response } from "express";
-import { createOrder, listRestaurants } from "./services/restaurant";
+import {
+  createOrder,
+  listRestaurants,
+  getProductRatingsBasedOnRestaurant,
+} from "./services/restaurant";
 import { validationResult } from "express-validator";
 import { db } from "../config/db";
 import {
@@ -147,5 +151,71 @@ export const addOrderToRestaurant = async (req: Request, res: Response) => {
   } catch (error: any) {
     console.error(error);
     return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const restaurantReviews = async (req: Request, res: Response) => {
+  try {
+    const restaurantId: number = parseInt(req.params.id as string);
+    const reviews = await getProductRatingsBasedOnRestaurant(restaurantId);
+    return res.status(200).json(reviews);
+  } catch (error: any) {
+    return res.status(500).json(error.message);
+  }
+};
+
+import path from "path";
+import { spawn } from "child_process";
+
+export const performSentimentAnalysis = async (req: Request, res: Response) => {
+  try {
+    const restaurantId: string = req.params.restaurantId as unknown as string;
+    const pythonScriptPath = path.join(
+      "C:",
+      "Users",
+      "FLORIN",
+      "Desktop",
+      "stuff",
+      "coding",
+      "projects",
+      "awesome-restaurant",
+      "server",
+      "restaurant-analysis",
+      "sentiment_analysis.py"
+    );
+
+    // Spawn a new Python process to run the sentiment analysis script
+    const pythonProcess = spawn("python", [pythonScriptPath, restaurantId]);
+    let data = "";
+
+    // Collect data from the Python script
+    pythonProcess.stdout.on("data", (chunk) => {
+      data += chunk.toString();
+    });
+
+    // Handle errors from the Python script
+    pythonProcess.stderr.on("data", (chunk) => {
+      console.error(`stderr: ${chunk}`);
+    });
+
+    pythonProcess.on("close", (code) => {
+      if (code === 0) {
+        try {
+          const parsedData = data;
+          console.log(parsedData);
+          res.status(200).send(parsedData);
+        } catch (error) {
+          console.error("Error parsing JSON data from Python script:", error);
+          console.error("Received data:", data);
+          res.status(500).send("Error parsing data from sentiment analysis");
+        }
+      } else {
+        console.error(`Python script exited with code ${code}`);
+        res.status(500).send("Error occurred during sentiment analysis");
+      }
+    });
+  } catch (error: any) {
+    console.error("Error in performSentimentAnalysis:", error);
+    return res.status(500).json(error.message);
   }
 };

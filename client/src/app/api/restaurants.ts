@@ -110,3 +110,15 @@ export const createOrder = async (
     throw err;
   }
 };
+
+export const fetchSentimentAnalysis = async (restaurantId: number) => {
+  try {
+    const response = await axios.get(
+      `http://localhost:8000/api/restaurants/analyze-sentiment/${restaurantId}`
+    );
+    return response;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+};
