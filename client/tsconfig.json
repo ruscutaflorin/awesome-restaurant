@@ -28,7 +28,8 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "tailwind.config.js",
-    "src/app/admin/management/dining"
+    "src/app/admin/management/dining",
+    "src/app/api/checkout-session"
   ],
   "exclude": ["node_modules"]
 }

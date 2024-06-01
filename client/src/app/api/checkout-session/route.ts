@@ -24,8 +24,8 @@ export const POST = async (req: NextRequest) => {
       payment_method_types: ["card"],
       line_items,
       mode: "payment",
-      success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/restaurants/${restaurantUUID}/home`,
-      cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/restaurants/${restaurantUUID}/home`,
+      success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/restaurants/${restaurantUUID}/order/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/restaurants/${restaurantUUID}/order/failed`,
       metadata: {
         restaurantID,
         totalAmount,
