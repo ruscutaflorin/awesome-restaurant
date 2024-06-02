@@ -5,21 +5,18 @@ import { useRouter, useParams } from "next/navigation";
 import axios from "axios";
 
 import { CategoryDetailed, RestaurantDetailed } from "@/app/types/types";
-import { fetchSentimentAnalysis, getRestaurant } from "@/app/api/restaurants";
+import { getRestaurant } from "@/app/api/restaurants";
 import { useAuthStore } from "@/app/store/user";
 import ProductCard from "@/app/ui/restaurant/card-products";
 import FloatingCategoryButton from "@/app/ui/restaurant/floating-button";
 import CategoryCard from "@/app/ui/restaurantsPage/category-card";
 import FloatingCartButton from "@/app/ui/restaurant/floating-cart";
-import ReviewModal from "@/app/ui/restaurant/review-modal";
 const RestaurantHomePage: React.FC = () => {
   const { push } = useRouter();
   const [restaurant, setRestaurant] = useState<RestaurantDetailed | null>(null);
   const [categories, setCategories] = useState<CategoryDetailed[]>([]);
   const [cart, setCart] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [open, setOpen] = useState(false);
-  const [selectedReview, setSelectedReview] = useState(null);
   const params = useParams();
   const token = useAuthStore((state) => state.token);
   const categoryRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
@@ -35,19 +32,6 @@ const RestaurantHomePage: React.FC = () => {
               category.products && category.products.length > 0
           )
         );
-        if (restaurant?.id) {
-          const reviewsResponse = await fetchSentimentAnalysis(
-            restaurant?.id || 0
-          );
-          console.log(reviewsResponse.data);
-          if (reviewsResponse.data.length > 0) {
-            const randomIndex = Math.floor(
-              Math.random() * reviewsResponse.data.length
-            );
-            setSelectedReview(reviewsResponse.data[randomIndex]);
-            setOpen(true);
-          }
-        }
         setLoading(false);
       } catch (err) {
         console.log(err);
@@ -130,19 +114,12 @@ const RestaurantHomePage: React.FC = () => {
     }
   };
 
-  const handleClose = () => setOpen(false);
-
   if (loading) {
     return <CircularProgress />;
   }
 
   return (
     <div className="p-4">
-      <ReviewModal
-        open={open}
-        handleClose={handleClose}
-        review={selectedReview}
-      />
       <FloatingCategoryButton
         categories={categories}
         scrollToCategory={scrollToCategory}

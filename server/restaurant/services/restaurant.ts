@@ -247,11 +247,11 @@ export const createOrder = async (
       },
     });
 
-    await db.diningTable.update({
-      where: { id: availableTable.id },
-      data: { status: "Occupied" },
-    });
-
+    // await db.diningTable.update({
+    //   where: { id: availableTable.id },
+    //   data: { status: "Occupied" },
+    // });
+    // TODO: uncomment this
     return {
       ...newOrder,
       totalAmount: newOrder.totalAmount.toNumber(),
@@ -304,4 +304,42 @@ export const getProductRatingsBasedOnRestaurant = async (
   );
 
   return ratings;
+};
+
+export const addProductReview = async (
+  restaurantId: number,
+  productId: number,
+  sentiment: number,
+  rating: number,
+  reviewText: string
+): Promise<{}> => {
+  try {
+    const product = await db.product.findUnique({
+      where: { id: productId },
+    });
+
+    if (!product) {
+      throw new Error("Product not found");
+    }
+
+    const review = await db.review.create({
+      data: {
+        rating,
+        reviewText,
+        user: {
+          connect: { id: sentiment },
+        },
+        product: {
+          connect: { id: productId },
+        },
+        restaurant: {
+          connect: { id: restaurantId },
+        },
+      },
+    });
+
+    return review;
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
 };

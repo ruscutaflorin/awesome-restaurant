@@ -20,6 +20,12 @@ export const POST = async (req: NextRequest) => {
       quantity: item.quantity,
     }));
 
+    // const cartItemsData = cartItems.map((item: any) => ({
+    //   quantity: item.quantity,
+    //   name: item.name,
+    // }));
+    // TODO:buba e aici ca eu pe succes iau din metadate un obiect orderItem si ma cam sparge
+
     const params: Stripe.Checkout.SessionCreateParams = {
       payment_method_types: ["card"],
       line_items,
@@ -29,6 +35,7 @@ export const POST = async (req: NextRequest) => {
       metadata: {
         restaurantID,
         totalAmount,
+        // cartItems: JSON.stringify(cartItemsData),
         cartItems: JSON.stringify(cartItems),
       },
     };

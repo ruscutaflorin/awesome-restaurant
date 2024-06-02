@@ -3,6 +3,7 @@ import {
   createOrder,
   listRestaurants,
   getProductRatingsBasedOnRestaurant,
+  addProductReview,
 } from "./services/restaurant";
 import { validationResult } from "express-validator";
 import { db } from "../config/db";
@@ -166,10 +167,11 @@ export const restaurantReviews = async (req: Request, res: Response) => {
 
 import path from "path";
 import { spawn } from "child_process";
+import { addProduct } from "../admin/services/admin";
 
 export const performSentimentAnalysis = async (req: Request, res: Response) => {
   try {
-    const restaurantId: string = req.params.restaurantId as unknown as string;
+    const { review } = req.body;
     const pythonScriptPath = path.join(
       "C:",
       "Users",
@@ -185,7 +187,7 @@ export const performSentimentAnalysis = async (req: Request, res: Response) => {
     );
 
     // Spawn a new Python process to run the sentiment analysis script
-    const pythonProcess = spawn("python", [pythonScriptPath, restaurantId]);
+    const pythonProcess = spawn("python", [pythonScriptPath, review]);
     let data = "";
 
     // Collect data from the Python script
@@ -202,8 +204,13 @@ export const performSentimentAnalysis = async (req: Request, res: Response) => {
       if (code === 0) {
         try {
           const parsedData = data;
-          console.log(parsedData);
-          res.status(200).send(parsedData);
+          const sentimentMatch = parsedData.match(/Sentiment: (\d+)/);
+          if (sentimentMatch) {
+            const sentiment = sentimentMatch[1];
+            res.status(200).json({ sentiment });
+          } else {
+            res.status(500).json({ error: "Failed to parse sentiment" });
+          }
         } catch (error) {
           console.error("Error parsing JSON data from Python script:", error);
           console.error("Received data:", data);
@@ -217,5 +224,24 @@ export const performSentimentAnalysis = async (req: Request, res: Response) => {
   } catch (error: any) {
     console.error("Error in performSentimentAnalysis:", error);
     return res.status(500).json(error.message);
+  }
+};
+
+export const postProductReview = async (req: Request, res: Response) => {
+  try {
+    const { restaurantId, productId, sentiment, rating, reviewText } = req.body;
+    console.log(restaurantId, productId, sentiment, rating, reviewText);
+    const review = await addProductReview(
+      restaurantId,
+      productId,
+      sentiment,
+      rating,
+      reviewText
+    );
+
+    return res.status(200).json(review);
+  } catch (error: any) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
   }
 };
