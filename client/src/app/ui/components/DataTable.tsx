@@ -8,7 +8,9 @@ import {
   GridToolbar,
 } from "@mui/x-data-grid";
 import { BorderDottedIcon } from "@radix-ui/react-icons";
-import { Button, Menu, MenuItem } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { Button, IconButton, Menu, MenuItem } from "@mui/material";
 import CategoryForm from "../adminPage/management/category/CategoryForm";
 import DiningTableForm from "../adminPage/management/dinningTables/DiningTableForm";
 import ProductForm from "../adminPage/management/product/ProductForm";
@@ -75,8 +77,9 @@ export default function DataGridDemo({ columns, rows, form }: Props) {
     setAnchorEl(null);
   };
 
-  const handleEdit = () => {
+  const handleEdit = (rowId: number) => {
     console.log("Editing row ID", selectedRowId);
+    setSelectedRowId(rowId);
     setIsEditFormVisible(true);
     handleClose();
   };
@@ -246,9 +249,9 @@ export default function DataGridDemo({ columns, rows, form }: Props) {
   };
 
   return (
-    <Box sx={{ width: "100%" }}>
+    <Box sx={{ width: "90vw", marginTop: "32px" }}>
       <Box sx={{ bgcolor: "white", p: 1, borderRadius: 2, boxShadow: 1 }}>
-        <Box sx={{ height: 400, width: "100%", overflowX: "auto" }}>
+        <Box sx={{ height: "75vh", width: "100%", overflowX: "auto" }}>
           <DataGrid
             sx={{
               boxShadow: 2,
@@ -272,7 +275,7 @@ export default function DataGridDemo({ columns, rows, form }: Props) {
                       headerAlign: "center" as GridAlignment,
                       renderCell: (params: GridCellParams) => (
                         <div className="flex h-full justify-center items-center">
-                          <Button
+                          {/* <Button
                             variant="outlined"
                             size="small"
                             onClick={(event) =>
@@ -280,7 +283,23 @@ export default function DataGridDemo({ columns, rows, form }: Props) {
                             }
                           >
                             <BorderDottedIcon />
-                          </Button>
+                          </Button> */}
+                          <IconButton
+                            aria-label="edit"
+                            color="success"
+                            onClick={(event) => handleEdit(params.row.id)}
+                          >
+                            <EditIcon />
+                          </IconButton>
+                          <IconButton
+                            aria-label="delete"
+                            color="error"
+                            onClick={(event) =>
+                              handleClick(event, params.row.id)
+                            }
+                          >
+                            <DeleteIcon />
+                          </IconButton>
                         </div>
                       ),
                     },
@@ -290,7 +309,7 @@ export default function DataGridDemo({ columns, rows, form }: Props) {
             initialState={{
               pagination: {
                 paginationModel: {
-                  pageSize: 5,
+                  pageSize: 25,
                 },
               },
             }}
@@ -315,8 +334,13 @@ export default function DataGridDemo({ columns, rows, form }: Props) {
         </Box>
       </Box>
       {form !== "orders" && (
-        <div className="mt-5">
-          <Button variant="contained" onClick={handleAdd}>
+        <div className="mt-5 mb-5">
+          <Button
+            variant="contained"
+            color="primary"
+            style={{ backgroundColor: "#1976d2" }}
+            onClick={handleAdd}
+          >
             Add New Row
           </Button>
         </div>

@@ -12,7 +12,7 @@ const PieChartComponent = ({ popularItems = [] }: PieChartProps) => {
   }));
   console.log(uData);
   return (
-    <div className="bg-veryPaleGrey flex justify-center items-center rounded-xl p-6 shadow-lg">
+    <div className="bg-veryPaleGrey flex rounded-xl p-6 shadow-lg">
       {uData.length > 0 ? (
         <PieChart
           series={[
@@ -24,16 +24,16 @@ const PieChartComponent = ({ popularItems = [] }: PieChartProps) => {
               cornerRadius: 5,
               // startAngle: -90,
               // endAngle: 180,
-              cx: 150,
+              cx: 100,
               cy: 150,
             },
           ]}
           height={300}
-          width={300}
+          width={400}
           slotProps={{
             legend: {
-              direction: "row",
-              position: { vertical: "bottom", horizontal: "right" },
+              direction: "column",
+              position: { vertical: "middle", horizontal: "right" },
               hidden: false,
             },
           }}

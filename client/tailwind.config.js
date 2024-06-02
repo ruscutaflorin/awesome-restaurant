@@ -86,5 +86,8 @@ module.exports = {
       },
     },
   },
+  // corePlugins: {
+  //   backgroundColor: false, // Disable backgroundColor core plugin
+  // },
   plugins: [require("tailwindcss-animate")],
 };

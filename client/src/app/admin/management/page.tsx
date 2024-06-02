@@ -35,7 +35,7 @@ const RestaurantDetails = () => {
       }
     };
     fetchProducts();
-  }, []);
+  }, [restaurantId, token]);
 
   return (
     <div className="flex justify-center items-center">

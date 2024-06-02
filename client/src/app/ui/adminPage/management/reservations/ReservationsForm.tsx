@@ -67,7 +67,7 @@ const ReservationsForm: React.FC<ReservationsFormProps> = ({
             data.name,
             data.email,
             data.phone,
-            dateTime,
+            new Date(dateTime).toLocaleDateString("ro-RO"),
             parseInt(data.persons),
             token
           );
@@ -81,7 +81,7 @@ const ReservationsForm: React.FC<ReservationsFormProps> = ({
             data.name,
             data.email,
             data.phone,
-            dateTime,
+            new Date(dateTime).toDateString(),
             parseInt(data.persons),
             token
           );
@@ -104,7 +104,7 @@ const ReservationsForm: React.FC<ReservationsFormProps> = ({
     <div className="flex justify-center items-center h-full">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="w-96 p-4 bg-white rounded-lg shadow-md absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+        className="w-96 p-4 bg-white rounded-lg shadow-md absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10"
       >
         <CloseIcon
           onClick={onClose}

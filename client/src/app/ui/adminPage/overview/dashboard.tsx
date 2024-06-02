@@ -18,6 +18,8 @@ import {
   restaurantReviews,
 } from "../../../api/admin";
 import { useAuthStore } from "@/app/store/user";
+import { boolean } from "zod";
+import { CircularProgress } from "@mui/material";
 const AdminDashboard = () => {
   const [earning, setEarning] = useState(0);
   const [customers, setCustomers] = useState(0);
@@ -25,38 +27,53 @@ const AdminDashboard = () => {
   const [dailyCustomers, setDailyCustomers] = useState<number[]>([]);
   const [popularItems, setPopularItems] = useState<[]>([]);
   const [reviews, setReviews] = useState<{}>({});
+  const [loading, setLoading] = useState<boolean>(true);
   const restaurantId = useAuthStore((state) => state.user?.restaurantId);
   const token = useAuthStore((state) => state.token);
 
   useEffect(() => {
     const fetchData = async () => {
       if (restaurantId && token) {
-        const income = await restaurantIncome(restaurantId, token);
-        const customers = await restaurantCustomers(restaurantId, token);
-        const hourlyCustomers = await restaurantHourlyCustomers(
-          restaurantId,
-          token
-        );
-        const dailyCustomers = await restaurantDailyCustomers(
-          restaurantId,
-          token
-        );
-        const popularItems = await restaurantMostOrderedItems(
-          restaurantId,
-          5,
-          token
-        );
-        const reviewsInfo = await restaurantReviews(restaurantId, token);
-        setEarning(income);
-        setCustomers(customers);
-        setHourlyCustomers(hourlyCustomers);
-        setDailyCustomers(dailyCustomers);
-        setPopularItems(popularItems);
-        setReviews(reviewsInfo);
+        try {
+          setLoading(true);
+          const income = await restaurantIncome(restaurantId, token);
+          const customers = await restaurantCustomers(restaurantId, token);
+          const hourlyCustomers = await restaurantHourlyCustomers(
+            restaurantId,
+            token
+          );
+          const dailyCustomers = await restaurantDailyCustomers(
+            restaurantId,
+            token
+          );
+          const popularItems = await restaurantMostOrderedItems(
+            restaurantId,
+            5,
+            token
+          );
+          const reviewsInfo = await restaurantReviews(restaurantId, token);
+          setEarning(income);
+          setCustomers(customers);
+          setHourlyCustomers(hourlyCustomers);
+          setDailyCustomers(dailyCustomers);
+          setPopularItems(popularItems);
+          setReviews(reviewsInfo);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        } finally {
+          setLoading(false);
+        }
       }
     };
     fetchData();
   }, [restaurantId]);
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <CircularProgress />
+      </div>
+    );
+  }
   return (
     <main className="h-full flex justify-center items-center">
       <div className="grid-container grid-cols-2 gap-4 ">
@@ -82,15 +99,13 @@ const AdminDashboard = () => {
         </div>
 
         {/* Second Row */}
-        <div className="col-span-4 grid grid-cols-4 mx-5 mt-5">
-          <div className="col-span-1 grid-item flex items-center justify-center">
+        <div className="col-span-3 grid grid-cols-3 mx-5 mt-5">
+          <div className="col-span-1 grid-item flex flex-col items-center justify-center">
             <Earning actualValue={earning} oldValue={40000} />
-          </div>
-          <div className="col-span-2 col-start-2 grid-item">
-            <RevenueLines hourlyCustomers={hourlyCustomers} />
-          </div>
-          <div className="col-span-1 grid-item flex items-center justify-center ">
             <Customers actualValue={customers} oldValue={4100} />
+          </div>
+          <div className="col-span-2 col-start-2 grid-item mb-5">
+            <RevenueLines hourlyCustomers={hourlyCustomers} />
           </div>
         </div>
       </div>

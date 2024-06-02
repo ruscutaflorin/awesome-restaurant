@@ -71,10 +71,10 @@ const DetailsForm: React.FC<restaurantDetailsProps> = ({
     <div className="flex justify-center items-center h-full w-full">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="w-96 p-4 bg-white rounded-lg shadow-md w-full"
+        className="w-96 p-4 bg-white rounded-lg shadow-md w-full mt-8"
       >
         <h1 className="text-2xl font-semibold mb-4">Restaurant Details</h1>
-        <div className="flex flex-column w-full">
+        <div className="flex flex-column w-full justify-around">
           <div className="mb-4">
             <label
               htmlFor="name"

@@ -39,6 +39,7 @@ const FloatingCartButton: React.FC<FloatingCartButtonProps> = ({
         <div className="relative">
           <IconButton
             onClick={handleToggle}
+            style={{ backgroundColor: "rgb(249 115 22)", color: "white" }}
             className="bg-orange-500 hover:bg-orange-600 text-white p-4 rounded-full shadow-lg transition-transform transform hover:scale-125"
             size="large"
           >
@@ -95,6 +96,7 @@ const FloatingCartButton: React.FC<FloatingCartButtonProps> = ({
                     <Button
                       variant="contained"
                       color="primary"
+                      style={{ backgroundColor: "rgb(249 115 22)" }}
                       className="w-full mt-4"
                       onClick={onFinishPayment}
                     >

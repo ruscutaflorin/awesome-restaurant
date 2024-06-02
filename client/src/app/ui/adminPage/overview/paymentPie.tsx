@@ -33,7 +33,7 @@ const PaymentPieChart = ({ reviews = {} }: PaymentPieChartProps) => {
           slotProps={{
             legend: {
               direction: "row",
-              position: { vertical: "top", horizontal: "middle" },
+              position: { vertical: "bottom", horizontal: "middle" },
               hidden: false,
             },
           }}

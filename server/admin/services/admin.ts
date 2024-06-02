@@ -410,7 +410,7 @@ export const addReservation = async (
 
     const reservation = await db.reservation.create({
       data: {
-        reservationDate: date,
+        reservationDate: new Date(date),
         numberOfGuests: persons,
         customerName: name,
         customerPhone: phone,

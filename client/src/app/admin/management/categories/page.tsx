@@ -5,6 +5,7 @@ import { restaurantCategories } from "@/app/api/admin";
 import { Category } from "@/app/types/types";
 import DisplayCategories from "@/app/ui/adminPage/management/category/DisplayCategories";
 import { useAuthStore } from "@/app/store/user";
+import { CircularProgress } from "@mui/material";
 
 const Categories = () => {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -30,21 +31,23 @@ const Categories = () => {
       }
     };
     fetchCategories();
-  }, []);
+  }, [restaurantId, token]);
 
   return (
     <div>
       {loading ? (
-        <p>Loading...</p>
+        <div className="flex justify-center items-center h-screen">
+          <CircularProgress />
+        </div>
       ) : (
         <div>
-          <DisplayCategories categories={categories} />
           {isFormVisible && (
             <CategoryForm
               categories={categories}
               onClose={toggleFormVisibility}
             />
           )}
+          <DisplayCategories categories={categories} />
         </div>
       )}
     </div>

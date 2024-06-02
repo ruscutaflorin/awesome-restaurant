@@ -32,7 +32,7 @@ const Reservations = () => {
       }
     };
     fetchOrders();
-  }, []);
+  }, [restaurantId, token]);
   return (
     <div className="flex justify-center items-center">
       {loading ? (

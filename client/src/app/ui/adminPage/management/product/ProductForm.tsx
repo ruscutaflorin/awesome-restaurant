@@ -47,7 +47,7 @@ const ProductForm = ({
       price: product?.price ?? 0,
       basePrice: product?.basePrice ?? 0,
       ingredients: product?.ingredients.join(", ") ?? "",
-      availability: product?.availability.toString() ?? "false",
+      availability: product?.availability.toString() ?? "true",
       category:
         product?.categoryId ?? (categories.length > 0 ? categories[0].id : 0),
     },
@@ -110,7 +110,7 @@ const ProductForm = ({
     <div className="flex justify-center items-center h-full">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="w-96 p-4 bg-white rounded-lg shadow-md absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+        className="w-96 p-4 bg-white rounded-lg shadow-md absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10"
       >
         <CloseIcon
           onClick={onClose}

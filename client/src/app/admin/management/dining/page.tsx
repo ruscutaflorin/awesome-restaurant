@@ -31,20 +31,20 @@ const DiningTables = () => {
       }
     };
     fetchTables();
-  }, []);
+  }, [restaurantId, token]);
   return (
     <div className="flex flex-row justify-center items-center">
       {loading ? (
         <p>Loading...</p>
       ) : (
         <div>
-          <DisplayDiningTables tables={tables} />
           {isFormVisible && (
             <DiningTableForm
               diningTables={tables}
               onClose={toggleFormVisibility}
             />
           )}
+          <DisplayDiningTables tables={tables} />
         </div>
       )}
     </div>

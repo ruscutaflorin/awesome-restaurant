@@ -127,7 +127,11 @@ const SuccessPage: React.FC = () => {
   };
 
   if (loading) {
-    return <CircularProgress />;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <CircularProgress />
+      </div>
+    );
   }
 
   return (
@@ -168,10 +172,15 @@ const SuccessPage: React.FC = () => {
         <Button
           variant="contained"
           color="primary"
+          style={{ backgroundColor: "#1976d2", color: "white" }}
           onClick={handleSubmit}
           disabled={submitting || submissionComplete}
         >
-          Submit Reviews
+          {submitting ? (
+            <CircularProgress style={{ color: "white" }} />
+          ) : (
+            <>Submit Reviews</>
+          )}
         </Button>
       </Box>
       {averageSentiment !== null && (

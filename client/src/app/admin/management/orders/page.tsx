@@ -30,7 +30,7 @@ const Order = () => {
       }
     };
     fetchOrders();
-  }, []);
+  }, [restaurantId, token]);
 
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 90 },
