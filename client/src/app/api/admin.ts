@@ -484,3 +484,15 @@ export const editRestaurantDetails = async (
     console.error(error);
   }
 };
+
+export const fetchRestaurantReviews = async (restaurantId: number) => {
+  try {
+    const response = await axios.get(
+      `http://localhost:8000/api/restaurants/reviews/${restaurantId}`
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+};

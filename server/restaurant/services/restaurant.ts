@@ -273,11 +273,14 @@ export const getProductRatingsBasedOnRestaurant = async (
             include: {
               reviews: {
                 select: {
+                  id: true,
                   rating: true,
                   userId: true,
                   productId: true,
                   reviewText: true,
                   restaurantId: true,
+                  createdAt: true,
+                  updatedAt: true,
                 },
                 where: {
                   restaurantId: restaurantId,
@@ -294,11 +297,14 @@ export const getProductRatingsBasedOnRestaurant = async (
   const ratings = restaurant.categories.flatMap((category) =>
     category.products.flatMap((product) =>
       product.reviews.map((review) => ({
+        id: review.id,
         restaurantId: review.restaurantId,
         productId: review.productId,
         rating: review.rating,
         userId: review.userId,
         reviewText: review.reviewText,
+        createdAt: review.createdAt,
+        updatedAt: review.updatedAt,
       }))
     )
   );
