@@ -9,8 +9,6 @@ def analyze_sentiment(review_text, model_path):
     
     try:
         learn = load_learner(model_path)
-        
-        # Suppress logging and progress bars
         with learn.no_bar(), learn.no_logging():
             prediction = learn.predict(review_text)
             return str(prediction[0])

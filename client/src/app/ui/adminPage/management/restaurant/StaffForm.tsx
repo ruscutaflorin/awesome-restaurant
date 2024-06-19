@@ -95,10 +95,10 @@ const StaffForm: React.FC<StaffFormProps> = ({
           onClose();
         }
       }
-    } catch (error) {
+    } catch (error: any) {
       setError("root", {
         type: "manual",
-        message: "An error occurred while submitting the form",
+        message: "An error occurred while submitting the form.",
       });
     }
   };
@@ -242,9 +242,6 @@ const StaffForm: React.FC<StaffFormProps> = ({
             >
               Close
             </button>
-          )}
-          {errors.root && (
-            <div className="text-red-500">{errors.root.message}</div>
           )}
           {errors.root && (
             <div className="text-red-500">{errors.root.message}</div>

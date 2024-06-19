@@ -11,13 +11,20 @@ const Hero = () => {
     >
       <div className="hero-content text-center text-neutral-content">
         <div className="max-w-md">
-          <h1 className="mb-5 text-5xl font-bold text-white">header text</h1>
+          <h1 className="mb-5 text-4xl font-bold text-white">
+            Awesome Restaurant
+          </h1>
           <p className="mb-5 text-white">
             Explore diverse cuisines, exclusive deals, and hidden gems. Your
             ultimate dining companion connects food enthusiasts with local
             restaurants effortlessly.
           </p>
-          <Button className="text-white">Get Started</Button>
+          <Button
+            className="text-white"
+            style={{ backgroundColor: "rgb(249 115 22)", color: "white" }}
+          >
+            Get Started
+          </Button>
         </div>
       </div>
     </div>

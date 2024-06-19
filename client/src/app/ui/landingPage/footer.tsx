@@ -58,7 +58,7 @@ function Footer() {
         </nav>
         <aside>
           <p className="text-center text-sm">
-            &copy; 2023 ACME Industries Ltd. All rights reserved.
+            &copy; 2024 RFL Computers Ltd. All rights reserved.
           </p>
         </aside>
       </div>

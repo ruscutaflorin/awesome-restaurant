@@ -16,7 +16,6 @@ import {
   addProductReview,
   fetchSentimentAnalysis,
 } from "@/app/api/restaurants";
-import { useAuthStore } from "@/app/store/user";
 
 interface Product {
   id: number;
@@ -135,17 +134,35 @@ const SuccessPage: React.FC = () => {
   }
 
   return (
-    <Box sx={{ p: 4 }}>
+    <Box
+      sx={{
+        p: 4,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        minHeight: "100vh",
+        bgcolor: "background.default",
+      }}
+    >
       <Typography variant="h4" gutterBottom>
         Order Success!
       </Typography>
       <Typography variant="h6" gutterBottom>
         Please leave your reviews for the products you ordered:
       </Typography>
-      <Grid container spacing={2}>
+      <Grid container spacing={2} justifyContent="center">
         {cartItems.map((product, index) => (
           <Grid item xs={12} sm={6} md={4} key={product.id}>
-            <Paper sx={{ p: 2, border: "1px solid #ccc", borderRadius: 2 }}>
+            <Paper
+              sx={{
+                p: 2,
+                border: "1px solid #ccc",
+                borderRadius: 2,
+                boxShadow: 3,
+                minHeight: "200px",
+              }}
+            >
               <Typography variant="h6">{product.name}</Typography>
               <Rating
                 value={reviews[index]?.rating || 0}

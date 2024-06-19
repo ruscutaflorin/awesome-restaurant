@@ -10,7 +10,6 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
     if (!token) {
       const absoluteURL = new URL("/");
       return res.redirect("/login");
-      // throw new Error();
     }
 
     const decoded = jwt.verify(token, SECRET_KEY);
