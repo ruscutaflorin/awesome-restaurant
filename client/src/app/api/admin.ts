@@ -496,3 +496,111 @@ export const fetchRestaurantReviews = async (restaurantId: number) => {
     throw err;
   }
 };
+
+export const deleteCategory = async (
+  restaurantId: number,
+  categoryId: number,
+  token: string
+) => {
+  try {
+    const res = await axios.delete(
+      `http://localhost:8000/api/admin/delete-category/${categoryId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        data: {
+          restaurantID: restaurantId,
+        },
+      }
+    );
+    return res.status;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const deleteDiningTable = async (
+  restaurantId: number,
+  tableId: number,
+  token: string
+) => {
+  try {
+    const res = await axios.delete(
+      `http://localhost:8000/api/admin/delete-table/${tableId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        data: {
+          restaurantID: restaurantId,
+        },
+      }
+    );
+    return res.status;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const deleteProduct = async (productId: number, token: string) => {
+  try {
+    const res = await axios.delete(
+      `http://localhost:8000/api/admin/delete-product/${productId}`,
+      getAuthHeaders(token)
+    );
+    return res.status;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const deleteReservation = async (
+  restaurantId: number,
+  reservationId: number,
+  token: string
+) => {
+  try {
+    const res = await axios.delete(
+      `http://localhost:8000/api/admin/delete-reservation/${reservationId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        data: {
+          restaurantID: restaurantId,
+        },
+      }
+    );
+    return res.status;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const deleteStaff = async (
+  restaurantId: number,
+  staffUserId: number,
+  token: string
+) => {
+  try {
+    const res = await axios.delete(
+      `http://localhost:8000/api/admin/delete-staff/${staffUserId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        data: {
+          restaurantID: restaurantId,
+        },
+      }
+    );
+    return res.status;
+  } catch (error) {
+    console.error(error);
+  }
+};

@@ -12,10 +12,20 @@ import {
   Rating,
   Paper,
 } from "@mui/material";
+import { addProductReview } from "@/app/api/restaurants";
 import {
-  addProductReview,
-  fetchSentimentAnalysis,
-} from "@/app/api/restaurants";
+  ComprehendClient,
+  DetectSentimentCommand,
+  LanguageCode,
+} from "@aws-sdk/client-comprehend";
+
+const comprehendClient = new ComprehendClient({
+  region: "us-west-2",
+  credentials: {
+    accessKeyId: "AKIA5FTZDLTAHUTADXFZ",
+    secretAccessKey: "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",
+  },
+});
 
 interface Product {
   id: number;
@@ -30,9 +40,8 @@ interface Review {
   rating: number;
   reviewText: string;
 }
-
+import Stripe from "stripe";
 const SuccessPage: React.FC = () => {
-  const { push } = useRouter();
   const searchParams = useSearchParams();
   const session_id = searchParams.get("session_id");
   const [cartItems, setCartItems] = useState<Product[]>([]);
@@ -42,6 +51,13 @@ const SuccessPage: React.FC = () => {
   const [submissionComplete, setSubmissionComplete] = useState(false);
   const [averageSentiment, setAverageSentiment] = useState<number | null>(null);
 
+  const stripe = new Stripe(
+    "sk_test_51PL76tBRrCx0c7zJCWUIxj2IKydSGWAV9fLqThxqYwwHLXSQap8ylPVfPbt71LUd6jcy4nilHupAgx0H39Yt99Rm00y4pi7NCr",
+    {
+      apiVersion: "2024-04-10",
+    }
+  );
+
   useEffect(() => {
     const fetchSessionData = async () => {
       if (session_id) {
@@ -49,8 +65,13 @@ const SuccessPage: React.FC = () => {
           const response = await axios.get(
             `/api/checkout-session/${session_id}`
           );
-
+          console.log(response.data.id);
+          const lineItems = await stripe.checkout.sessions.listLineItems(
+            `${response.data.id}`
+          );
+          console.log("these are line items", lineItems);
           const { metadata } = response.data;
+          console.log("metadata", metadata);
           const { cartItems, restaurantID } = metadata;
           const restaurantId = parseInt(restaurantID);
           const items = JSON.parse(cartItems);
@@ -82,23 +103,37 @@ const SuccessPage: React.FC = () => {
     setReviews(newReviews);
   };
 
+  const sentimentMapping = {
+    POSITIVE: 5,
+    NEGATIVE: 1,
+    MIXED: 4,
+    NEUTRAL: 2,
+  };
+
   const handleSubmit = async () => {
     setSubmitting(true);
     try {
       const analyzedReviews = await Promise.all(
         reviews.map(async (review) => {
-          const sentimentResponse = await fetchSentimentAnalysis(
-            review.reviewText
-          );
+          const input = {
+            Text: `${review.reviewText || ""}`,
+            LanguageCode: LanguageCode.EN || "zh-TW",
+          };
+          const command = new DetectSentimentCommand(input);
+          const sentimentResponse = await comprehendClient.send(command);
+          const sentiment =
+            sentimentResponse.Sentiment as keyof typeof sentimentMapping;
+          const rating = sentimentMapping[sentiment];
+          // Sentiment: "POSITIVE" || "NEGATIVE" || "NEUTRAL" || "MIXED",
           return {
             ...review,
-            userId: parseInt(sentimentResponse.data.sentiment),
+            rating: rating,
           };
         })
       );
 
       const totalSentiment = analyzedReviews.reduce(
-        (sum, review) => sum + review.userId,
+        (sum, review) => sum + review.rating,
         0
       );
       const avgSentiment = totalSentiment / analyzedReviews.length;
@@ -116,6 +151,7 @@ const SuccessPage: React.FC = () => {
         )
       );
 
+      setReviews(analyzedReviews);
       setSubmitting(false);
       setSubmissionComplete(true);
     } catch (error) {
@@ -166,6 +202,7 @@ const SuccessPage: React.FC = () => {
               <Typography variant="h6">{product.name}</Typography>
               <Rating
                 value={reviews[index]?.rating || 0}
+                readOnly={!submissionComplete}
                 onChange={(event, newValue) =>
                   handleInputChange(index, "rating", newValue)
                 }

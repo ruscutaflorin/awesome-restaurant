@@ -9,8 +9,7 @@ import { useLogin } from "@/app/hooks/useLogin";
 import { useLogout } from "@/app/hooks/useLogout";
 
 const schema = z.object({
-  email: z.string(),
-  // email: z.string().email("Invalid email address"),
+  email: z.string().email("Invalid email address"),
   password: z.string().min(4, "Password must be at least 4 characters"),
 });
 

@@ -111,19 +111,6 @@ export const createOrder = async (
   }
 };
 
-export const fetchSentimentAnalysis = async (review: string) => {
-  try {
-    const response = await axios.post(
-      `http://localhost:8000/api/restaurants/analyze-sentiment`,
-      { review }
-    );
-    return response;
-  } catch (err) {
-    console.log(err);
-    throw err;
-  }
-};
-
 export const addProductReview = async (
   restaurantId: number,
   productId: number,

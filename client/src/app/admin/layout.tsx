@@ -8,11 +8,6 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   const token = useAuthStore((state) => state.token);
   const router = useRouter();
 
-  useLayoutEffect(() => {
-    if (token === "") {
-      router.push("/login");
-    }
-  }, []);
   return (
     <div className="flex h-screen  md:flex-row md:overflow-hidden bg-mediumGrey">
       <AdminNavbar />

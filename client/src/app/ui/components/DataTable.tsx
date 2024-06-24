@@ -27,7 +27,14 @@ import {
   GridToolbarDensitySelector,
 } from "@mui/x-data-grid";
 import { useEffect } from "react";
-import { restaurantCategories } from "@/app/api/admin";
+import {
+  deleteCategory,
+  deleteDiningTable,
+  deleteProduct,
+  deleteReservation,
+  deleteStaff,
+  restaurantCategories,
+} from "@/app/api/admin";
 import { useAuthStore } from "@/app/store/user";
 
 type Props = {
@@ -78,15 +85,9 @@ export default function DataGridDemo({ columns, rows, form }: Props) {
   };
 
   const handleEdit = (rowId: number) => {
-    console.log("Editing row ID", selectedRowId);
     setSelectedRowId(rowId);
+    console.log("Editing row ID", selectedRowId);
     setIsEditFormVisible(true);
-    handleClose();
-  };
-
-  const handleView = () => {
-    console.log("Viewing row ID", selectedRowId);
-    setIsViewFormVisible(true);
     handleClose();
   };
 
@@ -96,8 +97,13 @@ export default function DataGridDemo({ columns, rows, form }: Props) {
     handleClose();
   };
 
+  const handleDelete = (rowId: number) => {
+    setSelectedRowId(rowId);
+    console.log("Deleting row ID", selectedRowId);
+    deleteHandler();
+  };
+
   const closeForm = () => {
-    setIsViewFormVisible(false);
     setIsEditFormVisible(false);
     setIsAddFormVisible(false);
   };
@@ -121,30 +127,62 @@ export default function DataGridDemo({ columns, rows, form }: Props) {
     );
   }
 
-  const renderViewForm = () => {
+  const deleteHandler = async () => {
     const selectedRow = rows.find((row) => row.id === selectedRowId);
+    if (selectedRow === undefined) return;
+    console.log(selectedRow);
     switch (form) {
       case "category":
-        return <CategoryForm categories={selectedRow} onClose={closeForm} />;
+        console.log("Deleting category with id", selectedRowId);
+        const resultCategory = await deleteCategory(
+          restaurantId || 1,
+          selectedRow.id,
+          token
+        );
+        if (resultCategory === 200) {
+          alert("Deleted successfully");
+        }
+        break;
       case "diningTable":
-        return (
-          <DiningTableForm diningTables={selectedRow} onClose={closeForm} />
+        console.log("Deleting category with id", selectedRowId);
+        const resultTable = await deleteDiningTable(
+          restaurantId || 1,
+          selectedRow.id,
+          token
         );
+        if (resultTable === 200) {
+          alert("Deleted successfully");
+        }
+        break;
       case "product":
-        const { product, categories } = selectedRow || {};
-        return (
-          <ProductForm
-            product={selectedRow}
-            categories={categories}
-            onClose={closeForm}
-          />
-        );
+        console.log("Deleting product with id", selectedRowId);
+        const resultProduct = await deleteProduct(selectedRow.id, token);
+        if (resultProduct === 200) {
+          alert("Deleted successfully");
+        }
+        break;
       case "reservations":
-        return (
-          <ReservationsForm reservation={selectedRow} onClose={closeForm} />
+        console.log("Deleting reservation with id", selectedRowId);
+        const resultReservations = await deleteReservation(
+          restaurantId || 1,
+          selectedRow.id,
+          token
         );
+        if (resultReservations === 200) {
+          alert("Deleted successfully");
+        }
+        break;
       case "staff":
-        return <StaffForm staffUsers={selectedRow} onClose={closeForm} />;
+        console.log("Deleting staff with id", selectedRowId);
+        const resultStaff = await deleteStaff(
+          restaurantId || 1,
+          selectedRow.userId,
+          token
+        );
+        if (resultStaff === 200) {
+          alert("Deleted successfully");
+        }
+        break;
       default:
         return null;
     }
@@ -287,16 +325,14 @@ export default function DataGridDemo({ columns, rows, form }: Props) {
                           <IconButton
                             aria-label="edit"
                             color="success"
-                            onClick={(event) => handleEdit(params.row.id)}
+                            onClick={() => handleEdit(params.row.id)}
                           >
                             <EditIcon />
                           </IconButton>
                           <IconButton
                             aria-label="delete"
                             color="error"
-                            onClick={(event) =>
-                              handleClick(event, params.row.id)
-                            }
+                            onClick={() => handleDelete(params.row.id)}
                           >
                             <DeleteIcon />
                           </IconButton>
@@ -325,10 +361,10 @@ export default function DataGridDemo({ columns, rows, form }: Props) {
             open={Boolean(anchorEl)}
             onClose={handleClose}
           >
-            <MenuItem onClick={handleEdit}>Edit Row</MenuItem>
-            <MenuItem onClick={handleView}>View Row</MenuItem>
+            {/* <MenuItem onClick={handleEdit}>Edit Row</MenuItem>
+            <MenuItem onClick={handleView}>View Row</MenuItem> */}
           </Menu>
-          {isViewFormVisible && renderViewForm()}
+          {/* {isViewFormVisible && renderViewForm()} */}
           {isEditFormVisible && renderEditForm()}
           {isAddFormVisible && renderAddForm()}
         </Box>
