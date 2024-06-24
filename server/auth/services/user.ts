@@ -127,7 +127,7 @@ export const addStaffToRestaurant = async (
         password: hashedPassword,
       },
     });
-    const staff = await db.staffUser.create({
+    const staffUser = await db.staffUser.create({
       data: {
         role,
         name,
@@ -143,7 +143,25 @@ export const addStaffToRestaurant = async (
         },
       },
     });
-    return staff;
+    const permissionNames = permissions.split(",").map((p) => p.trim());
+    const permissionConnections = permissionNames.map((name) => ({
+      where: { name },
+      create: { name, code: name.toUpperCase() },
+    }));
+
+    await db.staffUser.update({
+      where: { id: staffUser.id },
+      data: {
+        permissions: {
+          connectOrCreate: permissionConnections.map((connection) => ({
+            where: { id: staffUser.id, name: connection.where.name },
+            create: connection.create,
+          })),
+        },
+      },
+    });
+
+    return staffUser;
   } catch (error) {
     throw error;
   }

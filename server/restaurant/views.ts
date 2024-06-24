@@ -165,68 +165,6 @@ export const restaurantReviews = async (req: Request, res: Response) => {
   }
 };
 
-import path from "path";
-import { spawn } from "child_process";
-import { addProduct } from "../admin/services/admin";
-
-export const performSentimentAnalysis = async (req: Request, res: Response) => {
-  try {
-    const { review } = req.body;
-    const pythonScriptPath = path.join(
-      "C:",
-      "Users",
-      "FLORIN",
-      "Desktop",
-      "stuff",
-      "coding",
-      "projects",
-      "awesome-restaurant",
-      "server",
-      "restaurant-analysis",
-      "sentiment_analysis.py"
-    );
-
-    // Spawn a new Python process to run the sentiment analysis script
-    const pythonProcess = spawn("python", [pythonScriptPath, review]);
-    let data = "";
-
-    // Collect data from the Python script
-    pythonProcess.stdout.on("data", (chunk) => {
-      data += chunk.toString();
-    });
-
-    // Handle errors from the Python script
-    pythonProcess.stderr.on("data", (chunk) => {
-      console.error(`stderr: ${chunk}`);
-    });
-
-    pythonProcess.on("close", (code) => {
-      if (code === 0) {
-        try {
-          const parsedData = data;
-          const sentimentMatch = parsedData.match(/Sentiment: (\d+)/);
-          if (sentimentMatch) {
-            const sentiment = sentimentMatch[1];
-            res.status(200).json({ sentiment });
-          } else {
-            res.status(500).json({ error: "Failed to parse sentiment" });
-          }
-        } catch (error) {
-          console.error("Error parsing JSON data from Python script:", error);
-          console.error("Received data:", data);
-          res.status(500).send("Error parsing data from sentiment analysis");
-        }
-      } else {
-        console.error(`Python script exited with code ${code}`);
-        res.status(500).send("Error occurred during sentiment analysis");
-      }
-    });
-  } catch (error: any) {
-    console.error("Error in performSentimentAnalysis:", error);
-    return res.status(500).json(error.message);
-  }
-};
-
 export const postProductReview = async (req: Request, res: Response) => {
   try {
     const { restaurantId, productId, sentiment, rating, reviewText } = req.body;

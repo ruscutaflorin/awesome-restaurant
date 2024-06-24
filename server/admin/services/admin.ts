@@ -627,3 +627,105 @@ export const editRestaurant = async (
     throw new Error(error);
   }
 };
+
+export const deleteCategory = async (
+  restaurantID: number,
+  categoryID: number
+) => {
+  console.log(restaurantID, categoryID);
+  try {
+    const category = await db.category.delete({
+      where: {
+        id: categoryID,
+        restaurantId: restaurantID,
+      },
+    });
+    return category;
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+
+export const deleteDiningTable = async (
+  restaurantID: number,
+  tableId: number
+) => {
+  try {
+    const diningTable = await db.diningTable.delete({
+      where: {
+        id: tableId,
+        restaurantId: restaurantID,
+      },
+    });
+    return diningTable;
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+
+export const deleteProduct = async (productId: number) => {
+  try {
+    const product = await db.product.delete({
+      where: {
+        id: productId,
+      },
+    });
+    return product;
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+
+export const deleteReservation = async (
+  restaurantID: number,
+  reservationID: number
+) => {
+  try {
+    const reservation = await db.reservation.delete({
+      where: {
+        id: reservationID,
+        restaurantId: restaurantID,
+      },
+    });
+    return reservation;
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+
+export const deleteStaffUser = async (
+  restaurantID: number,
+  staffUserId: number
+) => {
+  try {
+    console.log(staffUserId);
+    const staffUser = await db.staffUser.findUnique({
+      where: { userId: staffUserId },
+      include: { permissions: true },
+    });
+
+    if (!staffUser) {
+      throw new Error("Staff user not found");
+    }
+
+    await db.staffUser.update({
+      where: { userId: staffUserId },
+      data: {
+        permissions: {
+          set: [],
+        },
+      },
+    });
+
+    const deletedStaffUser = await db.staffUser.delete({
+      where: {
+        userId: staffUserId,
+        restaurantId: restaurantID,
+      },
+    });
+
+    return deletedStaffUser;
+  } catch (error: any) {
+    throw new Error(error.message || error);
+  }
+};

@@ -1,5 +1,4 @@
 import express from "express";
-import { auth } from "../auth/middleware/auth";
 import {
   addOrderToRestaurant,
   getClosestReservationForTableId,
@@ -7,7 +6,6 @@ import {
   getRestaurantCategories,
   getRestaurants,
   getRestaurantsPaginated,
-  performSentimentAnalysis,
   postProductReview,
   postRestaurant,
   restaurantReviews,
@@ -20,7 +18,6 @@ import {
 
 export const router = express.Router();
 
-// router.use(auth);
 router.get(
   "/paginate",
   validateGetPaginatedRestaurants,
@@ -38,5 +35,4 @@ router.post("/add", postRestaurant);
 router.post("/add-order", addOrderToRestaurant);
 
 router.get("/reviews/:id", restaurantReviews);
-router.post("/analyze-sentiment", performSentimentAnalysis);
 router.post("/add-review", postProductReview);

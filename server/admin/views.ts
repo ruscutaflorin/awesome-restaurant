@@ -22,6 +22,11 @@ import {
   addProduct,
   addReservation,
   addStaffUser,
+  deleteCategory,
+  deleteDiningTable,
+  deleteProduct,
+  deleteReservation,
+  deleteStaffUser,
   editCategory,
   editDiningTable,
   editProduct,
@@ -451,6 +456,74 @@ export const editRestaurantDetails = async (req: Request, res: Response) => {
       businessHours,
       contact
     );
+    return res.status(200).json(result);
+  } catch (error: any) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const deleteRestaurantCategory = async (req: Request, res: Response) => {
+  try {
+    const { restaurantID } = req.body;
+    const categoryID: number = parseInt(req.params.id as string);
+    const result = await deleteCategory(restaurantID, categoryID);
+    return res.status(200).json(result);
+  } catch (error: any) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const deleteRestaurantDiningTable = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const { restaurantID } = req.body;
+    const tableID: number = parseInt(req.params.id as string);
+    const result = await deleteDiningTable(restaurantID, tableID);
+    return res.status(200).json(result);
+  } catch (error: any) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const deleteRestaurantProduct = async (req: Request, res: Response) => {
+  try {
+    const productID: number = parseInt(req.params.id as string);
+    const result = await deleteProduct(productID);
+    return res.status(200).json(result);
+  } catch (error: any) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const deleteRestaurantReservation = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const { restaurantID } = req.body;
+    const reservationID: number = parseInt(req.params.id as string);
+    const result = await deleteReservation(restaurantID, reservationID);
+    return res.status(200).json(result);
+  } catch (error: any) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const deleteRestaurantStaffUser = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const { restaurantID } = req.body;
+    const staffUserID: number = parseInt(req.params.id as string);
+    const result = await deleteStaffUser(restaurantID, staffUserID);
     return res.status(200).json(result);
   } catch (error: any) {
     console.error(error);

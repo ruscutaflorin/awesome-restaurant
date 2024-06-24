@@ -29,6 +29,11 @@ import {
   editRestaurantReservation,
   editRestaurantStaffUser,
   editRestaurantDetails,
+  deleteRestaurantDiningTable,
+  deleteRestaurantCategory,
+  deleteRestaurantProduct,
+  deleteRestaurantReservation,
+  deleteRestaurantStaffUser,
 } from "./views";
 
 export const router = express.Router();
@@ -69,3 +74,9 @@ router.put("/edit-product/", editRestaurantProduct);
 router.put("/edit-reservation/", editRestaurantReservation);
 router.put("/edit-staff/", editRestaurantStaffUser);
 router.put("/edit-restaurant/", editRestaurantDetails);
+
+router.delete("/delete-table/:id", deleteRestaurantDiningTable);
+router.delete("/delete-category/:id", deleteRestaurantCategory);
+router.delete("/delete-product/:id", deleteRestaurantProduct);
+router.delete("/delete-reservation/:id", deleteRestaurantReservation);
+router.delete("/delete-staff/:id", deleteRestaurantStaffUser);

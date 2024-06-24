@@ -18,7 +18,7 @@ model Restaurant {
   location      String
   businessHours String[]
   contact       String?
-  owner         User          @relation(fields: [ownerId], references: [id])
+  owner         User          @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   ownerId       Int
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
@@ -36,7 +36,7 @@ model DiningTable {
   capacity      Int
   positionX     Int
   positionY     Int
-  restaurant    Restaurant    @relation(fields: [restaurantId], references: [id])
+  restaurant    Restaurant    @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
   reservations  Reservation[]
   productOrders OrderItem[]
   restaurantId  Int
@@ -47,8 +47,8 @@ model DiningTable {
 
 model Reservation {
   id                Int         @id @default(autoincrement())
-  restaurant        Restaurant  @relation(fields: [restaurantId], references: [id])
-  diningTable       DiningTable @relation(fields: [tableId], references: [id])
+  restaurant        Restaurant  @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  diningTable       DiningTable @relation(fields: [tableId], references: [id], onDelete: Cascade)
   restaurantId      Int
   tableId           Int
   reservationDate   DateTime
@@ -66,11 +66,11 @@ model Order {
   status      String
   orderDate   DateTime
   totalAmount Decimal
-  diningTable DiningTable @relation(fields: [tableId], references: [id])
+  diningTable DiningTable @relation(fields: [tableId], references: [id], onDelete: Cascade)
   tableId     Int
   orderItems  OrderItem[]
   payments    Payment[]
-  user        User?       @relation(fields: [userId], references: [id])
+  user        User?       @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      Int?
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
@@ -82,7 +82,7 @@ model Payment {
   status        String
   method        String
   transactionID String?
-  order         Order    @relation(fields: [orderId], references: [id])
+  order         Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
   orderId       Int
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
@@ -92,7 +92,7 @@ model Category {
   id           Int        @id @default(autoincrement())
   name         String
   products     Product[]
-  restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
   restaurantId Int
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
@@ -106,7 +106,7 @@ model Product {
   basePrice    Decimal
   ingredients  String[]
   availability Boolean
-  category     Category    @relation(fields: [categoryId], references: [id])
+  category     Category    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   categoryId   Int
   orderItems   OrderItem[]
   createdAt    DateTime    @default(now())
@@ -118,14 +118,13 @@ model StaffUser {
   id           Int          @id @default(autoincrement())
   name         String
   role         String
-  user         User         @relation(fields: [userId], references: [id])
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId       Int          @unique
-  restaurant   Restaurant   @relation(fields: [restaurantId], references: [id])
+  restaurant   Restaurant   @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
   restaurantId Int
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt
   permissions  Permission[]
-  // TODO: fix permissions
 }
 
 model Permission {
@@ -153,9 +152,9 @@ model User {
 
 model Review {
   id           Int        @id @default(autoincrement())
-  restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
-  user         User       @relation(fields: [userId], references: [id])
-  product      Product?   @relation(fields: [productId], references: [id])
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product      Product?   @relation(fields: [productId], references: [id], onDelete: Cascade)
   userId       Int
   restaurantId Int
   rating       Int
@@ -167,13 +166,13 @@ model Review {
 
 model OrderItem {
   id            Int          @id @default(autoincrement())
-  order         Order        @relation(fields: [orderId], references: [id])
+  order         Order        @relation(fields: [orderId], references: [id], onDelete: Cascade)
   orderId       Int
-  product       Product      @relation(fields: [productId], references: [id])
+  product       Product      @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId     Int
   quantity      Int
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
-  DiningTable   DiningTable? @relation(fields: [diningTableId], references: [id])
+  DiningTable   DiningTable? @relation(fields: [diningTableId], references: [id], onDelete: Cascade)
   diningTableId Int?
 }
