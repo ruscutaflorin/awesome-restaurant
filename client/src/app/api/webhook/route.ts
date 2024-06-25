@@ -1,6 +1,6 @@
 import Stripe from "stripe";
 import { NextResponse, NextRequest } from "next/server";
-import { createOrder } from "../restaurants";
+import { changeOrderStatusToAccepted, createOrder } from "../restaurants";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2024-04-10",
@@ -24,20 +24,15 @@ export async function POST(req: NextRequest) {
 
     if (event.type === "checkout.session.completed") {
       const session = event.data.object as Stripe.Checkout.Session;
-      const { restaurantID, totalAmount, cartItems } = session.metadata;
+      const metadata = session.metadata;
 
-      const parsedCartItems = JSON.parse(cartItems);
-      const parsedRestaurantID = parseInt(restaurantID);
-      const parsedTotalAmount = parseInt(totalAmount);
+      if (metadata && metadata.orderId) {
+        const orderId = parseInt(metadata.orderId, 10);
 
-      const res = await createOrder(
-        parsedRestaurantID,
-        parsedCartItems,
-        parsedTotalAmount,
-        "Accepted"
-      );
+        await changeOrderStatusToAccepted(orderId);
 
-      console.log(`Payment for session ${session.id} was successful!`);
+        console.log(`Payment for session ${session.id} was successful!`);
+      }
     }
 
     return NextResponse.json({

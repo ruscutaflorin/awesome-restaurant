@@ -37,13 +37,7 @@ const SuccessPage: React.FC = () => {
   const [submitting, setSubmitting] = useState(false);
   const [submissionComplete, setSubmissionComplete] = useState(false);
   const [averageSentiment, setAverageSentiment] = useState<number | null>(null);
-
-  const stripe = new Stripe(
-    "sk_test_51PL76tBRrCx0c7zJCWUIxj2IKydSGWAV9fLqThxqYwwHLXSQap8ylPVfPbt71LUd6jcy4nilHupAgx0H39Yt99Rm00y4pi7NCr",
-    {
-      apiVersion: "2024-04-10",
-    }
-  );
+  const { push } = useRouter();
 
   useEffect(() => {
     const fetchSessionData = async () => {
@@ -52,13 +46,7 @@ const SuccessPage: React.FC = () => {
           const response = await axios.get(
             `/api/checkout-session/${session_id}`
           );
-          console.log(response.data.id);
-          const lineItems = await stripe.checkout.sessions.listLineItems(
-            `${response.data.id}`
-          );
-          console.log("these are line items", lineItems);
           const { metadata } = response.data;
-          console.log("metadata", metadata);
           const { cartItems, restaurantID } = metadata;
           const restaurantId = parseInt(restaurantID);
           const items = JSON.parse(cartItems);
@@ -136,6 +124,9 @@ const SuccessPage: React.FC = () => {
       setReviews(analyzedReviews);
       setSubmitting(false);
       setSubmissionComplete(true);
+      setTimeout(() => {
+        push("/restaurants");
+      }, 5000);
     } catch (error) {
       console.error("Error submitting reviews:", error);
       alert("Failed to submit reviews.");

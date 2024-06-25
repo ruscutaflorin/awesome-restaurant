@@ -150,3 +150,15 @@ export const fetchSentiment = async (reviewText: string) => {
     throw err;
   }
 };
+
+export const changeOrderStatusToAccepted = async (orderId: number) => {
+  try {
+    const response = await axios.put(
+      `http://localhost:8000/api/restaurants/update-order/${orderId}`
+    );
+    return response;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+};

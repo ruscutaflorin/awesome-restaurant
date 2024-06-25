@@ -365,11 +365,27 @@ const comprehendClient = new ComprehendClient({
 });
 
 export const amazonComprehend = async (reviewText: string) => {
-  const input = {
-    Text: `${reviewText || ""}`,
-    LanguageCode: LanguageCode.EN || "zh-TW",
-  };
-  const command = new DetectSentimentCommand(input);
-  const sentimentResponse = await comprehendClient.send(command);
-  return sentimentResponse;
+  try {
+    const input = {
+      Text: `${reviewText || ""}`,
+      LanguageCode: LanguageCode.EN || "zh-TW",
+    };
+    const command = new DetectSentimentCommand(input);
+    const sentimentResponse = await comprehendClient.send(command);
+    return sentimentResponse;
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
+};
+
+export const updateOrderStatus = async (orderId: number, status: string) => {
+  try {
+    const order = await db.order.update({
+      where: { id: orderId },
+      data: { status },
+    });
+    return order;
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
 };

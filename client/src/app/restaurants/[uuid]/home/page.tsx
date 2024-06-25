@@ -5,7 +5,7 @@ import { useRouter, useParams } from "next/navigation";
 import axios from "axios";
 
 import { CategoryDetailed, RestaurantDetailed } from "@/app/types/types";
-import { getRestaurant } from "@/app/api/restaurants";
+import { createOrder, getRestaurant } from "@/app/api/restaurants";
 import { useAuthStore } from "@/app/store/user";
 import ProductCard from "@/app/ui/restaurant/card-products";
 import FloatingCategoryButton from "@/app/ui/restaurant/floating-button";
@@ -94,20 +94,29 @@ const RestaurantHomePage: React.FC = () => {
   const onFinishPayment = async () => {
     const restaurantUUID = restaurant?.uuid;
     try {
-      const response = await axios.post("/api/checkout-session", {
-        cartItems: cart,
-        restaurantUUID,
-        restaurantID: restaurant?.id,
-        totalAmount: calculateTotalPrice(cart),
-      });
+      if (restaurant?.id) {
+        const order = await createOrder(
+          restaurant?.id,
+          cart,
+          calculateTotalPrice(cart),
+          "Pending"
+        );
+        const response = await axios.post("/api/checkout-session", {
+          cartItems: cart,
+          restaurantUUID,
+          restaurantID: restaurant?.id,
+          totalAmount: calculateTotalPrice(cart),
+          orderId: order.data.id,
+        });
 
-      const data = response.data;
-      const paymentLink = data.paymentLink;
+        const data = response.data;
+        const paymentLink = data.paymentLink;
 
-      if (paymentLink) {
-        push(paymentLink);
-      } else {
-        console.error("No payment link provided");
+        if (paymentLink && restaurant?.id) {
+          push(paymentLink);
+        } else {
+          console.error("No payment link provided");
+        }
       }
     } catch (error) {
       console.error("Payment failed:", error);

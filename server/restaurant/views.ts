@@ -5,6 +5,7 @@ import {
   getProductRatingsBasedOnRestaurant,
   addProductReview,
   amazonComprehend,
+  updateOrderStatus,
 } from "./services/restaurant";
 import { validationResult } from "express-validator";
 import { db } from "../config/db";
@@ -190,6 +191,17 @@ export const getReviewSentiment = async (req: Request, res: Response) => {
     const { reviewText } = req.body;
     const response = await amazonComprehend(reviewText);
     return res.status(200).json({ response });
+  } catch (error: any) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const makeOrderAccepted = async (req: Request, res: Response) => {
+  try {
+    const orderId: number = parseInt(req.params.id as string);
+    const order = await updateOrderStatus(orderId, "Accepted");
+    return res.status(200).json(order);
   } catch (error: any) {
     console.error(error);
     return res.status(500).json({ message: "Internal server error" });

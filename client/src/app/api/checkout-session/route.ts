@@ -7,7 +7,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 
 export const POST = async (req: NextRequest) => {
   try {
-    const { cartItems, restaurantUUID, restaurantID, totalAmount } =
+    const { cartItems, restaurantUUID, restaurantID, totalAmount, orderId } =
       await req.json();
     const line_items = cartItems.map((item: any) => ({
       price_data: {
@@ -20,11 +20,10 @@ export const POST = async (req: NextRequest) => {
       quantity: item.quantity,
     }));
 
-    // const cartItemsData = cartItems.map((item: any) => ({
-    //   quantity: item.quantity,
-    //   name: item.name,
-    // }));
-    // TODO:buba e aici ca eu pe succes iau din metadate un obiect orderItem si ma cam sparge
+    const cartItemsData = cartItems.map((item: any) => ({
+      id: item.id,
+      name: item.name,
+    }));
 
     const params: Stripe.Checkout.SessionCreateParams = {
       payment_method_types: ["card"],
@@ -34,9 +33,8 @@ export const POST = async (req: NextRequest) => {
       cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/restaurants/${restaurantUUID}/order/failed`,
       metadata: {
         restaurantID,
-        totalAmount,
-        // cartItems: JSON.stringify(cartItemsData),
-        cartItems: JSON.stringify(cartItems),
+        cartItems: JSON.stringify(cartItemsData),
+        orderId,
       },
     };
 
