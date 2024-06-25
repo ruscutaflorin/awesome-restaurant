@@ -6,6 +6,7 @@ import {
   getRestaurantCategories,
   getRestaurants,
   getRestaurantsPaginated,
+  getReviewSentiment,
   postProductReview,
   postRestaurant,
   restaurantReviews,
@@ -36,3 +37,5 @@ router.post("/add-order", addOrderToRestaurant);
 
 router.get("/reviews/:id", restaurantReviews);
 router.post("/add-review", postProductReview);
+
+router.post("/sentiment-analysis", getReviewSentiment);

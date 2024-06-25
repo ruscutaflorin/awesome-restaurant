@@ -135,3 +135,18 @@ export const addProductReview = async (
     throw err;
   }
 };
+
+export const fetchSentiment = async (reviewText: string) => {
+  try {
+    const response = await axios.post(
+      `http://localhost:8000/api/restaurants/sentiment-analysis`,
+      {
+        reviewText,
+      }
+    );
+    return response;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+};

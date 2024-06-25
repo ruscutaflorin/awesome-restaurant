@@ -349,3 +349,27 @@ export const addProductReview = async (
     throw new Error(error.message);
   }
 };
+
+import {
+  ComprehendClient,
+  DetectSentimentCommand,
+  LanguageCode,
+} from "@aws-sdk/client-comprehend";
+
+const comprehendClient = new ComprehendClient({
+  region: "us-west-2",
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY!,
+    secretAccessKey: process.env.AWS_SECRET_KEY!,
+  },
+});
+
+export const amazonComprehend = async (reviewText: string) => {
+  const input = {
+    Text: `${reviewText || ""}`,
+    LanguageCode: LanguageCode.EN || "zh-TW",
+  };
+  const command = new DetectSentimentCommand(input);
+  const sentimentResponse = await comprehendClient.send(command);
+  return sentimentResponse;
+};

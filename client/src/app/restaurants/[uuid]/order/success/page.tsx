@@ -12,20 +12,7 @@ import {
   Rating,
   Paper,
 } from "@mui/material";
-import { addProductReview } from "@/app/api/restaurants";
-import {
-  ComprehendClient,
-  DetectSentimentCommand,
-  LanguageCode,
-} from "@aws-sdk/client-comprehend";
-
-const comprehendClient = new ComprehendClient({
-  region: "us-west-2",
-  credentials: {
-    accessKeyId: "AKIA5FTZDLTAHUTADXFZ",
-    secretAccessKey: "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",
-  },
-});
+import { addProductReview, fetchSentiment } from "@/app/api/restaurants";
 
 interface Product {
   id: number;
@@ -115,14 +102,9 @@ const SuccessPage: React.FC = () => {
     try {
       const analyzedReviews = await Promise.all(
         reviews.map(async (review) => {
-          const input = {
-            Text: `${review.reviewText || ""}`,
-            LanguageCode: LanguageCode.EN || "zh-TW",
-          };
-          const command = new DetectSentimentCommand(input);
-          const sentimentResponse = await comprehendClient.send(command);
-          const sentiment =
-            sentimentResponse.Sentiment as keyof typeof sentimentMapping;
+          const sentimentResponse = fetchSentiment(review.reviewText);
+          const sentiment = (await sentimentResponse).data.response
+            .Sentiment as keyof typeof sentimentMapping;
           const rating = sentimentMapping[sentiment];
           // Sentiment: "POSITIVE" || "NEGATIVE" || "NEUTRAL" || "MIXED",
           return {
